@@ -1,0 +1,450 @@
+swagger: "2.0"
+info:
+  title: Amun API
+  version: "0.1"
+basePath: "/api/v1/"
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /_debug/generate-dockerfile:
+    post:
+      tags: ['Debug']
+      x-swagger-router-controller: amun.api_v1
+      operationId: post_generate_dockerfile
+      summary: >
+        Generate Dockerfile as it would be generated internally for inspections.
+      parameters:
+        - name: specification
+          in: body
+          required: true
+          description: Specification of the software stack that should be created and verified.
+          schema:
+            $ref: "#/definitions/InspectionSpecification"
+      responses:
+        202:
+          description: Successful response with insection id.
+          schema:
+            $ref: "#/definitions/InspectionGenerateDockerfileResponse"
+        400:
+          description: On invalid request.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
+
+  /inspect:
+    post:
+      tags: ['Inspection']
+      x-swagger-router-controller: amun.api_v1
+      operationId: post_inspect
+      summary: Inspect the given application stack.
+      parameters:
+        - name: specification
+          in: body
+          required: true
+          description: Base image to be used for runtime environment.
+          schema:
+            $ref: "#/definitions/InspectionSpecification"
+      responses:
+        202:
+          description: Successful response with insection id.
+          schema:
+            $ref: "#/definitions/InspectionResponse"
+        400:
+          description: On invalid request.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
+
+  /inspect/{inspection_id}/build/log:
+    get:
+      tags: ['Inspection']
+      x-swagger-router-controller: amun.api_v1
+      operationId: get_inspect_build_log
+      summary: Get log for a specific inspection build.
+      parameters:
+        - name: inspection_id
+          format: path
+          in: path
+          required: true
+          type: string
+          description: Id of inspection build.
+      responses:
+        200:
+          description: Successful response with insection build log.
+          schema:
+            $ref: "#/definitions/InspectionBuildLogResponse"
+        400:
+          description: On invalid request.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
+
+  /inspect/{inspection_id}/build/status:
+    get:
+      tags: ['Inspection']
+      x-swagger-router-controller: amun.api_v1
+      operationId: get_inspect_build_status
+      summary: Get status of a build run.
+      parameters:
+        - name: inspection_id
+          format: path
+          in: path
+          required: true
+          type: string
+          description: Id of inspection run.
+      responses:
+        200:
+          description: Successful response with insection build status.
+          schema:
+            $ref: "#/definitions/InspectionBuildStatusResponse"
+        400:
+          description: On invalid request.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
+
+  /inspect/{inspection_id}/job/log:
+    get:
+      tags: ['Inspection']
+      x-swagger-router-controller: amun.api_v1
+      operationId: get_inspect_job_log
+      summary: Get log for a specific inspection run.
+      parameters:
+        - name: inspection_id
+          format: path
+          in: path
+          required: true
+          type: string
+          description: Id of inspection run.
+      responses:
+        200:
+          description: Successful response with insection run log.
+          schema:
+            $ref: "#/definitions/InspectionRunLogResponse"
+        400:
+          description: On invalid request.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
+
+  /inspect/{inspection_id}/job/status:
+    get:
+      tags: ['Inspection']
+      x-swagger-router-controller: amun.api_v1
+      operationId: get_inspect_job_status
+      summary: Get status of the application run.
+      parameters:
+        - name: inspection_id
+          format: path
+          in: path
+          required: true
+          type: string
+          description: Id of inspection run.
+      responses:
+        200:
+          description: Successful response with insection run status.
+          schema:
+            $ref: "#/definitions/InspectionRunStatusResponse"
+        400:
+          description: On invalid request.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
+
+definitions:
+  InspectionSpecification:
+    type: object
+    description: Specification of software stack for inspection.
+    additionalProperties: true
+    required:
+      - base
+    properties:
+      base:
+        type: string
+        description: Base image on which the runtime environment should be based on.
+        example: 'fedora:28'
+      packages:
+        type: array
+        description: A list of native packages that should be installed into the runtime environment.
+        items:
+          type: string
+          description: Name of the package to be installed.
+          example: 'vim'
+      python:
+        type: object
+        description: Python application stack to be installed.
+        additionalProperties: false
+        required:
+          - requirements
+          - requirements_locked
+        properties:
+          requirements:
+            type: object
+            description: Pipfile stating software stack (direct dependencies) of an application.
+            additionalProperties: true
+          requirements_locked:
+            type: object
+            description: Pipfile.lock with fully pinned down and resolved software stack.
+            additionalProperties: true
+      files:
+        type: array
+        description: Files passed to the context.
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - content
+            - path
+          properties:
+            path:
+              type: string
+              description: Name of the file including an absolute path (relative will be taken from root).
+            content:
+              type: string
+              description: A string holding actual content of the file.
+      script:
+        type: string
+        description: A script that should be executed in inspection run.
+  InspectionResponse:
+    type: object
+    description: Response for a submitted inspection.
+    additionalProperties: false
+    properties:
+      inspection_id:
+        type: string
+        description: >
+          An id of submitted inspection for checking its status and its results.
+        example: 'inspect-ABCXYZ'
+      parameters:
+        type: object
+        description: >
+          Parameters echoed back to user (with default parameters if omitted).
+      build_created:
+        type: boolean
+        description: True if the build was scheduled for the given 
+      job_created:
+        type: boolean
+        description: >
+          True if there was created a job executing script for the given inspection.
+    required:
+      - inspection_id
+      - parameters
+      - job_created
+      - build_created
+  InspectionGenerateDockerfileResponse:
+    type: object
+    description: Response for a generated Dockerfile.
+    additionalProperties: false
+    properties:
+      dockerfile:
+        type: string
+        description: Generated Dockerfile as a string.
+      parameters:
+        type: object
+        description: >
+          Parameters echoed back to user (with default parameters if omitted).
+    required:
+      - dockerfile
+      - parameters
+  InspectionResponseError:
+    type: object
+    required:
+      - error
+      - parameters
+    properties:
+      error:
+        type: string
+        description: Error information for user.
+      parameters:
+        type: object
+        description: Parameters echoed back to user for debugging.
+  InspectionResultResponse: &analysisResult
+    type: object
+    additionalProperties: false
+    description: Result of an inspection
+    required:
+      - metadata
+      - result
+    properties:
+      metadata:
+        type: object
+        description: Metadata for inspection run.
+        additionalProperties: false
+        required:
+          - analyzer
+          - analyzer_version
+          - arguments
+          - datetime
+          - distribution
+          - hostname
+          - python
+        properties:
+          analyzer:
+            type: string
+            description: Analyzer name which handled inspection.
+          analyzer_version:
+            type: string
+            description: Version of analyzer handling inspection.
+          arguments:
+            type: object
+            additionalProperties: true
+            description: Arguments passed to analyzer.
+          datetime:
+            type: string
+            description: Date and time of inspection end in ISO format.
+          distribution:
+            type: object
+            description: >
+              Information about environment in which the inspection
+              was performed.
+            required:
+              - codename
+              - id
+              - like
+              - version
+              - version_parts
+            properties:
+              codename:
+                type: string
+                description: >
+                  Codename of environment in which the inspection was perfomed.
+              id:
+                type: string
+                description: >
+                  Identifier of environment in which the inspection
+                  was perfomed.
+              like:
+                type: string
+                description: >
+                  Similar environments in comparision to environment in
+                  which the inspection was perfomed.
+              version:
+                type: string
+                description: A string representation of environment version.
+              version_parts:
+                type: object
+                description: >
+                  Parts of version identifier of the analysing environment.
+                properties:
+                  build_number:
+                    type: string
+                  major:
+                    type: string
+                  minor:
+                    type: string
+                additionalProperties: false
+                required:
+                  - build_number
+                  - major
+                  - minor
+          hostname:
+            type: string
+            description: Pod name where the inspection was done.
+          python:
+            required:
+              - api_version
+              - implementation_name
+              - major
+              - minor
+              - micro
+              - releaselevel
+              - serial
+            properties:
+              api_version:
+                type: integer
+              implementation_name:
+                type: string
+                example: cpython
+              major:
+                type: integer
+              micro:
+                type: integer
+              minor:
+                type: integer
+              releaselevel:
+                type: string
+                example: final
+              serial:
+                type: integer
+      result:
+        type: object
+        additionalProperties: true
+        description: Actual result of an inspection run.
+  InspectionListingResponse:
+    type: array
+    description: Listing of available results.
+    items: *analysisResult
+  InspectionRunStatusResponse: &inspectionStatusResponse
+    type: object
+    description: Information about the current inspection status.
+    additionalProperties: false
+    required:
+      - parameters
+      - status
+    properties:
+      status:
+        type: object
+        description: Status information about the inspection run.
+        additionalProperties: false
+        required:
+          - container
+          - exit_code
+          - finished_at
+          - reason
+          - started_at
+          - state
+        properties:
+          container:
+            type: string
+            description: SHA of container image in which the analysis is done.
+            x-nullable: true
+          exit_code:
+            type: integer
+            description: Return code of the process perfoming analysis.
+            x-nullable: true
+          finished_at:
+            type: string
+            description: >
+              Datetime in ISO format informing about when the analysis
+              has finished.
+            x-nullable: true
+          reason:
+            type: string
+            description: Reasoning on finished run.
+            x-nullable: true
+          started_at:
+            type: string
+            description: >
+              Datetime in ISO format informing about when the analysis
+              has started.
+          state:
+            type: string
+            example: terminated
+      parameters:
+        type: object
+        description: Parameters echoed back to user for debugging.
+        additionalProperties: true
+  InspectionBuildStatusResponse: *inspectionStatusResponse
+  AnalysisUnfinishedResultResponse:
+    type: object
+    required:
+      - error
+      - parameters
+      - status
+    properties:
+      error:
+        type: string
+        description: Error information for user.
+      parameters:
+        type: object
+        description: Parameters echoed back to user for debugging.
+      status: *inspectionStatusResponse
+  InspectionRunLogResponse: &inspectionLogResponse
+    type: object
+    required:
+      - log
+      - parameters
+    properties:
+      log:
+        type: string
+        description: Analyzer logs printed to stdout/stderr as a plain text.
+      parameters:
+        type: object
+        description: Parameters echoed back to user for debugging.
+  InspectionBuildLogResponse: *inspectionLogResponse

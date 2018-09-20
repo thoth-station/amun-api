@@ -1,0 +1,60 @@
+kind: Template
+metadata:
+  name: amun-inspect-job
+  annotations:
+    description: Amun - Execution engine for Thoth
+    openshift.io/display-name: Amun API
+    version: 0.0.1
+    tags: poc,amun,thoth,ai-stacks
+    template.openshift.io/documentation-url: https://github.com/Thoth-Station/
+    template.openshift.io/long-description: >
+      This template defines resources needed to run Amun's inspection job on OpenShift.
+    template.openshift.io/provider-display-name: Red Hat, Inc.
+  labels:
+    template: amun-inspect-job
+    app: amun
+    component: amun-inspect
+
+objects:
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      name: "${AMUN_INSPECTION_ID}"
+      labels:
+        app: amun
+        component: amun-inspect
+    spec:
+      automountServiceAccountToken: false
+      restartPolicy: Never
+      containers:
+        - name: inspect
+          env: []
+          image: inspect
+          livenessProbe:
+            failureThreshold: 1
+            initialDelaySeconds: 3600
+            periodSeconds: 10
+            tcpSocket:
+              port: 80
+          resources:
+            limits:
+              cpu: 750m
+              memory: 256Mi
+            requests:
+              cpu: 750m
+              memory: 256Mi
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames: [inspect]
+            from:
+              kind: ImageStreamTag
+              name: '${AMUN_INSPECTION_ID}:latest'
+
+parameters:
+  - name: AMUN_INSPECTION_ID
+    description: Id of inspection that is run.
+    displayName: Inspection id
+    required: true

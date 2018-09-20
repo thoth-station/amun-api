@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: amun-inspect-buildconfig
+  annotations:
+    description: A template for BuildConfig to create build on the fly.
+    openshift.io/display-name: Amun inspect BuildConfig
+    version: 0.0.1
+    tags: poc,amun,thoth,ai-stacks
+    template.openshift.io/documentation-url: https://github.com/Thoth-Station/
+    template.openshift.io/long-description: >
+      A template used to create dynamic builds on user requests.
+    template.openshift.io/provider-display-name: Red Hat, Inc.
+  labels:
+    template: amun-inspect-buildconfig
+    app: amun
+    component: inspect-buildconfig
+
+objects:
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: "${AMUN_INSPECTION_ID}"
+      labels:
+        app: amun
+        component: inspect-buildconfig
+    spec:
+      output:
+        to:
+          kind: ImageStreamTag
+          name: "${AMUN_INSPECTION_ID}:latest"
+      source:
+        dockerfile: "${AMUN_GENERATED_DOCKERFILE}"
+        type: Dockerfile
+      resources:
+        limits:
+          memory: '512Mi'
+          cpu: '500m'
+        requests:
+          memory: '512Mi'
+          cpu: '500m'
+      strategy:
+        type: Docker
+      triggers:
+        - type: ConfigChange
+
+parameters:
+  - name: AMUN_INSPECTION_ID
+    description: Id of inspection that is run.
+    displayName: Inspection id
+    required: true
+
+  - description: The content of Dockerfile to be built.
+    displayName: Generated Dockerfile
+    required: true
+    name: AMUN_GENERATED_DOCKERFILE

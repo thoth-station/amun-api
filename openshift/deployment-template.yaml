@@ -1,0 +1,145 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: amun-api-deployment
+  annotations:
+    description: This is Amun API
+    openshift.io/display-name: 'Amun API'
+    version: 0.4.0
+    tags: poc,amun,thoth,api,ai-stacks
+    template.openshift.io/documentation-url: https://github.com/Thoth-Station/
+    template.openshift.io/long-description: This is Amun API
+    template.openshift.io/provider-display-name: Red Hat, Inc.
+  labels:
+    template: amun-api-deployment
+    app: amun
+    component: amun-api
+
+objects:
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: amun-api
+      labels:
+        app: amun
+        component: amun-api
+    spec:
+      to:
+        kind: Service
+        name: amun-api
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      labels:
+        app: amun
+        component: amun-api
+      name: amun-api
+    spec:
+      ports:
+        - port: 80
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        service: amun-api
+
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      labels:
+        app: amun
+        component: amun-api
+      name: amun-api
+    spec:
+      replicas: 1
+      selector:
+        service: amun-api
+      template:
+        metadata:
+          labels:
+            service: amun-api
+        spec:
+          serviceAccountName: inspector
+          containers:
+            - name: amun-api
+              env:
+                - name: APP_MODULE
+                  value: 'amun.entrypoint:app'
+                - name: KUBERNETES_API_URL
+                  value: 'https://kubernetes.default.svc.cluster.local'
+                - name: KUBERNETES_VERIFY_TLS
+                  value: '0'
+                - name: AMUN_DEBUG
+                  value: '0'
+                - name: AMUN_INSPECTION_NAMESPACE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: amun
+                      key: amun-inspection-namespace
+                - name: AMUN_INFRA_NAMESPACE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: amun
+                      key: amun-infra-namespace
+                - name: AMUN_API_APP_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: amun
+                      key: app-secret-key
+                - name: PROMETHEUS_PUSHGATEWAY_HOST
+                  valueFrom:
+                  configMapKeyRef:
+                    key: prometheus-pushgateway-host
+                    name: amun
+                - name: PROMETHEUS_PUSHGATEWAY_PORT
+                  valueFrom:
+                  configMapKeyRef:
+                    key: prometheus-pushgateway-port
+                    name: amun
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              resources:
+                requests:
+                  memory: "384Mi"
+                  cpu: "125m"
+                limits:
+                  memory: "384Mi"
+                  cpu: "500m"
+              readinessProbe:
+                httpGet:
+                  path: '/readiness'
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 5
+                periodSeconds: 10
+                timeoutSeconds: 10
+              livenessProbe:
+                httpGet:
+                  path: '/liveness'
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 5
+                periodSeconds: 60
+                timeoutSeconds: 10
+      test: false
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - amun-api
+            from:
+              kind: ImageStreamTag
+              name: 'amun-api:latest'
+
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      labels:
+        app: amun
+        component: amun-api
+      name: amun-api
+    spec:
+      name: latest
