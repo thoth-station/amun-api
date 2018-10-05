@@ -31,7 +31,7 @@ from .dockerfile import create_dockerfile
 from .exceptions import ScriptObtainingError
 
 _LOGGER = logging.getLogger('amun.api_v1')
-#_OPENSHIFT = OpenShift()
+_OPENSHIFT = OpenShift()
 
 
 def _do_create_dockerfile(specification: dict) -> tuple:
@@ -97,7 +97,7 @@ def get_inspect_job_log(inspection_id: str) -> dict:
     parameters = {'inspection_id': inspection_id}
     try:
         # TODO: switch query to respect job run
-        log = _OPENSHIFT.get_pod_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+        log = _OPENSHIFT.get_job_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException:
         return {
             'error': 'The given inspection id was not found',
@@ -116,7 +116,7 @@ def get_inspect_job_status(inspection_id: str) -> dict:
 
     try:
         # TODO: switch query to respect job run
-        status = _OPENSHIFT.get_pod_status_report(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+        status = _OPENSHIFT.get_job_status_report(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException:
         return {
             'error': 'The given inspection id was not found',
@@ -157,7 +157,7 @@ def get_inspect_build_status(inspection_id: str) -> dict:
         # safely call gathering info about pod. There will be always only one build
         # (hopefully) - created per a user request.
         # OpenShift does not expose any endpoint for a build status anyway.
-        status = _OPENSHIFT.get_pod_status_report(
+        status = _OPENSHIFT.get_job_status_report(
             inspection_id + '-1-build',
             Configuration.AMUN_INSPECTION_NAMESPACE
         )
