@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: amun-core
+  annotations:
+    description: This is Amun configuration template
+    openshift.io/display-name: "Amun core components"
+    version: 0.2.0
+    tags: poc,amun,thoth,ai-stacks
+    template.openshift.io/documentation-url: https://github.com/Thoth-Station/
+    template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
+    template.openshift.io/provider-display-name: Red Hat, Inc.
+  labels:
+    template: amun-core
+    app: amun
+
+objects:
+  - kind: ServiceAccount
+    apiVersion: v1
+    metadata:
+      name: inspector
+      namespace: ${AMUN_API_NAMESPACE}
+      labels:
+        app: amun
+    automountServiceAccountToken: true
+
+  - apiVersion: v1
+    kind: RoleBinding
+    metadata:
+      name: role-inspector-binding
+      namespace: ${AMUN_INSPECTION_NAMESPACE}
+      labels:
+        app: amun
+    roleRef:
+      kind: ClusterRole
+      name: edit
+    subjects:
+      - kind: ServiceAccount
+        name: inspector
+        namespace: ${AMUN_API_NAMESPACE}
+
+parameters:
+  - description: Namespace where Amun API service sits.
+    displayName: Amun API Namespace
+    required: true
+    name: AMUN_API_NAMESPACE
+  
+  - description: Namespace where inspection is done.
+    displayName: Amun Inspection Namespace
+    required: true
+    name: AMUN_INSPECTION_NAMESPACE

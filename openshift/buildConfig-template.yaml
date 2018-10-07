@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: amun-api-buildconfig
+  annotations:
+    description: This is Amun API BuildConfig.
+    openshift.io/display-name: 'Amun API: BuildConfig'
+    version: 0.0.1
+    tags: poc,amun,thoth,ai-stacks
+    template.openshift.io/documentation-url: https://github.com/Thoth-Station/
+    template.openshift.io/long-description: This is Amun API BuildConfig.
+    template.openshift.io/provider-display-name: Red Hat, Inc.
+  labels:
+    template: amun-api-buildconfig
+    app: amun
+    component: amun-api
+
+objects:
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: amun-api
+      labels:
+        app: amun
+        component: amun-api
+    spec:
+      resources:
+        requests:
+          cpu: 500m
+          memory: 512Mi
+        limits:
+          cpu: 1000m
+          memory: 768Mi
+      output:
+        to:
+          kind: ImageStreamTag
+          name: "amun-api:${IMAGE_STREAM_TAG}"
+      source:
+        type: Git
+        git:
+          uri: ${GITHUB_URL}
+          ref: ${GITHUB_REF}
+      strategy:
+        type: Source
+        sourceStrategy:
+          from:
+            kind: ImageStreamTag
+            name: python-36-centos7:latest
+          env:
+            - name: ENABLE_PIPENV
+              value: '1'
+            - name: UPGRADE_PIP_TO_LATEST
+              value: ''
+            - name: WEB_CONCURRENCY
+              value: '4'
+      triggers:
+        - type: ImageChange
+          imageChange: {}
+
+parameters:
+  - description: Name of the GitHub repository for Amun API
+    displayName: Git Repository
+    required: true
+    name: GITHUB_URL
+    value: 'https://github.com/thoth-station/amun-api'
+
+  - description: Git reference to be used for Amun API
+    displayName: Git Reference
+    required: true
+    name: GITHUB_REF
+    value: 'master'
+
+  - description: >
+      Tag of the output ImageStream the resulting container image should go to
+    displayName: ImageStream Tag
+    required: true
+    name: IMAGE_STREAM_TAG
+    value: 'latest'
