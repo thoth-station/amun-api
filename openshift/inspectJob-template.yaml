@@ -36,7 +36,7 @@ objects:
           containers:
             - name: inspect
               env: []
-              image: inspect
+              image: '${AMUN_INSPECTION_ID}:latest'
               livenessProbe:
                 failureThreshold: 1
                 initialDelaySeconds: 3600
@@ -50,15 +50,14 @@ objects:
                 requests:
                   cpu: 750m
                   memory: 256Mi
-          triggers:
-            - type: ConfigChange
-            - type: ImageChange
-              imageChangeParams:
-                automatic: true
-                containerNames: [inspect]
-                from:
-                  kind: ImageStreamTag
-                  name: '${AMUN_INSPECTION_ID}:latest'
+      triggers:
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames: [inspect]
+            from:
+              kind: ImageStreamTag
+              name: '${AMUN_INSPECTION_ID}:latest'
 
 parameters:
   - name: AMUN_INSPECTION_ID
