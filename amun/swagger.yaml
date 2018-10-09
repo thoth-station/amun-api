@@ -141,7 +141,7 @@ paths:
         200:
           description: Successful response with insection run status.
           schema:
-            $ref: "#/definitions/InspectionRunStatusResponse"
+            $ref: "#/definitions/InspectionJobStatusResponse"
         400:
           description: On invalid request.
           schema:
@@ -370,7 +370,7 @@ definitions:
     type: array
     description: Listing of available results.
     items: *analysisResult
-  InspectionRunStatusResponse: &inspectionStatusResponse
+  InspectionJobStatusResponse: &inspectionStatusResponse
     type: object
     description: Information about the current inspection status.
     additionalProperties: false
