@@ -39,8 +39,8 @@ def create_inspect_imagestream(openshift: OpenShift, inspection_id: str) -> str:
     _LOGGER.debug("OpenShift response for getting Amun inspect ImageStream template: %r", response)
     template = response['items'][0]
 
-    openshift._set_template_parameters(template, AMUN_INSPECTION_ID=inspection_id)
-    template = openshift._oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
+    openshift.set_template_parameters(template, AMUN_INSPECTION_ID=inspection_id)
+    template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     imagestream = template['objects'][0]
 
     response = openshift.ocp_client.resources.get(api_version='v1', kind=imagestream['kind']).create(
@@ -66,13 +66,13 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
     _LOGGER.debug("OpenShift response for getting Amun inspect BuildConfig template: %r", response)
 
     template = response['items'][0]
-    openshift._set_template_parameters(
+    openshift.set_template_parameters(
         template,
         AMUN_INSPECTION_ID=inspection_id,
         AMUN_GENERATED_DOCKERFILE=dockerfile
     )
 
-    template = openshift._oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
+    template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     buildconfig = template['objects'][0]
 
     response = openshift.ocp_client.resources.get(api_version='v1', kind=buildconfig['kind']).create(
@@ -95,9 +95,9 @@ def create_inspect_job(openshift: OpenShift, image_stream_name: str) -> None:
     _LOGGER.debug("OpenShift response for getting Amun inspect Job template: %r", response)
 
     template = response['items'][0]
-    openshift._set_template_parameters(template, AMUN_INSPECTION_ID=image_stream_name)
+    openshift.set_template_parameters(template, AMUN_INSPECTION_ID=image_stream_name)
 
-    template = openshift._oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
+    template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     job = template['objects'][0]
 
     response = openshift.ocp_client.resources.get(api_version='v1', kind=job['kind']).create(
