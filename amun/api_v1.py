@@ -96,7 +96,6 @@ def get_inspect_job_log(inspection_id: str) -> dict:
     """Get logs of the given inspection."""
     parameters = {'inspection_id': inspection_id}
     try:
-        # TODO: switch query to respect job run
         log = _OPENSHIFT.get_job_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException:
         return {
@@ -115,7 +114,6 @@ def get_inspect_job_status(inspection_id: str) -> dict:
     parameters = {'inspection_id': inspection_id}
 
     try:
-        # TODO: switch query to respect job run
         status = _OPENSHIFT.get_job_status_report(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException:
         return {
@@ -134,7 +132,6 @@ def get_inspect_build_log(inspection_id: str) -> dict:
     parameters = {'inspection_id': inspection_id}
 
     try:
-        # TODO: switch query to respect job run
         status = _OPENSHIFT.get_build_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException:
         return {
