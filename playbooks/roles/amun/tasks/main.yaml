@@ -25,7 +25,8 @@
 - name: create Amun secrets
   shell:
     oc process --namespace {{ AMUN_API_NAMESPACE }} --filename ../openshift/secrets-template.yaml
-    -p AMUN_API_APP_SECRET_KEY="{{ AMUN_API_APP_SECRET_KEY }}" | oc apply -f -
+    -p AMUN_API_APP_SECRET_KEY="{{ AMUN_API_APP_SECRET_KEY }}"
+    -p SENTRY_DSN="{{ SENTRY_DSN }}" | oc apply -f -
 
 - name: create Amun configmap
   shell:
