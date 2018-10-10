@@ -118,7 +118,7 @@ paths:
         200:
           description: Successful response with insection run log.
           schema:
-            $ref: "#/definitions/InspectionRunLogResponse"
+            $ref: "#/definitions/InspectionJobLogResponse"
         400:
           description: On invalid request.
           schema:
@@ -372,7 +372,7 @@ definitions:
     items: *analysisResult
   InspectionJobStatusResponse: &inspectionStatusResponse
     type: object
-    description: Information about the current inspection status.
+    description: Status about the current job run of inspection.
     additionalProperties: false
     required:
       - parameters
@@ -392,26 +392,28 @@ definitions:
         properties:
           container:
             type: string
-            description: SHA of container image in which the analysis is done.
+            description: SHA of container image in which the inspection is done.
             x-nullable: true
           exit_code:
             type: integer
-            description: Return code of the process perfoming analysis.
+            description: >
+              Return code of the process perfoming inspection (user supplied 
+              script return value).
             x-nullable: true
           finished_at:
             type: string
             description: >
-              Datetime in ISO format informing about when the analysis
+              Datetime in ISO format informing about when the inspection
               has finished.
             x-nullable: true
           reason:
             type: string
-            description: Reasoning on finished run.
+            description: Reasoning on finished inspection run.
             x-nullable: true
           started_at:
             type: string
             description: >
-              Datetime in ISO format informing about when the analysis
+              Datetime in ISO format informing about when the inspection
               has started.
           state:
             type: string
@@ -420,22 +422,57 @@ definitions:
         type: object
         description: Parameters echoed back to user for debugging.
         additionalProperties: true
-  InspectionBuildStatusResponse: *inspectionStatusResponse
-  AnalysisUnfinishedResultResponse:
+  InspectionBuildStatusResponse:
     type: object
+    description: Status about the current build of inspection.
+    additionalProperties: false
     required:
-      - error
       - parameters
       - status
     properties:
-      error:
-        type: string
-        description: Error information for user.
+      status:
+        type: object
+        description: Status information about the inspection run.
+        additionalProperties: false
+        required:
+          - container
+          - exit_code
+          - finished_at
+          - reason
+          - started_at
+          - state
+        properties:
+          container:
+            type: string
+            description: SHA of container image in which the build is done.
+            x-nullable: true
+          exit_code:
+            type: integer
+            description: Return code of the build process.
+            x-nullable: true
+          finished_at:
+            type: string
+            description: >
+              Datetime in ISO format informing about when the build
+              has finished.
+            x-nullable: true
+          reason:
+            type: string
+            description: Reasoning on finished build.
+            x-nullable: true
+          started_at:
+            type: string
+            description: >
+              Datetime in ISO format informing about when the build
+              has started.
+          state:
+            type: string
+            example: terminated
       parameters:
         type: object
         description: Parameters echoed back to user for debugging.
-      status: *inspectionStatusResponse
-  InspectionRunLogResponse: &inspectionLogResponse
+        additionalProperties: true
+  InspectionJobLogResponse: &inspectionLogResponse
     type: object
     required:
       - log
