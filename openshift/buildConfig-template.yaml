@@ -54,6 +54,7 @@ objects:
             - name: WEB_CONCURRENCY
               value: '4'
       triggers:
+        - type: ConfigChange
         - type: ImageChange
           imageChange: {}
 
