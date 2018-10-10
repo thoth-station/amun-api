@@ -97,9 +97,22 @@ def get_inspection_job_log(inspection_id: str) -> dict:
     parameters = {'inspection_id': inspection_id}
     try:
         log = _OPENSHIFT.get_job_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
-    except NotFoundException:
+    except NotFoundException as exc:
+        try:
+            # Try to get status so a user knows to ask later.
+            _OPENSHIFT.get_job_status_report(
+                inspection_id,
+                Configuration.AMUN_INSPECTION_NAMESPACE
+            )
+            return {
+                'error': 'No logs available yet for the given inspection id',
+                'parameters': parameters
+            }, 202
+        except NotFoundException:
+            pass
+
         return {
-            'error': 'Job log for the given inspection id was not found',
+            'error': 'No such inspection with the given inspection id',
             'parameters': inspection_id
         }, 404
 

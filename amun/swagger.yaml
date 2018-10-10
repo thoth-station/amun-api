@@ -100,6 +100,10 @@ paths:
           description: Successful response with insection run log.
           schema:
             $ref: "#/definitions/InspectionJobLogResponse"
+        202:
+          description: The inspection job was not scheduled yet, check back later.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
         400:
           description: On invalid request.
           schema:
