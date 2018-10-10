@@ -19,12 +19,12 @@
 
 import json
 import logging
+import os
 
 import toml
 import requests
 
 from .exceptions import ScriptObtainingError
-
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -57,6 +57,17 @@ def _obtain_script(script: str) -> str:
 
     return script
 
+
+def _write_file_string(content: str, path: str) -> str:
+    """Generate Dockerfile instruction that writes down the file content on the given path."""
+    # TODO: accept a list of files so we generate only one layer for all files
+    # TODO: escape content
+    # TODO: handle it in nice way so we can see it nicely in OpenShift's configuration
+    content = content.replace('"', '\\"').replace('\n', '\\\n')
+    path = path.replace('"', '\"')
+    return f'RUN echo "{content}" >"{path}"\n'
+
+
 def create_dockerfile(specification: dict) -> tuple:
     """Create a Dockerfile based on software stack specification."""
     script_present = False
@@ -75,8 +86,7 @@ def create_dockerfile(specification: dict) -> tuple:
         path = file_spec['path']
         content = file_spec['content']
         # This trick helps so that env variables are not expanded.
-        # TODO: escape content
-        dockerfile += f'RUN CONTENT="{content}" ' + 'echo "${CONTENT}" >' + path + '\n'
+        dockerfile += _write_file_string(content, path)
 
     # Create workdir only if needed.
     if 'python' in specification or 'script' in specification:
@@ -85,15 +95,14 @@ def create_dockerfile(specification: dict) -> tuple:
     if 'python' in specification:
         pipfile_content = toml.dumps(specification['python']['requirements'])
         pipfile_lock_content = json.dumps(specification['python']['requirements_locked'], sort_keys=True, indent=4)
-        dockerfile += f'RUN CONTENT="{pipfile_content} echo $CONTENT" >/home/amun/Pipfile\n && ' + \
-            f'CONTENT="{pipfile_lock_content}" echo $CONTENT >/home/amun/Pipfile.lock'
+        dockerfile += _write_file_string(pipfile_content, '/home/amun/Pipfile')
+        dockerfile += _write_file_string(pipfile_lock_content, '/home/amun/Pipfile.lock')
 
     if 'script' in specification:
-        # TODO: escape content
         script_present = True
         content = _obtain_script(specification['script'])
-        dockerfile += f'RUN CONTENT="{content}" ' + \
-            'echo "${CONTENT}" >/home/amun/script && chmod a+x /home/amun/script\n'
+        dockerfile += _write_file_string(content, '/home/amun/script')
+        dockerfile += f'RUN chmod a+x /home/amun/script\n'
         dockerfile += "CMD [/home/amun/script]\n"
 
     # An arbitrary user.
