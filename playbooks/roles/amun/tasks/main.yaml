@@ -61,3 +61,9 @@
 
   - name: create Amun Inspect ImageStream template
     command: oc create --save-config=true --namespace {{ AMUN_INFRA_NAMESPACE }} --filename ../openshift/inspectImageStream-template.yaml
+
+  - name: create Amun Inspect HW Info ImageStream template
+    command: oc create --save-config=true --namespace {{ AMUN_INFRA_NAMESPACE }} --filename https://raw.githubusercontent.com/thoth-station/amun-hwinfo/master/openshift/imageStream-template.yaml
+
+  - name: create Amun Inspect HW Info BuildConfig template
+    command: oc create --save-config=true --namespace {{ AMUN_INFRA_NAMESPACE }} --filename https://raw.githubusercontent.com/thoth-station/amun-hwinfo/master/openshift/buildConfig-template.yaml

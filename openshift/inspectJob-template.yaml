@@ -50,6 +50,18 @@ objects:
                 requests:
                   cpu: 750m
                   memory: 256Mi
+              volumeMounts:
+                - mountPath: /home/amun/hwinfo
+                  name: hw-info-volume
+          initContainers:
+            - name: inspect-hwinfo
+              image: inspect-hwinfo
+              volumeMounts:
+                - mountPath: /home/amun/hwinfo
+                  name: hw-info-volume
+          volumes:
+            - name: hw-info-volume
+              emptyDir: {}
       triggers:
         - type: ImageChange
           imageChangeParams:

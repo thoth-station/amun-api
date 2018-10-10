@@ -60,6 +60,20 @@ stream. These are logs printed by the script provided by the Amun user.
    :alt: Amun service architecture.
    :align: center
 
+Gathering Hardware Configuration
+================================
+
+Each time there is created a request with a script run (so there is actually
+spawned job responsible for running the provided script), there is run an
+init container that gathers information about hardware that is present on
+node where the application is run. This information is available as a JSON
+file unde ``/home/amun/hwinfo/info.json``. The script that is provided by
+user can pick this file as a metadata for the inspection run (and for example
+submit it to a remote).
+
+The actual application that gathers information about hardware present can be
+found in
+`amun-hwinfo repository <https://github.com/thoth-station/amun-hwinfo>`_.
 
 An example scenario
 ===================
