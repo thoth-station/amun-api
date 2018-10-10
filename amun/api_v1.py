@@ -114,7 +114,10 @@ def get_inspection_build_log(inspection_id: str) -> dict:
     parameters = {'inspection_id': inspection_id}
 
     try:
-        status = _OPENSHIFT.get_build_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+        status = _OPENSHIFT.get_pod_log(
+            inspection_id + '-1-build',
+            Configuration.AMUN_INSPECTION_NAMESPACE
+        )
     except NotFoundException:
         return {
             'error': 'Build log with for the given inspection id was not found',
