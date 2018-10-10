@@ -86,6 +86,11 @@ objects:
                     secretKeyRef:
                       name: amun
                       key: app-secret-key
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: amun
+                      key: sentry-dsn
                 - name: PROMETHEUS_PUSHGATEWAY_HOST
                   valueFrom:
                   configMapKeyRef:
