@@ -103,7 +103,7 @@ def create_dockerfile(specification: dict) -> tuple:
         content = _obtain_script(specification['script'])
         dockerfile += _write_file_string(content, '/home/amun/script')
         dockerfile += f'RUN chmod a+x /home/amun/script\n'
-        dockerfile += "CMD [/home/amun/script]\n"
+        dockerfile += 'CMD ["/home/amun/script"]\n'
 
     # An arbitrary user.
     dockerfile += "USER 1042\n"
