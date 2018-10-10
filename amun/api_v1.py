@@ -100,7 +100,7 @@ def get_inspection_job_log(inspection_id: str) -> dict:
     except NotFoundException:
         return {
             'error': 'Job log for the given inspection id was not found',
-            'parameters': inspection_id
+            'parameters': parameters
         }, 404
 
     return {
