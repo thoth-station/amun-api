@@ -26,13 +26,13 @@ from flask import jsonify
 import connexion
 from flask_script import Manager
 from thoth.common import datetime2datetime_str
-#from thoth.common import init_logging
+from thoth.common import init_logging
 from datetime import datetime
 
 from .configuration import Configuration
 
-# TODO: enable once new thoth-common will be released with configurable prefix support
-#init_logging()
+# Configure global application logging using Thoth's init_logging.
+init_logging(logging_env_var_start='AMUN_LOG_')
 
 # Expose for uWSGI.
 app = connexion.App(__name__)

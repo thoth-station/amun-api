@@ -20,7 +20,7 @@
     command: "oc project {{ AMUN_API_NAMESPACE }}"
     register: project_exists
     ignore_errors: true
-    changed_when: False
+    changed_when: false
 
   - name: Deprovision Amun API
     command: "oc delete bc,configmap,cronjob,dc,is,pod,role,rolebinding,route,\
@@ -30,7 +30,7 @@
     command: "oc project {{ AMUN_INSPECTION_NAMESPACE }}"
     register: project_exists
     ignore_errors: true
-    changed_when: False
+    changed_when: false
 
   - name: Deprovision Amun Inspection Namespace
     command: "oc delete bc,configmap,cronjob,dc,is,pod,role,rolebinding,route,\
@@ -40,9 +40,8 @@
     command: "oc project {{ AMUN_INFRA_NAMESPACE }}"
     register: project_exists
     ignore_errors: true
-    changed_when: False
+    changed_when: false
 
   - name: Deprovision Amun Infra Namespace
     command: "oc delete bc,configmap,cronjob,dc,is,pod,role,rolebinding,route,\
       secret,svc,sa,template,clusterrole --selector 'app=amun'"
-

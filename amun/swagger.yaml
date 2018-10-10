@@ -217,7 +217,7 @@ definitions:
           Parameters echoed back to user (with default parameters if omitted).
       build_created:
         type: boolean
-        description: True if the build was scheduled for the given 
+        description: True if the build was scheduled for the given.
       job_created:
         type: boolean
         description: >
@@ -397,7 +397,7 @@ definitions:
           exit_code:
             type: integer
             description: >
-              Return code of the process perfoming inspection (user supplied 
+              Return code of the process perfoming inspection (user supplied
               script return value).
             x-nullable: true
           finished_at:
