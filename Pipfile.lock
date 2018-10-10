@@ -277,10 +277,10 @@
         },
         "sentry-sdk": {
             "hashes": [
-                "sha256:593c81517e98ab67edc8def34fe3afacde83eb899da31cd069b448a0ac122a83",
-                "sha256:6fcb7e87069221e3ddbc9a7baf756e69b3346020f8fa20057d0df2466d8ea011"
+                "sha256:47e612413dd9ce247b6383f8eddb405c02411f152694aadea56640713bae0eed",
+                "sha256:f8f302e186076b8cfe80472ac7da93d06325dd446d7bb0ed60e867a4fcb808d9"
             ],
-            "version": "==0.3.11"
+            "version": "==0.4.0"
         },
         "six": {
             "hashes": [
@@ -291,18 +291,18 @@
         },
         "swagger-spec-validator": {
             "hashes": [
-                "sha256:7212467c6be39a86ed5b0009ad04d1a1a8c4b0bb7eea8ba396763347bdc3e20a",
-                "sha256:aec4cbc4d16a55c4ba7fcf1f42d2600b5813114060e0dea0553c9527b0038a2c"
+                "sha256:320308dd4e9525daf2c041d37414283b3c7424de912ea5c37c215206e3890e44",
+                "sha256:b9618efbfa5446cdf09e72f9d384b869970c63c9a726c981f0abcf2d63a929cb"
             ],
-            "version": "==2.4.0"
+            "version": "==2.4.1"
         },
         "thoth-common": {
             "hashes": [
-                "sha256:588d377a496655f600676801e430a5c7f2f682350a774866d787f65e75f4f0f3",
-                "sha256:db26bc1c619deff5e77b8a5b754921d19c917cc05ffeca30f15aa4b7f1cfacff"
+                "sha256:2532b52a93e28382a22b862a5e83d8d8c4cb45070528e327c1c2748d1dc5e226",
+                "sha256:52dbdb02e87b2950270686dd913f7e1a53c35785b5184aaf7c06bbe4f95c00bc"
             ],
             "index": "pypi",
-            "version": "==0.3.7"
+            "version": "==0.3.9"
         },
         "toml": {
             "hashes": [
