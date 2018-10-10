@@ -66,7 +66,7 @@ def post_generate_dockerfile(specification: dict):
     }, 200
 
 
-def post_inspect(specification: dict) -> dict:
+def post_inspection(specification: dict) -> dict:
     """Create new inspection for the given software stack."""
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
     dockerfile, run_job = _do_create_dockerfile(specification)
@@ -92,14 +92,14 @@ def post_inspect(specification: dict) -> dict:
     }, 202
 
 
-def get_inspect_job_log(inspection_id: str) -> dict:
+def get_inspection_job_log(inspection_id: str) -> dict:
     """Get logs of the given inspection."""
     parameters = {'inspection_id': inspection_id}
     try:
         log = _OPENSHIFT.get_job_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException:
         return {
-            'error': 'The given inspection id was not found',
+            'error': 'Job log for the given inspection id was not found',
             'parameters': inspection_id
         }, 404
 
@@ -109,25 +109,7 @@ def get_inspect_job_log(inspection_id: str) -> dict:
     }, 200
 
 
-def get_inspect_job_status(inspection_id: str) -> dict:
-    """Get status of the inspection."""
-    parameters = {'inspection_id': inspection_id}
-
-    try:
-        status = _OPENSHIFT.get_job_status_report(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
-    except NotFoundException:
-        return {
-            'error': 'The given inspection id was not found',
-            'parameters': parameters
-        }, 404
-
-    return {
-        'status': status,
-        'parameters': parameters
-    }, 200
-
-
-def get_inspect_build_log(inspection_id: str) -> dict:
+def get_inspection_build_log(inspection_id: str) -> dict:
     """Get build log of an inspection."""
     parameters = {'inspection_id': inspection_id}
 
@@ -135,7 +117,7 @@ def get_inspect_build_log(inspection_id: str) -> dict:
         status = _OPENSHIFT.get_build_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException:
         return {
-            'error': 'The given inspection id was not found',
+            'error': 'Build log with for the given inspection id was not found',
             'parameters': parameters
         }, 404
 
@@ -145,16 +127,17 @@ def get_inspect_build_log(inspection_id: str) -> dict:
     }, 200
 
 
-def get_inspect_build_status(inspection_id: str) -> dict:
-    """Get status of an inspection build."""
+def get_inspection_status(inspection_id: str) -> dict:
+    """Get status of an inspection."""
     parameters = {'inspection_id': inspection_id}
 
+    build_status = None
     try:
         # As we treat inspection_id same all over the places (dc, dc, job), we can
         # safely call gathering info about pod. There will be always only one build
         # (hopefully) - created per a user request.
         # OpenShift does not expose any endpoint for a build status anyway.
-        status = _OPENSHIFT.get_job_status_report(
+        build_status = _OPENSHIFT.get_pod_status_report(
             inspection_id + '-1-build',
             Configuration.AMUN_INSPECTION_NAMESPACE
         )
@@ -164,7 +147,18 @@ def get_inspect_build_status(inspection_id: str) -> dict:
             'parameters': parameters
         }, 404
 
+    job_status = None
+    try:
+        job_status = _OPENSHIFT.get_job_status_report(
+            inspection_id,
+            Configuration.AMUN_INSPECTION_NAMESPACE
+        )
+    except NotFoundException:
+        # There was no job scheduled - user did not submitted any script to run the job. Report None.
+        pass
+
     return {
-        'status': status,
+        'build': build_status,
+        'job': job_status,
         'parameters': parameters
     }, 200

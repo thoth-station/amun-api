@@ -36,7 +36,7 @@ paths:
     post:
       tags: ['Inspection']
       x-swagger-router-controller: amun.api_v1
-      operationId: post_inspect
+      operationId: post_inspection
       summary: Inspect the given application stack.
       parameters:
         - name: specification
@@ -59,7 +59,7 @@ paths:
     get:
       tags: ['Inspection']
       x-swagger-router-controller: amun.api_v1
-      operationId: get_inspect_build_log
+      operationId: get_inspection_build_log
       summary: Get log for a specific inspection build.
       parameters:
         - name: inspection_id
@@ -77,27 +77,8 @@ paths:
           description: On invalid request.
           schema:
             $ref: "#/definitions/InspectionResponseError"
-
-  /inspect/{inspection_id}/build/status:
-    get:
-      tags: ['Inspection']
-      x-swagger-router-controller: amun.api_v1
-      operationId: get_inspect_build_status
-      summary: Get status of a build run.
-      parameters:
-        - name: inspection_id
-          format: path
-          in: path
-          required: true
-          type: string
-          description: Id of inspection run.
-      responses:
-        200:
-          description: Successful response with insection build status.
-          schema:
-            $ref: "#/definitions/InspectionBuildStatusResponse"
-        400:
-          description: On invalid request.
+        404:
+          description: The given inspection build referenced by inspection id was not found.
           schema:
             $ref: "#/definitions/InspectionResponseError"
 
@@ -105,7 +86,7 @@ paths:
     get:
       tags: ['Inspection']
       x-swagger-router-controller: amun.api_v1
-      operationId: get_inspect_job_log
+      operationId: get_inspection_job_log
       summary: Get log for a specific inspection run.
       parameters:
         - name: inspection_id
@@ -123,13 +104,17 @@ paths:
           description: On invalid request.
           schema:
             $ref: "#/definitions/InspectionResponseError"
+        404:
+          description: The given inspection job referenced by inspection id was not found.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
 
-  /inspect/{inspection_id}/job/status:
+  /inspect/{inspection_id}/status:
     get:
       tags: ['Inspection']
       x-swagger-router-controller: amun.api_v1
-      operationId: get_inspect_job_status
-      summary: Get status of the application run.
+      operationId: get_inspection_status
+      summary: Get status of an inspection.
       parameters:
         - name: inspection_id
           format: path
@@ -139,11 +124,15 @@ paths:
           description: Id of inspection run.
       responses:
         200:
-          description: Successful response with insection run status.
+          description: Successful response with insection status.
           schema:
-            $ref: "#/definitions/InspectionJobStatusResponse"
+            $ref: "#/definitions/InspectionStatusResponse"
         400:
           description: On invalid request.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
+        404:
+          description: The given inspection with provided id was not found.
           schema:
             $ref: "#/definitions/InspectionResponseError"
 
@@ -254,7 +243,7 @@ definitions:
       parameters:
         type: object
         description: Parameters echoed back to user for debugging.
-  InspectionResultResponse: &analysisResult
+  InspectionResultResponse:
     type: object
     additionalProperties: false
     description: Result of an inspection
@@ -366,21 +355,22 @@ definitions:
         type: object
         additionalProperties: true
         description: Actual result of an inspection run.
-  InspectionListingResponse:
-    type: array
-    description: Listing of available results.
-    items: *analysisResult
-  InspectionJobStatusResponse: &inspectionStatusResponse
+  InspectionStatusResponse:
     type: object
     description: Status about the current job run of inspection.
     additionalProperties: false
     required:
       - parameters
-      - status
+      - build
+      - job
     properties:
-      status:
+      parameters:
         type: object
-        description: Status information about the inspection run.
+        description: Parameters echoed back to user for debugging.
+        additionalProperties: true
+      build:
+        type: object
+        description: Status information for the inspection build.
         additionalProperties: false
         required:
           - container
@@ -418,21 +408,9 @@ definitions:
           state:
             type: string
             example: terminated
-      parameters:
+      job:
         type: object
-        description: Parameters echoed back to user for debugging.
-        additionalProperties: true
-  InspectionBuildStatusResponse:
-    type: object
-    description: Status about the current build of inspection.
-    additionalProperties: false
-    required:
-      - parameters
-      - status
-    properties:
-      status:
-        type: object
-        description: Status information about the inspection run.
+        description: Status information for the inspection job.
         additionalProperties: false
         required:
           - container
@@ -444,44 +422,55 @@ definitions:
         properties:
           container:
             type: string
-            description: SHA of container image in which the build is done.
+            description: SHA of container image in which the inspection is done.
             x-nullable: true
           exit_code:
             type: integer
-            description: Return code of the build process.
+            description: >
+              Return code of the process perfoming inspection (user supplied
+              script return value).
             x-nullable: true
           finished_at:
             type: string
             description: >
-              Datetime in ISO format informing about when the build
+              Datetime in ISO format informing about when the inspection
               has finished.
             x-nullable: true
           reason:
             type: string
-            description: Reasoning on finished build.
+            description: Reasoning on finished inspection run.
             x-nullable: true
           started_at:
             type: string
             description: >
-              Datetime in ISO format informing about when the build
+              Datetime in ISO format informing about when the inspection
               has started.
           state:
             type: string
             example: terminated
-      parameters:
-        type: object
-        description: Parameters echoed back to user for debugging.
-        additionalProperties: true
-  InspectionJobLogResponse: &inspectionLogResponse
+  InspectionJobLogResponse:
     type: object
+    description: Job logs for the given inspection.
     required:
       - log
       - parameters
     properties:
       log:
         type: string
-        description: Analyzer logs printed to stdout/stderr as a plain text.
+        description: Inspection job logs printed to stdout/stderr as a plain text.
       parameters:
         type: object
         description: Parameters echoed back to user for debugging.
-  InspectionBuildLogResponse: *inspectionLogResponse
+  InspectionBuildLogResponse:
+    type: object
+    description: Build logs for the given inspection.
+    required:
+      - log
+      - parameters
+    properties:
+      log:
+        type: string
+        description: Inspection job logs printed to stdout/stderr as a plain text.
+      parameters:
+        type: object
+        description: Parameters echoed back to user for debugging.
