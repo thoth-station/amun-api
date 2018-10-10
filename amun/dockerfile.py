@@ -52,7 +52,7 @@ def _obtain_script(script: str) -> str:
             raise ScriptObtainingError(
                 f"Failed to obtain script from {script} (HTTP status: {response.status_code})"
             )
-            
+
         return response.text
 
     return script

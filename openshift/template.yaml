@@ -44,7 +44,7 @@ parameters:
     displayName: Amun API Namespace
     required: true
     name: AMUN_API_NAMESPACE
-  
+
   - description: Namespace where inspection is done.
     displayName: Amun Inspection Namespace
     required: true
