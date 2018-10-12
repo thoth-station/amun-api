@@ -298,11 +298,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:2532b52a93e28382a22b862a5e83d8d8c4cb45070528e327c1c2748d1dc5e226",
-                "sha256:52dbdb02e87b2950270686dd913f7e1a53c35785b5184aaf7c06bbe4f95c00bc"
+                "sha256:ccf901789e8b67fcc7f70e9b65e87db2f5c475008a3edc25e19cccebd430ea9f",
+                "sha256:e258f8d3c70fec87cd6d153857639f75f40a124abcc640e466189e8d07a2c447"
             ],
             "index": "pypi",
-            "version": "==0.3.9"
+            "version": "==0.3.11"
         },
         "toml": {
             "hashes": [

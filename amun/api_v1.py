@@ -112,8 +112,8 @@ def get_inspection_job_log(inspection_id: str) -> dict:
             pass
 
         return {
-            'error': 'No such inspection with the given inspection id',
-            'parameters': inspection_id
+            'error': 'Job log for the given inspection id was not found',
+            'parameters': parameters
         }, 404
 
     return {

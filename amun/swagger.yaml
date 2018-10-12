@@ -462,6 +462,7 @@ definitions:
       log:
         type: string
         description: Inspection job logs printed to stdout/stderr as a plain text.
+        x-nullable: true
       parameters:
         type: object
         description: Parameters echoed back to user for debugging.
@@ -475,6 +476,7 @@ definitions:
       log:
         type: string
         description: Inspection job logs printed to stdout/stderr as a plain text.
+        x-nullable: true
       parameters:
         type: object
         description: Parameters echoed back to user for debugging.

@@ -63,9 +63,9 @@ def _write_file_string(content: str, path: str) -> str:
     # TODO: accept a list of files so we generate only one layer for all files
     # TODO: escape content
     # TODO: handle it in nice way so we can see it nicely in OpenShift's configuration
-    content = content.replace('"', '\\"').replace('\n', '\\\n')
+    content = content.replace('"', '\\"').replace('\n', '\\n\\\n')
     path = path.replace('"', '\"')
-    return f'RUN echo "{content}" >"{path}"\n'
+    return f'RUN echo -e "{content}" >"{path}"\n'
 
 
 def create_dockerfile(specification: dict) -> tuple:
@@ -103,7 +103,7 @@ def create_dockerfile(specification: dict) -> tuple:
         content = _obtain_script(specification['script'])
         dockerfile += _write_file_string(content, '/home/amun/script')
         dockerfile += f'RUN chmod a+x /home/amun/script\n'
-        dockerfile += "CMD [/home/amun/script]\n"
+        dockerfile += 'CMD ["/home/amun/script"]\n'
 
     # An arbitrary user.
     dockerfile += "USER 1042\n"
