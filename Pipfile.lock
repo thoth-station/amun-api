@@ -125,9 +125,10 @@
         },
         "itsdangerous": {
             "hashes": [
-                "sha256:cbb3fcf8d3e33df861709ecaf89d9e6629cff0a217bc2848f1b41cd30d360519"
+                "sha256:a7de3201740a857380421ef286166134e10fe58846bcefbc9d6424a69a0b99ec",
+                "sha256:aca4fc561b7671115a2156f625f2eaa5e0e3527e0adf2870340e7968c0a81f85"
             ],
-            "version": "==0.24"
+            "version": "==1.0.0"
         },
         "jinja2": {
             "hashes": [
@@ -236,10 +237,10 @@
         },
         "rfc5424-logging-handler": {
             "hashes": [
-                "sha256:1ab343e1ee3639251d6b5dfd4db2e614f056b068c148a172314486804aac2c7d",
-                "sha256:f51dd80c2606fec874f871ed4b920c4087d4308064d2a138b8d55808d4987dce"
+                "sha256:8c944b5361df53186c99723ed473c4c240def85fb13f4dcd69151baa4a9cbdda",
+                "sha256:adb2228ada491ae3e83f6840768d9818763dffca506275abb03ecd5caf5b2a64"
             ],
-            "version": "==1.2.1"
+            "version": "==1.3.0"
         },
         "rsa": {
             "hashes": [
@@ -277,10 +278,10 @@
         },
         "sentry-sdk": {
             "hashes": [
-                "sha256:0f8998a847121444388785c7ecf8540cd52d5a323cac38299298821318947926",
-                "sha256:8f6391eca1f02ea0d09edbd7e9b835fc66dbf5c94ab29c34b848295081510af4"
+                "sha256:475ecd892da2eac77ced7193231baf2431f3852f1795362e9e780e0f7af728b1",
+                "sha256:883f31e0399991c02a186fa32a17af6e4cfea330deab2c38f50b60f9391db2fc"
             ],
-            "version": "==0.4.2"
+            "version": "==0.4.3"
         },
         "six": {
             "hashes": [
@@ -298,11 +299,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:ccf901789e8b67fcc7f70e9b65e87db2f5c475008a3edc25e19cccebd430ea9f",
-                "sha256:e258f8d3c70fec87cd6d153857639f75f40a124abcc640e466189e8d07a2c447"
+                "sha256:6e874ee5aff6d9b2b3844cb4140e3ba866e9db85fac4436894e5948f951122f5",
+                "sha256:a1dcb8ade11f014cb9b8e1b2b99efc323e1e16cc3863ccf80495199db6c19e70"
             ],
             "index": "pypi",
-            "version": "==0.3.11"
+            "version": "==0.3.12"
         },
         "toml": {
             "hashes": [
