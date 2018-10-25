@@ -1,18 +1,19 @@
 ---
-- name: Playbook to provision Amun
+- name: "Playbook to provision Amun"
 
   hosts: localhost
+  connection: local
+  gather_facts: false
+
   vars:
     openshift_master_url: "{{ lookup('env','OCP_URL') }}"
     token: "{{ lookup('env','OCP_TOKEN') }}"
-    AMUN_INFRA_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
-    AMUN_API_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
-    AMUN_INSPECTION_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
-    AMUN_API_APP_SECRET_KEY: "{{ lookup('env','AMUN_API_APP_SECRET_KEY') }}"
-    PROMETHEUS_PUSHGATEWAY_HOST: "{{ lookup('env','PROMETHEUS_PUSHGATEWAY_HOST') }}"
-    PROMETHEUS_PUSHGATEWAY_PORT: "{{ lookup('env','PROMETHEUS_PUSHGATEWAY_PORT') }}"
 
-  gather_facts: false
-  connection: local
   roles:
     - role: amun
+      AMUN_INFRA_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
+      AMUN_API_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
+      AMUN_INSPECTION_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
+      AMUN_API_APP_SECRET_KEY: "{{ lookup('env','AMUN_API_APP_SECRET_KEY') }}"
+      PROMETHEUS_PUSHGATEWAY_HOST: "{{ lookup('env','PROMETHEUS_PUSHGATEWAY_HOST') }}"
+      PROMETHEUS_PUSHGATEWAY_PORT: "{{ lookup('env','PROMETHEUS_PUSHGATEWAY_PORT') }}"
