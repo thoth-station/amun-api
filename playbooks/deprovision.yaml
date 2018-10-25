@@ -1,25 +1,25 @@
 ---
-  - name: "Playbook to deprovision Amun"
+- name: "Playbook to deprovision Amun"
 
-    hosts: localhost
-    connection: local
-    gather_facts: false
+  hosts: localhost
+  connection: local
+  gather_facts: false
 
-    tasks:
-      - fail: msg="Bailing out. this play requires 'AMUN_API_NAMESPACE'"
-        when: AMUN_API_NAMESPACE is not defined
+  tasks:
+    - fail: msg="Bailing out. this play requires 'AMUN_API_NAMESPACE'"
+      when: AMUN_API_NAMESPACE is not defined
 
-      - fail: msg="Bailing out. this play requires 'AMUN_INSPECTION_NAMESPACE'"
-        when: AMUN_INSPECTION_NAMESPACE is not defined
+    - fail: msg="Bailing out. this play requires 'AMUN_INSPECTION_NAMESPACE'"
+      when: AMUN_INSPECTION_NAMESPACE is not defined
 
-      - fail: msg="Bailing out. this play requires 'AMUN_INFRA_NAMESPACE'"
-        when: AMUN_INFRA_NAMESPACE is not defined
+    - fail: msg="Bailing out. this play requires 'AMUN_INFRA_NAMESPACE'"
+      when: AMUN_INFRA_NAMESPACE is not defined
 
-      - name: "Deprovision Amun API"
-        command: "oc --namespace {{ item }} \
-          delete bc,configmap,cronjob,dc,is,pod,role,rolebinding,route,secret,svc,sa,template,clusterrole \
-          --selector 'app=amun'"
-        with_items:
-          - "{{ AMUN_API_NAMESPACE }}"
-          - "{{ AMUN_INSPECTION_NAMESPACE }}"
-          - "{{ AMUN_INFRA_NAMESPACE }}"
+    - name: "Deprovision Amun API"
+      command: "oc --namespace {{ item }} \
+        delete bc,configmap,cronjob,dc,is,pod,role,rolebinding,route,secret,svc,sa,template,clusterrole \
+        --selector 'app=amun'"
+      with_items:
+        - "{{ AMUN_API_NAMESPACE }}"
+        - "{{ AMUN_INSPECTION_NAMESPACE }}"
+        - "{{ AMUN_INFRA_NAMESPACE }}"
