@@ -1,12 +1,13 @@
+---
 - project:
     check:
       jobs:
-        - linters
+        - "thoth-coala"
     gate:
-      queue: thoth-station/core
+      queue: "thoth-station/core"
       jobs:
-        - linters
+        - "thoth-coala"
     kebechet-auto-gate:
-      queue: thoth-station/core
+      queue: "thoth-station/core"
       jobs:
-        - linters
+        - "thoth-coala"
