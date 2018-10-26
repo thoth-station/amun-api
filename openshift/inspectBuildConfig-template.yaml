@@ -37,8 +37,8 @@ objects:
           memory: '512Mi'
           cpu: '500m'
         requests:
-          memory: '512Mi'
-          cpu: '500m'
+          memory: ${AMUN_BUILD_CPU}
+          cpu: ${AMUN_BUILD_MEMORY}
       strategy:
         type: Docker
       triggers:
@@ -54,3 +54,13 @@ parameters:
     displayName: Generated Dockerfile
     required: true
     name: AMUN_GENERATED_DOCKERFILE
+
+  - name: AMUN_BUILD_CPU
+    description: CPU cores requested for running job
+    displayName: Job CPU
+    default: 500m
+
+  - name: AMUN_BUILD_MEMORY
+    description: Memory requested for running job
+    displayName: Job Memory
+    default: 128Mi

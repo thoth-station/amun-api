@@ -79,10 +79,10 @@ def post_inspection(specification: dict) -> dict:
 
     inspection_id = _generate_inspection_id()
     create_inspect_imagestream(_OPENSHIFT, inspection_id)
-    create_inspect_buildconfig(_OPENSHIFT, inspection_id, dockerfile)
+    create_inspect_buildconfig(_OPENSHIFT, inspection_id, dockerfile, specification)
 
     if run_job:
-        create_inspect_job(_OPENSHIFT, inspection_id)
+        create_inspect_job(_OPENSHIFT, inspection_id, specification)
 
     return {
         'parameters': specification,
