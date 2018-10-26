@@ -63,4 +63,4 @@ parameters:
   - name: AMUN_BUILD_MEMORY
     description: Memory requested for running job
     displayName: Job Memory
-    default: 128Mi
+    default: 512Mi

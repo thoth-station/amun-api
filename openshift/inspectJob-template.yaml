@@ -80,9 +80,9 @@ parameters:
   - name: AMUN_JOB_CPU
     description: CPU cores requested for build
     displayName: Build CPU
-    default: 500m
+    default: 750m
 
   - name: AMUN_JOB_MEMORY
     description: Memory requested for build
     displayName: Build Memory
-    default: 128Mi
+    default: 256Mi

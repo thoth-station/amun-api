@@ -43,7 +43,8 @@ def create_inspect_imagestream(openshift: OpenShift, inspection_id: str) -> str:
     template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     imagestream = template['objects'][0]
 
-    response = openshift.ocp_client.resources.get(api_version='v1', kind=imagestream['kind']).create(
+    response = openshift.ocp_client.resources.get(api_version='v1', kind=imagestream['kind']).\
+    create(
         body=imagestream,
         namespace=Configuration.AMUN_INSPECTION_NAMESPACE
     )
@@ -65,29 +66,35 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
     response = response.to_dict()
     _LOGGER.debug("OpenShift response for getting Amun inspect BuildConfig template: %r", response)
 
+    parameters = {
+        'AMUN_INSPECTION_ID': inspection_id,
+        'AMUN_GENERATED_DOCKERFILE': dockerfile
+    }
+
     template = response['items'][0]
+
     if 'build' in specification:
         build_specification = specification['build']['response']
-        BUILD_MEMORY = build_specification['memory']
-        BUILD_CPU = build_specification['cpu']
+        if 'cpu' in build_specification['cpu']:
+            parameters['AMUN_BUILD_CPU'] = build_specification['cpu']
+        if 'memory' in build_specification['memory']:
+            parameters['AMUN_BUILD_MEMORY'] = build_specification['memory']
+
         openshift.set_template_parameters(
             template,
-            AMUN_INSPECTION_ID=inspection_id,
-            AMUN_GENERATED_DOCKERFILE=dockerfile,
-            AMUN_BUILD_CPU=BUILD_CPU,
-            AMUN_BUILD_MEMORY=BUILD_MEMORY,
+            **parameters,
             )
     else:
         openshift.set_template_parameters(
             template,
-            AMUN_INSPECTION_ID=inspection_id,
-            AMUN_GENERATED_DOCKERFILE=dockerfile,
+            **parameters,
             )
 
     template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     buildconfig = template['objects'][0]
 
-    response = openshift.ocp_client.resources.get(api_version='v1', kind=buildconfig['kind']).create(
+    response = openshift.ocp_client.resources.get(api_version='v1', kind=buildconfig['kind']).\
+    create(
         body=buildconfig,
         namespace=Configuration.AMUN_INSPECTION_NAMESPACE
     )
@@ -106,18 +113,28 @@ def create_inspect_job(openshift: OpenShift, image_stream_name: str, specificati
     response = response.to_dict()
     _LOGGER.debug("OpenShift response for getting Amun inspect Job template: %r", response)
 
+    parameters = {
+        'AMUN_INSPECTION_ID':image_stream_name
+    }
+
     template = response['items'][0]
+
     if 'run' in specification:
-        build_specification = specification['run']['response']
-        RUN_MEMORY = build_specification['memory']
-        RUN_CPU = build_specification['cpu']
-        openshift.set_template_parameters(template,
-            AMUN_INSPECTION_ID=image_stream_name,
-            AMUN_JOB_CPU=RUN_CPU,
-            AMUN_JOB_MEMORY=RUN_MEMORY,
+        run_specification = specification['run']['response']
+        if 'cpu' in run_specification['cpu']:
+            parameters['AMUN_JOB_CPU'] = run_specification['cpu']
+        if 'memory' in run_specification['memory']:
+            parameters['AMUN_JOB_MEMORY'] = run_specification['memory']
+
+        openshift.set_template_parameters(
+            template,
+            **parameters,
             )
     else:
-        openshift.set_template_parameters(template, AMUN_INSPECTION_ID=image_stream_name)
+        openshift.set_template_parameters(
+            template,
+            **parameters,
+            )
 
     template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     job = template['objects'][0]
