@@ -150,6 +150,7 @@ definitions:
     properties:
       base:
         type: string
+        minLength: 1
         description: Base image on which the runtime environment should be based on.
         example: 'fedora:28'
       packages:
@@ -192,11 +193,13 @@ definitions:
             properties:
               cpu: 
                 type: string
+                minLength: 1
                 description: CPU cores requested at build time
                 example: 500m
                 additionalProperties: false
               memory: 
                 type: string
+                minLength: 1
                 description: CPU Memory requested at build time
                 example: 256Mi
                 additionalProperties: false
@@ -217,11 +220,13 @@ definitions:
             properties:
               cpu: 
                 type: string
+                minLength: 1
                 description: CPU cores requested at run time
                 example: 500mi
                 additionalProperties: false
               memory: 
                 type: string
+                minLength: 1
                 description: CPU Memory requested at run time
                 example: 256Mi
                 additionalProperties: false
@@ -237,9 +242,11 @@ definitions:
           properties:
             path:
               type: string
+              minLength: 1
               description: Name of the file including an absolute path (relative will be taken from root).
             content:
               type: string
+              minLength: 1
               description: A string holding actual content of the file.
       script:
         type: string
@@ -251,6 +258,7 @@ definitions:
     properties:
       inspection_id:
         type: string
+        required: true
         description: >
           An id of submitted inspection for checking its status and its results.
         example: 'inspect-ABCXYZ'
