@@ -180,16 +180,11 @@ definitions:
         type: object
         description: Hardware requirements for build time
         additionalProperties: false
-        required:
-          - requests
         properties:
           requests:
             type: object
             description: Requested hardware environment at build time
             additionalProperties: false
-            required:
-              - cpu
-              - memory
             properties:
               cpu: 
                 type: string
@@ -207,16 +202,11 @@ definitions:
         type: object
         description: Hardware requirements for run time
         additionalProperties: false
-        required:
-          - requests
         properties:
           requests:
             type: object
             description: Requested hardware environment for run time
             additionalProperties: false
-            required:
-              - cpu
-              - memory
             properties:
               cpu: 
                 type: string
