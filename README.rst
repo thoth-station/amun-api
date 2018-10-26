@@ -108,7 +108,8 @@ Installation and Deployment
 ===========================
 
 .. code-block:: console
-
+  # install required Ansible Roles
+  ansible-galaxy install --role-file=requirements.yaml
   # Adjust configuration in the provision.yaml file.
   vim playbooks/provision.yaml
   # Deploy to the OpenShift cluster.
