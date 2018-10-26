@@ -184,20 +184,17 @@ definitions:
           requests:
             type: object
             description: Requested hardware environment at build time
-            additionalProperties: false
             properties:
               cpu: 
                 type: string
                 minLength: 1
                 description: CPU cores requested at build time
                 example: 500m
-                additionalProperties: false
               memory: 
                 type: string
                 minLength: 1
                 description: CPU Memory requested at build time
                 example: 256Mi
-                additionalProperties: false
       run:
         type: object
         description: Hardware requirements for run time
@@ -213,13 +210,11 @@ definitions:
                 minLength: 1
                 description: CPU cores requested at run time
                 example: 500mi
-                additionalProperties: false
               memory: 
                 type: string
                 minLength: 1
                 description: CPU Memory requested at run time
                 example: 256Mi
-                additionalProperties: false
       files:
         type: array
         description: Files passed to the context.
