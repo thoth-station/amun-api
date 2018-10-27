@@ -185,12 +185,12 @@ definitions:
             type: object
             description: Requested hardware environment at build time
             properties:
-              cpu: 
+              cpu:
                 type: string
                 minLength: 1
                 description: CPU cores requested at build time
                 example: 500m
-              memory: 
+              memory:
                 type: string
                 minLength: 1
                 description: CPU Memory requested at build time
@@ -205,12 +205,12 @@ definitions:
             description: Requested hardware environment for run time
             additionalProperties: false
             properties:
-              cpu: 
+              cpu:
                 type: string
                 minLength: 1
                 description: CPU cores requested at run time
                 example: 500mi
-              memory: 
+              memory:
                 type: string
                 minLength: 1
                 description: CPU Memory requested at run time

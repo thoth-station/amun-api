@@ -109,7 +109,7 @@ def create_inspect_job(openshift: OpenShift, image_stream_name: str, specificati
     _LOGGER.debug("OpenShift response for getting Amun inspect Job template: %r", response)
 
     parameters = {
-        'AMUN_INSPECTION_ID':image_stream_name
+        'AMUN_INSPECTION_ID': image_stream_name
     }
 
     template = response['items'][0]
