@@ -80,15 +80,10 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
         if 'memory' in build_specification['memory']:
             parameters['AMUN_BUILD_MEMORY'] = build_specification['memory']
 
-        openshift.set_template_parameters(
-            template,
-            **parameters,
-            )
-    else:
-        openshift.set_template_parameters(
-            template,
-            **parameters,
-            )
+    openshift.set_template_parameters(
+        template,
+        **parameters,
+        )
 
     template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     buildconfig = template['objects'][0]
@@ -126,15 +121,10 @@ def create_inspect_job(openshift: OpenShift, image_stream_name: str, specificati
         if 'memory' in run_specification['memory']:
             parameters['AMUN_JOB_MEMORY'] = run_specification['memory']
 
-        openshift.set_template_parameters(
-            template,
-            **parameters,
-            )
-    else:
-        openshift.set_template_parameters(
-            template,
-            **parameters,
-            )
+    openshift.set_template_parameters(
+        template,
+        **parameters,
+        )
 
     template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     job = template['objects'][0]
