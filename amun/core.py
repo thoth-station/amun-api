@@ -73,7 +73,7 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
     template = response['items'][0]
 
     if 'build' in specification:
-        build_specification = specification['build']['response']
+        build_specification = specification['build']['requests']
         if 'cpu' in build_specification['cpu']:
             parameters['AMUN_BUILD_CPU'] = build_specification['cpu']
         if 'memory' in build_specification['memory']:
@@ -113,7 +113,7 @@ def create_inspect_job(openshift: OpenShift, image_stream_name: str, specificati
     template = response['items'][0]
 
     if 'run' in specification:
-        run_specification = specification['run']['response']
+        run_specification = specification['run']['requests']
         if 'cpu' in run_specification['cpu']:
             parameters['AMUN_JOB_CPU'] = run_specification['cpu']
         if 'memory' in run_specification['memory']:
