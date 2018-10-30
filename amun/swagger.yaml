@@ -150,6 +150,7 @@ definitions:
     properties:
       base:
         type: string
+        minLength: 1
         description: Base image on which the runtime environment should be based on.
         example: 'fedora:28'
       packages:
@@ -175,6 +176,45 @@ definitions:
             type: object
             description: Pipfile.lock with fully pinned down and resolved software stack.
             additionalProperties: true
+      build:
+        type: object
+        description: Hardware requirements for build time
+        additionalProperties: false
+        properties:
+          requests:
+            type: object
+            description: Requested hardware environment at build time
+            properties:
+              cpu:
+                type: string
+                minLength: 1
+                description: CPU cores requested at build time
+                example: 500m
+              memory:
+                type: string
+                minLength: 1
+                description: CPU Memory requested at build time
+                example: 256Mi
+      run:
+        type: object
+        description: Hardware requirements for run time
+        additionalProperties: false
+        properties:
+          requests:
+            type: object
+            description: Requested hardware environment for run time
+            additionalProperties: false
+            properties:
+              cpu:
+                type: string
+                minLength: 1
+                description: CPU cores requested at run time
+                example: 500mi
+              memory:
+                type: string
+                minLength: 1
+                description: CPU Memory requested at run time
+                example: 256Mi
       files:
         type: array
         description: Files passed to the context.
@@ -187,9 +227,11 @@ definitions:
           properties:
             path:
               type: string
+              minLength: 1
               description: Name of the file including an absolute path (relative will be taken from root).
             content:
               type: string
+              minLength: 1
               description: A string holding actual content of the file.
       script:
         type: string
@@ -201,6 +243,7 @@ definitions:
     properties:
       inspection_id:
         type: string
+        required: true
         description: >
           An id of submitted inspection for checking its status and its results.
         example: 'inspect-ABCXYZ'

@@ -48,8 +48,8 @@ objects:
                   cpu: 750m
                   memory: 256Mi
                 requests:
-                  cpu: 750m
-                  memory: 256Mi
+                  cpu: ${AMUN_JOB_CPU}
+                  memory: ${AMUN_JOB_MEMORY}
               volumeMounts:
                 - mountPath: /home/amun/hwinfo
                   name: hw-info-volume
@@ -76,3 +76,13 @@ parameters:
     description: Id of inspection that is run.
     displayName: Inspection id
     required: true
+
+  - name: AMUN_JOB_CPU
+    description: CPU cores requested for build
+    displayName: Build CPU
+    default: 750m
+
+  - name: AMUN_JOB_MEMORY
+    description: Memory requested for build
+    displayName: Build Memory
+    default: 256Mi
