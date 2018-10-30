@@ -1,4 +1,5 @@
 .vscode
 amun/__pycache__/
 *.pyc
+*.retry
 .vault_pass
