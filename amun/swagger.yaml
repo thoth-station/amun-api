@@ -205,7 +205,7 @@ definitions:
                 example: 6
               CPU_MODEL:
                 type: integer
-                description:  Model number of CPU from CPU proc info
+                description: Model number of CPU from CPU proc info
                 example: 94
               PHYSICAL_CPUS:
                 type: integer
@@ -245,7 +245,7 @@ definitions:
                 example: 6
               CPU_MODEL:
                 type: integer
-                description:  Model number of CPU from CPU proc info
+                description: Model number of CPU from CPU proc info
                 example: 94
               PHYSICAL_CPUS:
                 type: integer
