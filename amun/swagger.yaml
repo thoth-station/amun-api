@@ -195,6 +195,26 @@ definitions:
                 minLength: 1
                 description: CPU Memory requested at build time
                 example: 256Mi
+          env:
+            type: object
+            description: Set environment variables for inspection job at build time
+            properties:
+              CPU_FAMILY:
+                type: integer
+                description: CPU family number from CPU proc info
+                example: 6
+              CPU_MODEL:
+                type: integer
+                description:  Model number of CPU from CPU proc info
+                example: 94
+              PHYSICAL_CPUS:
+                type: integer
+                description: Number of physical physical CPUs
+                example: 32
+              Processor:
+                type: string
+                description: Name of the CPU model name of CPU proc info
+                example: "Intel Core Processor (Skylake, IBRS)"
       run:
         type: object
         description: Hardware requirements for run time
@@ -215,6 +235,26 @@ definitions:
                 minLength: 1
                 description: CPU Memory requested at run time
                 example: 256Mi
+          env:
+            type: object
+            description: Set environment variables for inspection job at build time
+            properties:
+              CPU_FAMILY:
+                type: integer
+                description: CPU family number from CPU proc info
+                example: 6
+              CPU_MODEL:
+                type: integer
+                description:  Model number of CPU from CPU proc info
+                example: 94
+              PHYSICAL_CPUS:
+                type: integer
+                description: Number of physical physical CPUs
+                example: 32
+              Processor:
+                type: string
+                description: Name of the CPU model name of CPU proc info
+                example: "Intel Core Processor (Skylake, IBRS)"
       files:
         type: array
         description: Files passed to the context.
