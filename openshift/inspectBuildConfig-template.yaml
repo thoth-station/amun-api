@@ -43,6 +43,27 @@ objects:
         type: Docker
       triggers:
         - type: ConfigChange
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: CPU_FAMILY
+                  operator: In
+                  values:
+                    - ${cpu_family}
+                - key: CPU_MODEL
+                  operator: In
+                  values:
+                    - ${cpu_model}
+                - key: PHYSICAL_CPUS
+                  operator: In
+                  values:
+                    - ${physical_cpus}
+                - key: processor
+                  operator: In
+                  values:
+                    - ${processor}
 
 parameters:
   - name: AMUN_INSPECTION_ID
@@ -64,3 +85,23 @@ parameters:
     description: Memory requested for running job
     displayName: Job Memory
     default: 512Mi
+
+  - name: cpu_family
+    description: Family number of CPU
+    displayName: CPU Family
+    default: 6
+
+  - name: cpu_model
+    description: Modelnumber of CPU
+    displayName: CPU model
+    default: 85
+
+  - name: physical_cpus
+    description: NUmber of physical CPUS
+    displayName: Physical CPUS
+    default: 16
+
+  - name: processor
+    description: Name of processor
+    displayName: Processor
+    default: "Intel Xeon Processor (Skylake, IBRS)"
