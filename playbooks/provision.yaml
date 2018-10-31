@@ -12,7 +12,7 @@
   roles:
     - role: thoth-station.core_imagestreams
       THOTH_INFRA_NAMESPACE: "{{ infra_namespace }}"
-      
+
     - role: thoth-station.amun
       AMUN_INFRA_NAMESPACE: "{{ infra_namespace }}"
       AMUN_API_NAMESPACE: "{{ api_namespace }}"

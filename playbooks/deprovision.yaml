@@ -9,7 +9,7 @@
     AMUN_INFRA_NAMESPACE: "{{ infra_namespace }}"
     AMUN_API_NAMESPACE: "{{ api_namespace }}"
     AMUN_INSPECTION_NAMESPACE: "{{ inspection_namespace }}"
-      
+
   tasks:
     - fail: msg="Bailing out. this play requires 'AMUN_API_NAMESPACE'"
       when: AMUN_API_NAMESPACE is not defined
