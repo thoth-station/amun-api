@@ -195,23 +195,23 @@ definitions:
                 minLength: 1
                 description: CPU Memory requested at build time
                 example: 256Mi
-          env:
+          hardware:
             type: object
             description: Set environment variables for inspection job at build time
             properties:
-              CPU_FAMILY:
+              cpu_family:
                 type: integer
                 description: CPU family number from CPU proc info
                 example: 6
-              CPU_MODEL:
+              cpu_model:
                 type: integer
                 description: Model number of CPU from CPU proc info
                 example: 94
-              PHYSICAL_CPUS:
+              physical_cpus:
                 type: integer
                 description: Number of physical physical CPUs
                 example: 32
-              Processor:
+              processor:
                 type: string
                 description: Name of the CPU model name of CPU proc info
                 example: "Intel Core Processor (Skylake, IBRS)"
@@ -235,23 +235,23 @@ definitions:
                 minLength: 1
                 description: CPU Memory requested at run time
                 example: 256Mi
-          env:
+          hardware:
             type: object
             description: Set environment variables for inspection job at build time
             properties:
-              CPU_FAMILY:
+              cpu_family:
                 type: integer
                 description: CPU family number from CPU proc info
                 example: 6
-              CPU_MODEL:
+              cpu_model:
                 type: integer
                 description: Model number of CPU from CPU proc info
                 example: 94
-              PHYSICAL_CPUS:
+              physical_cpus:
                 type: integer
                 description: Number of physical physical CPUs
                 example: 32
-              Processor:
+              processor:
                 type: string
                 description: Name of the CPU model name of CPU proc info
                 example: "Intel Core Processor (Skylake, IBRS)"
