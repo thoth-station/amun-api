@@ -6,7 +6,7 @@ metadata:
     description: This is Amun API
     openshift.io/display-name: 'Amun API'
     version: 0.4.0
-    tags: poc,amun,thoth,api,ai-stacks
+    tags: amun,thoth,ai-stacks,aistacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: This is Amun API
     template.openshift.io/provider-display-name: Red Hat, Inc.

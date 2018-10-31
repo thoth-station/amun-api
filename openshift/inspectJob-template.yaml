@@ -5,7 +5,7 @@ metadata:
     description: Amun - Execution engine for Thoth
     openshift.io/display-name: Amun API
     version: 0.0.1
-    tags: poc,amun,thoth,ai-stacks
+    tags: amun,thoth,ai-stacks,aistacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       This template defines resources needed to run Amun's inspection job on OpenShift.

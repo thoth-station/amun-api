@@ -6,7 +6,7 @@ metadata:
     description: A template for BuildConfig to create build on the fly.
     openshift.io/display-name: Amun inspect BuildConfig
     version: 0.0.1
-    tags: poc,amun,thoth,ai-stacks
+    tags: amun,thoth,ai-stacks,aistacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       A template used to create dynamic builds on user requests.

@@ -1,19 +1,23 @@
 ---
 - name: "Playbook to provision Amun"
+  tags:
+    - thoth
+    - amun
+    - operations
 
   hosts: localhost
   connection: local
   gather_facts: false
 
-  vars:
-    openshift_master_url: "{{ lookup('env','OCP_URL') }}"
-    token: "{{ lookup('env','OCP_TOKEN') }}"
-
   roles:
-    - role: amun
-      AMUN_INFRA_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
-      AMUN_API_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
-      AMUN_INSPECTION_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
-      AMUN_API_APP_SECRET_KEY: "{{ lookup('env','AMUN_API_APP_SECRET_KEY') }}"
-      PROMETHEUS_PUSHGATEWAY_HOST: "{{ lookup('env','PROMETHEUS_PUSHGATEWAY_HOST') }}"
-      PROMETHEUS_PUSHGATEWAY_PORT: "{{ lookup('env','PROMETHEUS_PUSHGATEWAY_PORT') }}"
+    - role: thoth-station.core_imagestreams
+      THOTH_INFRA_NAMESPACE: "{{ infra_namespace }}"
+      
+    - role: thoth-station.amun
+      AMUN_INFRA_NAMESPACE: "{{ infra_namespace }}"
+      AMUN_API_NAMESPACE: "{{ api_namespace }}"
+      AMUN_INSPECTION_NAMESPACE: "{{ inspection_namespace }}"
+      AMUN_API_APP_SECRET_KEY: "{{ app_secret }}"
+      PROMETHEUS_PUSHGATEWAY_HOST: "{{ prometheus_pushgateway_host }}"
+      PROMETHEUS_PUSHGATEWAY_PORT: "{{ prometheus_pushgateway_port }}"
+      SENTRY_DSN: "{{ sentry_dsn }}"

@@ -1,0 +1,7 @@
+infra_namespace: "goern-thoth-dev"
+api_namespace: "goern-thoth-dev"
+inspection_namespace: "goern-thoth-dev"
+app_secret: "{{ vault_secret }}"
+sentry_dsn: "{{ vault_sentry_dsn }}"
+prometheus_pushgateway_host: "{{ vault_prometheus_pushgateway_host }}"
+prometheus_pushgateway_port: "{{ vault_prometheus_pushgateway_port }}"
