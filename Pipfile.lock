@@ -301,11 +301,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:5213daa7c804850da1199785eb521eff3f05f85bff6c34bac071f5d983995ebf",
-                "sha256:fa4082df05ce47bda6c7657b585db3561893bf21db062a201c1014befba57f67"
+                "sha256:96158f8d7871230b44bc9ce69300414a1c6ffcd7de9914ab2b4028a2c90ef5cd",
+                "sha256:981d0b8b9f9d1ac5157e691539911d1008847e4a4255cb625d9e8454ab142b92"
             ],
             "index": "pypi",
-            "version": "==0.3.14"
+            "version": "==0.3.16"
         },
         "toml": {
             "hashes": [
