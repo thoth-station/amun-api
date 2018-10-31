@@ -67,22 +67,22 @@ objects:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
                   - matchExpressions:
-                    - key: CPU_FAMILY
-                      operator: In
-                      values:
-                        - ${cpu_family}
-                    - key: CPU_MODEL
-                      operator: In
-                      values:
-                        - ${cpu_model}
-                    - key: PHYSICAL_CPUS
-                      operator: In
-                      values:
-                        - ${physical_cpus}
-                    - key: processor
-                      operator: In
-                      values:
-                        - ${processor}
+                      - key: CPU_FAMILY
+                        operator: In
+                        values:
+                          - ${cpu_family}
+                      - key: CPU_MODEL
+                        operator: In
+                        values:
+                          - ${cpu_model}
+                      - key: PHYSICAL_CPUS
+                        operator: In
+                        values:
+                          - ${physical_cpus}
+                      - key: processor
+                        operator: In
+                        values:
+                          - ${processor}
       triggers:
         - type: ImageChange
           imageChangeParams:
