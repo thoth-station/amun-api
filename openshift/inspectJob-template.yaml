@@ -70,19 +70,19 @@ objects:
                       - key: CPU_FAMILY
                         operator: In
                         values:
-                          - ${cpu_family}
+                          - ${CPU_FAMILY}
                       - key: CPU_MODEL
                         operator: In
                         values:
-                          - ${cpu_model}
+                          - ${CPU_MODEL}
                       - key: PHYSICAL_CPUS
                         operator: In
                         values:
-                          - ${physical_cpus}
+                          - ${PHYSICAL_CPUS}
                       - key: processor
                         operator: In
                         values:
-                          - ${processor}
+                          - ${Processor}
       triggers:
         - type: ImageChange
           imageChangeParams:
@@ -108,22 +108,22 @@ parameters:
     displayName: Build Memory
     default: 256Mi
 
-  - name: cpu_family
+  - name: CPU_FAMILY
     description: Family number of CPU
     displayName: CPU Family
     default: 6
 
-  - name: cpu_model
+  - name: CPU_MODEL
     description: Modelnumber of CPU
     displayName: CPU model
     default: 85
 
-  - name: physical_cpus
+  - name: PHYSICAL_CPUS
     description: NUmber of physical CPUS
     displayName: Physical CPUS
     default: 16
 
-  - name: processor
+  - name: Processor
     description: Name of processor
     displayName: Processor
     default: "Intel Xeon Processor (Skylake, IBRS)"

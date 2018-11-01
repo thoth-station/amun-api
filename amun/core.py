@@ -73,21 +73,23 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
     template = response['items'][0]
 
     if 'build' in specification:
-        build_specification = specification['build']['requests']
-        hardware_specification = specification['build']['hardware']
+        if 'requests' in specification['build']['requests']:
+            build_specification = specification['build']['requests']
+            if 'cpu' in build_specification['cpu']:
+                parameters['AMUN_BUILD_CPU'] = build_specification['cpu']
+            if 'memory' in build_specification['memory']:
+                parameters['AMUN_BUILD_MEMORY'] = build_specification['memory']
 
-        if 'cpu' in build_specification['cpu']:
-            parameters['AMUN_BUILD_CPU'] = build_specification['cpu']
-        if 'memory' in build_specification['memory']:
-            parameters['AMUN_BUILD_MEMORY'] = build_specification['memory']
-        if 'cpu_family' in hardware_specification['cpu_family']:
-            parameters['cpu_family'] = hardware_specification['cpu_family']
-        if 'cpu_model' in hardware_specification['cpu_model']:
-            parameters['cpu_model'] = hardware_specification['cpu_model']
-        if 'physical_cpus' in hardware_specification['physical_cpus']:
-            parameters['physical_cpus'] = hardware_specification['physical_cpus']
-        if 'processor' in hardware_specification['processor']:
-            parameters['processor'] = hardware_specification['processor']
+        if 'hardware' in specification['build']['hardware']:
+            hardware_specification = specification['build']['hardware']
+            if 'cpu_family' in hardware_specification['cpu_family']:
+                parameters['CPU_FAMILY'] = hardware_specification['cpu_family']
+            if 'cpu_model' in hardware_specification['cpu_model']:
+                parameters['CPU_MODEL'] = hardware_specification['cpu_model']
+            if 'physical_cpus' in hardware_specification['physical_cpus']:
+                parameters['PHYSICAL_CPUS'] = hardware_specification['physical_cpus']
+            if 'processor' in hardware_specification['processor']:
+                parameters['Processor'] = hardware_specification['processor']
 
     openshift.set_template_parameters(
         template,
@@ -123,20 +125,23 @@ def create_inspect_job(openshift: OpenShift, image_stream_name: str, specificati
     template = response['items'][0]
 
     if 'run' in specification:
-        run_specification = specification['run']['requests']
-        hardware_specification = specification['run']['hardware']
-        if 'cpu' in run_specification['cpu']:
-            parameters['AMUN_JOB_CPU'] = run_specification['cpu']
-        if 'memory' in run_specification['memory']:
-            parameters['AMUN_JOB_MEMORY'] = run_specification['memory']
-        if 'cpu_family' in hardware_specification['cpu_family']:
-            parameters['cpu_family'] = hardware_specification['cpu_family']
-        if 'cpu_model' in hardware_specification['cpu_model']:
-            parameters['cpu_model'] = hardware_specification['cpu_model']
-        if 'physical_cpus' in hardware_specification['physical_cpus']:
-            parameters['physical_cpus'] = hardware_specification['physical_cpus']
-        if 'processor' in hardware_specification['processor']:
-            parameters['processor'] = hardware_specification['processor']
+        if 'requests' in specification['run']['requests']:
+            run_specification = specification['run']['requests']
+            if 'cpu' in run_specification['cpu']:
+                parameters['AMUN_BUILD_CPU'] = run_specification['cpu']
+            if 'memory' in run_specification['memory']:
+                parameters['AMUN_BUILD_MEMORY'] = run_specification['memory']
+
+        if 'hardware' in specification['run']['hardware']:
+            hardware_specification = specification['run']['hardware']
+            if 'cpu_family' in hardware_specification['cpu_family']:
+                parameters['CPU_FAMILY'] = hardware_specification['cpu_family']
+            if 'cpu_model' in hardware_specification['cpu_model']:
+                parameters['CPU_MODEL'] = hardware_specification['cpu_model']
+            if 'physical_cpus' in hardware_specification['physical_cpus']:
+                parameters['PHYSICAL_CPUS'] = hardware_specification['physical_cpus']
+            if 'processor' in hardware_specification['processor']:
+                parameters['Processor'] = hardware_specification['processor']
 
     openshift.set_template_parameters(
         template,
