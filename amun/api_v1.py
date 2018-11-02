@@ -66,16 +66,15 @@ def post_generate_dockerfile(specification: dict):
     }, 200
 
 
-def post_inspection(specification: dict,job_count: int) -> dict:
+def post_inspection(specification: dict, job_count: int) -> dict:
     """Create new inspection for the given software stack."""
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
     for _ in range(job_count):
         dockerfile, run_job = _do_create_dockerfile(specification)
         if dockerfile is None:
             return {
-            'parameters:': specification,
-            # If not dockerfile is produced, run_job holds the error message.
-            'error': run_job
+                'parameters:': specification,
+                'error': run_job
             }, 400
             break
 
@@ -172,7 +171,7 @@ def get_inspection_status(inspection_id: str) -> dict:
             Configuration.AMUN_INSPECTION_NAMESPACE
         )
     except NotFoundException:
-        # There was no job scheduled - user did not submitted any script to run the job. Report None.
+        #There was no job scheduled - user did not submitted any script to run the job. Report None.
         pass
 
     return {
