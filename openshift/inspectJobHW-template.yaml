@@ -1,6 +1,6 @@
 kind: Template
 metadata:
-  name: amun-inspect-job
+  name: amun-inspect-job-HW
   annotations:
     description: Amun - Execution engine for Thoth
     openshift.io/display-name: Amun API
@@ -11,7 +11,7 @@ metadata:
       This template defines resources needed to run Amun's inspection job on OpenShift.
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
-    template: amun-inspect-job
+    template: amun-inspect-job-HW
     app: amun
     component: amun-inspect
 
@@ -62,6 +62,27 @@ objects:
           volumes:
             - name: hw-info-volume
               emptyDir: {}
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: CPU_FAMILY
+                        operator: In
+                        values:
+                          - ${CPU_FAMILY}
+                      - key: CPU_MODEL
+                        operator: In
+                        values:
+                          - ${CPU_MODEL}
+                      - key: PHYSICAL_CPUS
+                        operator: In
+                        values:
+                          - ${PHYSICAL_CPUS}
+                      - key: processor
+                        operator: In
+                        values:
+                          - ${Processor}
       triggers:
         - type: ImageChange
           imageChangeParams:
@@ -86,3 +107,23 @@ parameters:
     description: Memory requested for build
     displayName: Build Memory
     default: 256Mi
+
+  - name: CPU_FAMILY
+    description: Family number of CPU
+    displayName: CPU Family
+    required: false
+
+  - name: CPU_MODEL
+    description: Modelnumber of CPU
+    displayName: CPU model
+    required: false
+
+  - name: PHYSICAL_CPUS
+    description: NUmber of physical CPUS
+    displayName: Physical CPUS
+    required: false
+
+  - name: Processor
+    description: Name of processor
+    displayName: Processor
+    required: false

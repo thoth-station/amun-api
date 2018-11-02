@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: amun-inspect-buildconfig
+  name: amun-inspect-buildconfig-HW
   annotations:
     description: A template for BuildConfig to create build on the fly.
     openshift.io/display-name: Amun inspect BuildConfig
@@ -12,7 +12,7 @@ metadata:
       A template used to create dynamic builds on user requests.
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
-    template: amun-inspect-buildconfig
+    template: amun-inspect-buildconfig-HW
     app: amun
     component: inspect-buildconfig
 
@@ -43,6 +43,27 @@ objects:
         type: Docker
       triggers:
         - type: ConfigChange
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: CPU_FAMILY
+                    operator: In
+                    values:
+                      - ${CPU_FAMILY}
+                  - key: CPU_MODEL
+                    operator: In
+                    values:
+                      - ${CPU_MODEL}
+                  - key: PHYSICAL_CPUS
+                    operator: In
+                    values:
+                      - ${PHYSICAL_CPUS}
+                  - key: processor
+                    operator: In
+                    values:
+                      - ${Processor}
 
 parameters:
   - name: AMUN_INSPECTION_ID
@@ -64,3 +85,23 @@ parameters:
     description: Memory requested for running job
     displayName: Job Memory
     default: 512Mi
+
+  - name: CPU_FAMILY
+    description: Family number of CPU
+    displayName: CPU Family
+    required: false
+
+  - name: CPU_MODEL
+    description: Modelnumber of CPU
+    displayName: CPU model
+    required: false
+
+  - name: PHYSICAL_CPUS
+    description: NUmber of physical CPUS
+    displayName: Physical CPUS
+    required: false
+
+  - name: Processor
+    description: Name of processor
+    displayName: Processor
+    required: false

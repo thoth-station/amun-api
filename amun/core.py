@@ -56,10 +56,16 @@ def create_inspect_imagestream(openshift: OpenShift, inspection_id: str) -> str:
 
 def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerfile: str, specification: dict) -> None:
     """Create build config for the given image stream."""
-    response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
-        namespace=Configuration.AMUN_INFRA_NAMESPACE,
-        label_selector='template=amun-inspect-buildconfig'
-    )
+    if 'hardware' in specification['build']['hardware']:
+        response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
+            namespace=Configuration.AMUN_INFRA_NAMESPACE,
+            label_selector='template=amun-inspect-buildconfig-HW'
+            )
+    else:
+        response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
+            namespace=Configuration.AMUN_INFRA_NAMESPACE,
+            label_selector='template=amun-inspect-buildconfig'
+            )
 
     openshift._raise_on_invalid_response_size(response)
     response = response.to_dict()
@@ -109,10 +115,16 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
 
 def create_inspect_job(openshift: OpenShift, image_stream_name: str, specification: dict) -> None:
     """Create the actual inspect job."""
-    response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
-        namespace=Configuration.AMUN_INFRA_NAMESPACE,
-        label_selector='template=amun-inspect-job'
-    )
+    if 'hardware' in specification['run']['hardware']:
+        response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
+            namespace=Configuration.AMUN_INFRA_NAMESPACE,
+            label_selector='template=amun-inspect-job-HW'
+            )
+    else:
+        response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
+            namespace=Configuration.AMUN_INFRA_NAMESPACE,
+            label_selector='template=amun-inspect-job'
+            )
 
     openshift._raise_on_invalid_response_size(response)
     response = response.to_dict()
