@@ -45,11 +45,18 @@ paths:
           description: Base image to be used for runtime environment.
           schema:
             $ref: "#/definitions/InspectionSpecification"
+        - name: job_count
+          in: 
+          required: false
+          default: 1
+          description: The number of jobs created to benchmark the test results
+          schema:
+            type: integer
       responses:
         202:
           description: Successful response with insection id.
           schema:
-            $ref: "#/definitions/InspectionResponse"
+            $ref: "#/definitions/InspectionIDs"
         400:
           description: On invalid request.
           schema:
@@ -141,6 +148,18 @@ paths:
             $ref: "#/definitions/InspectionResponseError"
 
 definitions:
+  InspectionIDs:
+    type: object
+    description: List of inspection IDs
+    required:
+      - inspection_ids
+    properties:
+      inspection_ids:
+        type: array
+        description: A list of inspection IDs for the jobs that are scheduled
+        items:
+          type: string
+          description: Single Inspection ID for scheduled Job.
   InspectionSpecification:
     type: object
     description: Specification of software stack for inspection.
