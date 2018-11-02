@@ -171,7 +171,7 @@ def get_inspection_status(inspection_id: str) -> dict:
             Configuration.AMUN_INSPECTION_NAMESPACE
         )
     except NotFoundException:
-        #There was no job scheduled - user did not submitted any script to run the job. Report None.
+        # There was no job scheduled - user did not submitted any script to run the job. Report None.
         pass
 
     return {

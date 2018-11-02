@@ -46,7 +46,7 @@ paths:
           schema:
             $ref: "#/definitions/InspectionSpecification"
         - name: job_count
-          in: 
+          in: query
           required: false
           default: 1
           description: The number of jobs created to benchmark the test results
