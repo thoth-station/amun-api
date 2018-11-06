@@ -27,8 +27,6 @@ objects:
       to:
         kind: Service
         name: amun-api
-      tls:
-        termination: edge
 
   - kind: Service
     apiVersion: v1
