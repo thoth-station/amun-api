@@ -243,7 +243,6 @@ definitions:
     properties:
       inspection_id:
         type: string
-        required: true
         description: >
           An id of submitted inspection for checking its status and its results.
         example: 'inspect-ABCXYZ'
