@@ -37,8 +37,8 @@ objects:
           memory: '512Mi'
           cpu: '500m'
         requests:
-          memory: ${AMUN_BUILD_CPU}
-          cpu: ${AMUN_BUILD_MEMORY}
+          memory: ${AMUN_BUILD_MEMORY}
+          cpu: ${AMUN_BUILD_CPU}
       strategy:
         type: Docker
       triggers:
@@ -79,12 +79,12 @@ parameters:
   - name: AMUN_BUILD_CPU
     description: CPU cores requested for running job
     displayName: Job CPU
-    default: 500m
+    default: '500m'
 
   - name: AMUN_BUILD_MEMORY
     description: Memory requested for running job
     displayName: Job Memory
-    default: 512Mi
+    default: '512Mi'
 
   - name: CPU_FAMILY
     description: Family number of CPU

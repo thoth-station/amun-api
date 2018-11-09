@@ -56,7 +56,7 @@ def create_inspect_imagestream(openshift: OpenShift, inspection_id: str) -> str:
 
 def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerfile: str, specification: dict) -> None:
     """Create build config for the given image stream."""
-    if 'hardware' in specification['build']['hardware']:
+    if 'hardware' in specification['build']:
         response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
             namespace=Configuration.AMUN_INFRA_NAMESPACE,
             label_selector='template=amun-inspect-buildconfig-HW'
@@ -79,23 +79,20 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
     template = response['items'][0]
 
     if 'build' in specification:
-        if 'requests' in specification['build']['requests']:
-            build_specification = specification['build']['requests']
-            if 'cpu' in build_specification['cpu']:
-                parameters['AMUN_BUILD_CPU'] = build_specification['cpu']
-            if 'memory' in build_specification['memory']:
-                parameters['AMUN_BUILD_MEMORY'] = build_specification['memory']
+        if 'cpu' in specification['build']['requests']:
+            parameters['AMUN_BUILD_CPU'] = specification['build']['requests']['cpu']
+        if 'memory' in specification['build']['requests']:
+            parameters['AMUN_BUILD_MEMORY'] = specification['build']['requests']['memory']
 
-        if 'hardware' in specification['build']['hardware']:
-            hardware_specification = specification['build']['hardware']
-            if 'cpu_family' in hardware_specification['cpu_family']:
-                parameters['CPU_FAMILY'] = hardware_specification['cpu_family']
-            if 'cpu_model' in hardware_specification['cpu_model']:
-                parameters['CPU_MODEL'] = hardware_specification['cpu_model']
-            if 'physical_cpus' in hardware_specification['physical_cpus']:
-                parameters['PHYSICAL_CPUS'] = hardware_specification['physical_cpus']
-            if 'processor' in hardware_specification['processor']:
-                parameters['Processor'] = hardware_specification['processor']
+        if 'hardware' in specification['build']:
+            if 'cpu_family' in specification['build']['hardware']:
+                parameters['CPU_FAMILY'] = specification['build']['hardware']['cpu_family']
+            if 'cpu_model' in specification['build']['hardware']:
+                parameters['CPU_MODEL'] = specification['build']['hardware']['cpu_model']
+            if 'physical_cpus' in specification['build']['hardware']:
+                parameters['PHYSICAL_CPUS'] = specification['build']['hardware']['physical_cpus']
+            if 'processor' in specification['build']['hardware']:
+                parameters['Processor'] = specification['build']['hardware']['processor']
 
     openshift.set_template_parameters(
         template,
@@ -115,7 +112,7 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
 
 def create_inspect_job(openshift: OpenShift, image_stream_name: str, specification: dict) -> None:
     """Create the actual inspect job."""
-    if 'hardware' in specification['run']['hardware']:
+    if 'hardware' in specification['run']:
         response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
             namespace=Configuration.AMUN_INFRA_NAMESPACE,
             label_selector='template=amun-inspect-job-HW'
@@ -137,23 +134,20 @@ def create_inspect_job(openshift: OpenShift, image_stream_name: str, specificati
     template = response['items'][0]
 
     if 'run' in specification:
-        if 'requests' in specification['run']['requests']:
-            run_specification = specification['run']['requests']
-            if 'cpu' in run_specification['cpu']:
-                parameters['AMUN_BUILD_CPU'] = run_specification['cpu']
-            if 'memory' in run_specification['memory']:
-                parameters['AMUN_BUILD_MEMORY'] = run_specification['memory']
+        if 'cpu' in specification['run']['requests']:
+            parameters['AMUN_JOB_CPU'] = specification['run']['requests']['cpu']
+        if 'memory' in specification['run']['requests']:
+            parameters['AMUN_JOB_MEMORY'] = specification['run']['requests']['memory']
 
-        if 'hardware' in specification['run']['hardware']:
-            hardware_specification = specification['run']['hardware']
-            if 'cpu_family' in hardware_specification['cpu_family']:
-                parameters['CPU_FAMILY'] = hardware_specification['cpu_family']
-            if 'cpu_model' in hardware_specification['cpu_model']:
-                parameters['CPU_MODEL'] = hardware_specification['cpu_model']
-            if 'physical_cpus' in hardware_specification['physical_cpus']:
-                parameters['PHYSICAL_CPUS'] = hardware_specification['physical_cpus']
-            if 'processor' in hardware_specification['processor']:
-                parameters['Processor'] = hardware_specification['processor']
+        if 'hardware' in specification['run']:
+            if 'cpu_family' in specification['run']['hardware']:
+                parameters['CPU_FAMILY'] = specification['run']['hardware']['cpu_family']
+            if 'cpu_model' in specification['run']['hardware']:
+                parameters['CPU_MODEL'] = specification['run']['hardware']['cpu_model']
+            if 'physical_cpus' in specification['run']['hardware']:
+                parameters['PHYSICAL_CPUS'] = specification['run']['hardware']['physical_cpus']
+            if 'processor' in specification['run']['hardware']:
+                parameters['Processor'] = specification['run']['hardware']['processor']
 
     openshift.set_template_parameters(
         template,

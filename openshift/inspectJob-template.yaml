@@ -44,12 +44,12 @@ objects:
                 tcpSocket:
                   port: 80
               resources:
-                limits:
-                  cpu: 750m
-                  memory: 256Mi
                 requests:
                   cpu: ${AMUN_JOB_CPU}
                   memory: ${AMUN_JOB_MEMORY}
+                limits:
+                  cpu: '750m'
+                  memory: '256Mi'
               volumeMounts:
                 - mountPath: /home/amun/hwinfo
                   name: hw-info-volume
@@ -80,9 +80,9 @@ parameters:
   - name: AMUN_JOB_CPU
     description: CPU cores requested for build
     displayName: Build CPU
-    default: 750m
+    default: '750m'
 
   - name: AMUN_JOB_MEMORY
     description: Memory requested for build
     displayName: Build Memory
-    default: 256Mi
+    default: '256Mi'
