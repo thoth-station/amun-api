@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 requests = "*"
 gunicorn = "*"
-connexion = "*"
+connexion = {extras = ["swagger-ui"], version = "*"}
 flask = "*"
 thoth-common = {version = "*", extras = ["openshift"]}
 flask-script = "*"

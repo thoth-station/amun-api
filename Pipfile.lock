@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "35c28fb39f5a562d121b4f994094cfc1883fe84c1198c6d684abcd7831c00e44"
+            "sha256": "8ad5bc755e43aa87f4a90717bb708d947dd08f7a7329155b2a6457250775727a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -52,6 +52,9 @@
             "version": "==1.2.2"
         },
         "connexion": {
+            "extras": [
+                "swagger-ui"
+            ],
             "hashes": [
                 "sha256:1485be2bc4b6d4448975c8cf1e48b541c9b08669b73c333fa850fbb9112cba19",
                 "sha256:94476c76c98e9a4837454ad62eb4b881726c338ae552dc8e7e5e4138452db538"
@@ -149,7 +152,6 @@
                 "sha256:b370ab4abd925309db69a14a4723487948e9a83de60ca92782ec14992b741c89",
                 "sha256:c80dcf531deca2037105df09c933355c80830ffbf9e496b5e6a3967ac6809ef7"
             ],
-            "markers": "extra == 'openshift'",
             "version": "==6.0.0"
         },
         "markupsafe": {
@@ -204,7 +206,6 @@
             "hashes": [
                 "sha256:aab848277e61ad10446e6187c79781ba65256392ffd13aa874619a588c238dae"
             ],
-            "markers": "extra == 'openshift'",
             "version": "==0.6.2"
         },
         "pyasn1": {
@@ -327,7 +328,18 @@
             ],
             "version": "==1.11.0"
         },
+        "swagger-ui-bundle": {
+            "hashes": [
+                "sha256:98a418585f62e5e1193cb0f8000292bcb01e6a33bc39e5ba95b642172ef2664e",
+                "sha256:dfb9522f9b501db042358b3f6e86b644cc5dd083e162d9b77c7e6b64aeb9a8fe",
+                "sha256:e23abfae8fd775428a5b0e61214a04646299c61e31d1e46536448a3a04400cb6"
+            ],
+            "version": "==0.0.2"
+        },
         "thoth-common": {
+            "extras": [
+                "openshift"
+            ],
             "hashes": [
                 "sha256:6b01e9d892b28068efc8cbbb41d790406aebfa47a9eed9fbcacae5f8ae66b94a",
                 "sha256:cd4a757ba3a238028f22aa4e547c6a5924be53f3e6d7bb46a329e30d355524f3"
@@ -338,8 +350,7 @@
         "toml": {
             "hashes": [
                 "sha256:229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c",
-                "sha256:235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e",
-                "sha256:f1db651f9657708513243e61e6cc67d101a39bad662eaa9b5546f789338e07a3"
+                "sha256:235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e"
             ],
             "index": "pypi",
             "version": "==0.10.0"
