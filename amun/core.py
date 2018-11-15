@@ -74,15 +74,15 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
 
     if 'build' in specification:
         build_specification = specification['build']['requests']
-        if 'cpu' in build_specification['cpu']:
+        if 'cpu' in build_specification:
             parameters['AMUN_BUILD_CPU'] = build_specification['cpu']
-        if 'memory' in build_specification['memory']:
+        if 'memory' in build_specification:
             parameters['AMUN_BUILD_MEMORY'] = build_specification['memory']
 
     openshift.set_template_parameters(
         template,
         **parameters,
-        )
+    )
 
     template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     buildconfig = template['objects'][0]
