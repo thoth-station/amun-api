@@ -34,8 +34,8 @@ objects:
         type: Dockerfile
       resources:
         limits:
-          memory: '512Mi'
-          cpu: '500m'
+          memory: ${AMUN_BUILD_CPU}
+          cpu: ${AMUN_BUILD_MEMORY}
         requests:
           memory: ${AMUN_BUILD_CPU}
           cpu: ${AMUN_BUILD_MEMORY}
