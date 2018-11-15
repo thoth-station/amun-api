@@ -46,8 +46,8 @@ objects:
                   port: 80
               resources:
                 limits:
-                  cpu: 750m
-                  memory: 256Mi
+                  cpu: ${AMUN_JOB_CPU}
+                  memory: ${AMUN_JOB_MEMORY}
                 requests:
                   cpu: ${AMUN_JOB_CPU}
                   memory: ${AMUN_JOB_MEMORY}
