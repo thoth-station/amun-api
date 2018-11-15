@@ -114,15 +114,15 @@ def create_inspect_job(openshift: OpenShift, image_stream_name: str, specificati
 
     if 'run' in specification:
         run_specification = specification['run']['requests']
-        if 'cpu' in run_specification['cpu']:
+        if 'cpu' in run_specification:
             parameters['AMUN_JOB_CPU'] = run_specification['cpu']
-        if 'memory' in run_specification['memory']:
+        if 'memory' in run_specification:
             parameters['AMUN_JOB_MEMORY'] = run_specification['memory']
 
     openshift.set_template_parameters(
         template,
         **parameters,
-        )
+    )
 
     template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     job = template['objects'][0]
