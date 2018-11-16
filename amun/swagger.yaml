@@ -45,18 +45,11 @@ paths:
           description: Base image to be used for runtime environment.
           schema:
             $ref: "#/definitions/InspectionSpecification"
-        - name: job_count
-          in: query
-          required: false
-          default: 1
-          description: The number of jobs created to benchmark the test results
-          schema:
-            type: integer
       responses:
         202:
           description: Successful response with insection id.
           schema:
-            $ref: "#/definitions/InspectionIDs"
+            $ref: "#/definitions/InspectionResponse"
         400:
           description: On invalid request.
           schema:
@@ -148,18 +141,6 @@ paths:
             $ref: "#/definitions/InspectionResponseError"
 
 definitions:
-  InspectionIDs:
-    type: object
-    description: List of inspection IDs
-    required:
-      - inspection_ids
-    properties:
-      inspection_ids:
-        type: array
-        description: A list of inspection IDs for the jobs that are scheduled
-        items:
-          type: string
-          description: Single Inspection ID for scheduled Job.
   InspectionSpecification:
     type: object
     description: Specification of software stack for inspection.
@@ -206,12 +187,10 @@ definitions:
             properties:
               cpu:
                 type: string
-                minLength: 1
                 description: CPU cores requested at build time
                 example: 500m
               memory:
                 type: string
-                minLength: 1
                 description: CPU Memory requested at build time
                 example: 256Mi
           hardware:
@@ -246,12 +225,10 @@ definitions:
             properties:
               cpu:
                 type: string
-                minLength: 1
                 description: CPU cores requested at run time
                 example: 500mi
               memory:
                 type: string
-                minLength: 1
                 description: CPU Memory requested at run time
                 example: 256Mi
           hardware:
@@ -302,7 +279,6 @@ definitions:
     properties:
       inspection_id:
         type: string
-        required: true
         description: >
           An id of submitted inspection for checking its status and its results.
         example: 'inspect-ABCXYZ'

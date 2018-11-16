@@ -66,30 +66,29 @@ def post_generate_dockerfile(specification: dict):
     }, 200
 
 
-def post_inspection(specification: dict, job_count: int) -> dict:
+def post_inspection(specification: dict) -> dict:
     """Create new inspection for the given software stack."""
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
-    for _ in range(job_count):
-        dockerfile, run_job = _do_create_dockerfile(specification)
-        if dockerfile is None:
-            return {
-                'parameters:': specification,
-                'error': run_job
-            }, 400
-            break
+    dockerfile, run_job = _do_create_dockerfile(specification)
+    if dockerfile is None:
+        return {
+            'parameters:': specification,
+            # If not dockerfile is produced, run_job holds the error message.
+            'error': run_job
+        }, 400
 
-    inspection_ids = []
-    for _ in range(job_count):
-        inspection_ids.append(_generate_inspection_id())
+    inspection_id = _generate_inspection_id()
+    create_inspect_imagestream(_OPENSHIFT, inspection_id)
+    create_inspect_buildconfig(_OPENSHIFT, inspection_id, dockerfile)
 
-    for inspection_id in inspection_ids:
-        create_inspect_imagestream(_OPENSHIFT, inspection_id)
-        create_inspect_buildconfig(_OPENSHIFT, inspection_id, dockerfile, specification)
-        if run_job:
-            create_inspect_job(_OPENSHIFT, inspection_id, specification)
+    if run_job:
+        create_inspect_job(_OPENSHIFT, inspection_id)
 
     return {
-        'inspection_ids': inspection_ids
+        'parameters': specification,
+        'inspection_id': inspection_id,
+        'job_created': run_job,
+        'build_created': True
     }, 202
 
 
