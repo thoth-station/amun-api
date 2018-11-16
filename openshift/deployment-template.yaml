@@ -17,7 +17,7 @@ metadata:
 
 objects:
   - kind: Route
-    apiVersion: v1
+    apiVersion: route.openshift.io/v1
     metadata:
       name: amun-api
       labels:
@@ -27,8 +27,6 @@ objects:
       to:
         kind: Service
         name: amun-api
-      tls:
-        termination: edge
 
   - kind: Service
     apiVersion: v1
@@ -142,7 +140,7 @@ objects:
               name: 'amun-api:latest'
 
   - kind: ImageStream
-    apiVersion: v1
+    apiVersion: image.openshift.io/v1
     metadata:
       labels:
         app: amun

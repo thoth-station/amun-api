@@ -1,47 +1,25 @@
 ---
-- name: Playbook to deprovision Amun
+- name: "Playbook to deprovision Amun"
 
   hosts: localhost
-
-  gather_facts: false
   connection: local
+  gather_facts: false
 
   tasks:
-  - fail: msg="Bailing out. this play requires 'AMUN_API_NAMESPACE'"
-    when: AMUN_API_NAMESPACE is not defined
+    - fail: msg="Bailing out. this play requires 'AMUN_API_NAMESPACE'"
+      when: AMUN_API_NAMESPACE is not defined
 
-  - fail: msg="Bailing out. this play requires 'AMUN_INSPECTION_NAMESPACE'"
-    when: AMUN_INSPECTION_NAMESPACE is not defined
+    - fail: msg="Bailing out. this play requires 'AMUN_INSPECTION_NAMESPACE'"
+      when: AMUN_INSPECTION_NAMESPACE is not defined
 
-  - fail: msg="Bailing out. this play requires 'AMUN_INFRA_NAMESPACE'"
-    when: AMUN_INFRA_NAMESPACE is not defined
+    - fail: msg="Bailing out. this play requires 'AMUN_INFRA_NAMESPACE'"
+      when: AMUN_INFRA_NAMESPACE is not defined
 
-  - name: "make sure to use project {{ AMUN_API_NAMESPACE }}"
-    command: "oc project {{ AMUN_API_NAMESPACE }}"
-    register: project_exists
-    ignore_errors: true
-    changed_when: false
-
-  - name: Deprovision Amun API
-    command: "oc delete bc,configmap,cronjob,dc,is,pod,role,rolebinding,route,\
-      secret,svc,sa,template,clusterrole --selector 'app=amun'"
-
-  - name: "make sure to use project {{ AMUN_INSPECTION_NAMESPACE }}"
-    command: "oc project {{ AMUN_INSPECTION_NAMESPACE }}"
-    register: project_exists
-    ignore_errors: true
-    changed_when: false
-
-  - name: Deprovision Amun Inspection Namespace
-    command: "oc delete bc,configmap,cronjob,dc,is,pod,role,rolebinding,route,\
-      secret,svc,sa,template,clusterrole --selector 'app=amun'"
-
-  - name: "make sure to use project {{ AMUN_INFRA_NAMESPACE }}"
-    command: "oc project {{ AMUN_INFRA_NAMESPACE }}"
-    register: project_exists
-    ignore_errors: true
-    changed_when: false
-
-  - name: Deprovision Amun Infra Namespace
-    command: "oc delete bc,configmap,cronjob,dc,is,pod,role,rolebinding,route,\
-      secret,svc,sa,template,clusterrole --selector 'app=amun'"
+    - name: "Deprovision Amun API"
+      command: "oc --namespace {{ item }} \
+        delete bc,configmap,cronjob,dc,is,pod,role,rolebinding,route,secret,svc,sa,template,clusterrole \
+        --selector 'app=amun'"
+      with_items:
+        - "{{ AMUN_API_NAMESPACE }}"
+        - "{{ AMUN_INSPECTION_NAMESPACE }}"
+        - "{{ AMUN_INFRA_NAMESPACE }}"

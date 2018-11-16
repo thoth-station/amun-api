@@ -43,7 +43,10 @@ def create_inspect_imagestream(openshift: OpenShift, inspection_id: str) -> str:
     template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     imagestream = template['objects'][0]
 
-    response = openshift.ocp_client.resources.get(api_version='v1', kind=imagestream['kind']).create(
+    response = openshift.ocp_client.resources.get(
+        api_version=imagestream['apiVersion'],
+        kind=imagestream['kind']
+    ).create(
         body=imagestream,
         namespace=Configuration.AMUN_INSPECTION_NAMESPACE
     )
@@ -102,7 +105,10 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
     template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     buildconfig = template['objects'][0]
 
-    response = openshift.ocp_client.resources.get(api_version='v1', kind=buildconfig['kind']).create(
+    response = openshift.ocp_client.resources.get(
+        api_version=buildconfig['apiVersion'],
+        kind=buildconfig['kind']
+    ).create(
         body=buildconfig,
         namespace=Configuration.AMUN_INSPECTION_NAMESPACE
     )
@@ -157,7 +163,10 @@ def create_inspect_job(openshift: OpenShift, image_stream_name: str, specificati
     template = openshift.oc_process(Configuration.AMUN_INSPECTION_NAMESPACE, template)
     job = template['objects'][0]
 
-    response = openshift.ocp_client.resources.get(api_version='v1', kind=job['kind']).create(
+    response = openshift.ocp_client.resources.get(
+        api_version=job['apiVersion'],
+        kind=job['kind']
+    ).create(
         body=job,
         namespace=Configuration.AMUN_INSPECTION_NAMESPACE
     )

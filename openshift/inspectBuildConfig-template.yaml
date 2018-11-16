@@ -18,7 +18,7 @@ metadata:
 
 objects:
   - kind: BuildConfig
-    apiVersion: v1
+    apiVersion: build.openshift.io/v1
     metadata:
       name: "${AMUN_INSPECTION_ID}"
       labels:
@@ -63,4 +63,4 @@ parameters:
   - name: AMUN_BUILD_MEMORY
     description: Memory requested for running job
     displayName: Job Memory
-    default: '512Mi'
+    default: 256Mi
