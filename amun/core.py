@@ -17,6 +17,7 @@
 
 """Core parts of Amun for spawning builds and inspect runs."""
 
+import json
 import logging
 
 from thoth.common import OpenShift
@@ -70,7 +71,8 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
 
     parameters = {
         'AMUN_INSPECTION_ID': inspection_id,
-        'AMUN_GENERATED_DOCKERFILE': dockerfile
+        'AMUN_GENERATED_DOCKERFILE': dockerfile,
+        'AMUN_SPECIFICATION': json.dumps(specification)
     }
 
     template = response['items'][0]

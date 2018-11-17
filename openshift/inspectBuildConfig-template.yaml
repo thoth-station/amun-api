@@ -24,6 +24,8 @@ objects:
       labels:
         app: amun
         component: inspect-buildconfig
+      annotations:
+        amun_specification: ${AMUN_SPECIFICATION}
     spec:
       output:
         to:
@@ -64,3 +66,8 @@ parameters:
     description: Memory requested for running job
     displayName: Job Memory
     default: 256Mi
+
+  - name: AMUN_SPECIFICATION
+    description: Inspection specification as posted to Amun API.
+    displayName: Amun specification
+    required: true
