@@ -178,3 +178,25 @@ def get_inspection_status(inspection_id: str) -> dict:
         'job': job_status,
         'parameters': parameters
     }, 200
+
+
+def get_inspection_specification(specification_id: str):
+    """Get specification for the given build."""
+    parameters = {'inspection_id': inspection_id}
+
+    try:
+        # Check get_inspection_status for explanation of build name construction.
+        build = _OPENSHIFT.get_build(
+            inspection_id + '-1-build',
+            Configuration.AMUN_INSPECTION_NAMESPACE
+        )
+    except NotFoundException:
+        return {
+            'error': 'The given inspection id build was not found',
+            'parameters': parameters
+        }
+
+    return {
+        'parameters': parameters,
+        'specification' build['metadata']['annotations']['amun_specification']
+    }

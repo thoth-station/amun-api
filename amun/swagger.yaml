@@ -140,8 +140,35 @@ paths:
           schema:
             $ref: "#/definitions/InspectionResponseError"
 
+  /inspect/{inspection_id}/specification:
+    get:
+      tags: ['Inspection']
+      x-swagger-router-controller: amun.api_v1
+      operationId: get_inspection_specification
+      summary: Get specification of the given inspection.
+      parameters:
+        - name: inspection_id
+          format: path
+          in: path
+          required: true
+          type: string
+          description: Id of inspection run.
+      responses:
+        200:
+          description: Successful response with insection specification.
+          schema:
+            $ref: "#/definitions/InspectionSpecificationResponse"
+        400:
+          description: On invalid request.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
+        404:
+          description: The given inspection with provided id was not found.
+          schema:
+            $ref: "#/definitions/InspectionResponseError"
+
 definitions:
-  InspectionSpecification:
+  InspectionSpecification: &inspectionSpecification
     type: object
     description: Specification of software stack for inspection.
     additionalProperties: true
@@ -236,6 +263,19 @@ definitions:
       script:
         type: string
         description: A script that should be executed in inspection run.
+  InspectionSpecificationResponse:
+    type: object
+    description: Response for an inspection for the given inspection.
+    additionalProperties: true
+    required:
+      - parameters
+      - specification
+    properties:
+      parameters:
+        type: object
+        description: >
+          Parameters echoed back to user (with default parameters if omitted).
+      specification: *inspectionSpecification
   InspectionResponse:
     type: object
     description: Response for a submitted inspection.
