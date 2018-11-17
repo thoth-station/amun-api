@@ -97,6 +97,7 @@ def create_dockerfile(specification: dict) -> tuple:
         pipfile_lock_content = json.dumps(specification['python']['requirements_locked'], sort_keys=True, indent=4)
         dockerfile += _write_file_string(pipfile_content, '/home/amun/Pipfile')
         dockerfile += _write_file_string(pipfile_lock_content, '/home/amun/Pipfile.lock')
+        dockerfile += 'RUN cd /home/amun && pipenv install --deploy\n'
 
     if 'script' in specification:
         script_present = True
