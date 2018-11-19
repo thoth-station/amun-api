@@ -37,7 +37,7 @@ def _construct_parameters_dict(specificaiton: dict) -> dict:
         parameters['AMUN_CPU'] = specification['requests']['cpu']
     if 'memory' in specification:
         parameters['AMUN_MEMORY'] = specification['requests']['memory']
-    
+
     if 'hardware' in specification['requests']:
         hardware_specification = specification['requests']['hardware']
         use_hw_template = True
