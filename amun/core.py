@@ -27,6 +27,36 @@ from .configuration import Configuration
 _LOGGER = logging.getLogger(__name__)
 
 
+def _construct_parameters_dict(specificaiton: dict) -> dict:
+    """Construct parameters that should be passed to build or inspection job."""
+    # Name of parameters are shared in build/job templates so parameters are constructed regardless build or job.
+    parameters = {}
+    use_hw_template = False
+
+    if 'cpu' in specification['requests']:
+        parameters['AMUN_CPU'] = specification['requests']['cpu']
+    if 'memory' in specification:
+        parameters['AMUN_MEMORY'] = specification['requests']['memory']
+    
+    if 'hardware' in specification['requests']:
+        hardware_specification = specification['requests']['hardware']
+        use_hw_template = True
+
+        if 'cpu_family' in hardware_specification:
+            parameters['CPU_FAMILY'] = hardware_specification['cpu_family']
+
+        if 'cpu_model' in hardware_specification:
+            parameters['CPU_MODEL'] = hardware_specificaiton['cpu_model']
+
+        if 'physical_cpus' in hardware_specification:
+            parameters['PHYSICAL_CPUS'] = hardware_specificaiton['physical_cpus']
+
+        if 'processor' in hardware_specification:
+            parameters['PROCESSOR'] = hardware_specification['processor']
+
+    return parameters, use_hw_template
+
+
 def create_inspect_imagestream(openshift: OpenShift, inspection_id: str) -> str:
     """Dynamically create imagestream on user request."""
     response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
@@ -60,29 +90,26 @@ def create_inspect_imagestream(openshift: OpenShift, inspection_id: str) -> str:
 
 def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerfile: str, specification: dict) -> None:
     """Create build config for the given image stream."""
+    parameters, use_hw_template = _construct_parameters_dict(specification['build'])
+    parameters['AMUN_INSPECTION_ID'] = inspection_id,
+    parameters['AMUN_GENERATED_DOCKERFILE'] = dockerfile,
+    parameters['AMUN_SPECIFICATION'] json.dumps(specification)
+
+    if use_hw_template:
+        label_selector = 'template=amun-inspect-buildconfig-cpu-hw'
+    else:
+        label_selector = 'template=amun-inspect-buildconfig'
+
     response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
         namespace=Configuration.AMUN_INFRA_NAMESPACE,
-        label_selector='template=amun-inspect-buildconfig'
+        label_selector=label_selector
     )
 
     openshift._raise_on_invalid_response_size(response)
     response = response.to_dict()
     _LOGGER.debug("OpenShift response for getting Amun inspect BuildConfig template: %r", response)
 
-    parameters = {
-        'AMUN_INSPECTION_ID': inspection_id,
-        'AMUN_GENERATED_DOCKERFILE': dockerfile,
-        'AMUN_SPECIFICATION': json.dumps(specification)
-    }
-
     template = response['items'][0]
-
-    if 'build' in specification:
-        build_specification = specification['build']['requests']
-        if 'cpu' in build_specification:
-            parameters['AMUN_BUILD_CPU'] = build_specification['cpu']
-        if 'memory' in build_specification:
-            parameters['AMUN_BUILD_MEMORY'] = build_specification['memory']
 
     openshift.set_template_parameters(
         template,
@@ -105,27 +132,24 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
 
 def create_inspect_job(openshift: OpenShift, image_stream_name: str, specification: dict) -> None:
     """Create the actual inspect job."""
+    parameters, use_hw_template = _construct_parameters_dict(specification['run'])
+    parameters['AMUN_INSPECTION_ID'] = image_stream_name
+
+    if use_hw_template:
+        label_selector = 'template=amun-inspect-job-cpu-hw'
+    else:
+        label_selector = 'template=amun-inspect-job'
+
     response = openshift.ocp_client.resources.get(api_version='v1', kind='Template').get(
         namespace=Configuration.AMUN_INFRA_NAMESPACE,
-        label_selector='template=amun-inspect-job'
+        label_selector=label_selector
     )
 
     openshift._raise_on_invalid_response_size(response)
     response = response.to_dict()
     _LOGGER.debug("OpenShift response for getting Amun inspect Job template: %r", response)
 
-    parameters = {
-        'AMUN_INSPECTION_ID': image_stream_name
-    }
-
     template = response['items'][0]
-
-    if 'run' in specification:
-        run_specification = specification['run']['requests']
-        if 'cpu' in run_specification:
-            parameters['AMUN_JOB_CPU'] = run_specification['cpu']
-        if 'memory' in run_specification:
-            parameters['AMUN_JOB_MEMORY'] = run_specification['memory']
 
     openshift.set_template_parameters(
         template,

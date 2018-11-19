@@ -1,0 +1,114 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: amun-inspect-buildconfig-with-cpu
+  annotations:
+    description: A template for BuildConfig to create build on the fly.
+    openshift.io/display-name: Amun inspect BuildConfig
+    version: 0.0.1
+    tags: poc,amun,thoth,ai-stacks
+    template.openshift.io/documentation-url: https://github.com/Thoth-Station/
+    template.openshift.io/long-description: >
+      A template used to create dynamic builds on user requests.
+    template.openshift.io/provider-display-name: Red Hat, Inc.
+  labels:
+    template: amun-inspect-buildconfig-with-cpu
+    app: amun
+    component: inspect-buildconfig
+
+objects:
+  - kind: BuildConfig
+    apiVersion: build.openshift.io/v1
+    metadata:
+      name: "${AMUN_INSPECTION_ID}"
+      labels:
+        app: amun
+        component: inspect-buildconfig
+      annotations:
+        amun_specification: ${AMUN_SPECIFICATION}
+    spec:
+      output:
+        to:
+          kind: ImageStreamTag
+          name: "${AMUN_INSPECTION_ID}:latest"
+      source:
+        dockerfile: "${AMUN_GENERATED_DOCKERFILE}"
+        type: Dockerfile
+      resources:
+        limits:
+          memory: ${AMUN_MEMORY}
+          cpu: ${AMUN_CPU}
+        requests:
+          memory: ${AMUN_MEMORY}
+          cpu: ${AMUN_CPU}
+      strategy:
+        type: Docker
+      triggers:
+        - type: ConfigChange
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: CPU_FAMILY
+                    operator: In
+                    values:
+                      - ${CPU_FAMILY}
+                  - key: CPU_MODEL
+                    operator: In
+                    values:
+                      - ${CPU_MODEL}
+                  - key: PHYSICAL_CPUS
+                    operator: In
+                    values:
+                      - ${PHYSICAL_CPUS}
+                  - key: processor
+                    operator: In
+                    values:
+                      - ${PROCESSOR}
+
+parameters:
+  - name: AMUN_INSPECTION_ID
+    description: Id of inspection that is run.
+    displayName: Inspection id
+    required: true
+
+  - description: The content of Dockerfile to be built.
+    displayName: Generated Dockerfile
+    required: true
+    name: AMUN_GENERATED_DOCKERFILE
+
+  - name: AMUN_CPU
+    description: CPU cores requested for running job.
+    displayName: Job CPU
+    default: 500m
+
+  - name: AMUN_MEMORY
+    description: Memory requested for running job.
+    displayName: Job Memory
+    default: 256Mi
+
+  - name: AMUN_SPECIFICATION
+    description: Inspection specification as posted to Amun API.
+    displayName: Amun specification
+    required: true
+
+  - name: CPU_FAMILY
+    description: Family number of CPU.
+    displayName: CPU Family
+    required: true
+
+  - name: CPU_MODEL
+    description: Modelnumber of CPU.
+    displayName: CPU model
+    required: true
+
+  - name: PHYSICAL_CPUS
+    description: Number of physical CPUs.
+    displayName: Physical CPUS
+    required: true
+
+  - name: PROCESSOR
+    description: Name of processor.
+    displayName: Processor name
+    required: true

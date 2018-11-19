@@ -205,23 +205,47 @@ definitions:
             additionalProperties: true
       build:
         type: object
-        description: Hardware requirements for build time
+        description: Hardware requirements for build time.
         additionalProperties: false
         properties:
           requests:
             type: object
-            description: Requested hardware environment at build time
+            description: Requested hardware environment at build time.
             properties:
               cpu:
                 type: string
                 minLength: 1
-                description: CPU cores requested at build time
+                description: CPU cores requested at build time.
                 example: 500m
               memory:
                 type: string
                 minLength: 1
-                description: CPU Memory requested at build time
+                description: CPU Memory requested at build time.
                 example: 256Mi
+              hardware:
+                type: object
+                description: Set hardware requirements for build time.
+                required:
+                  - cpu_family
+                  - cpu_model
+                  - processor
+                properties:
+                  cpu_family:
+                    type: integer
+                    description: CPU family number from CPU proc info.
+                    example: 6
+                  cpu_model:
+                    type: integer
+                    description: Model number of CPU from CPU proc info.
+                    example: 94
+                  physical_cpus:
+                    type: integer
+                    description: Number of physical physical CPUs.
+                    example: 32
+                  processor:
+                    type: string
+                    description: Name of the CPU model name of CPU proc info.
+                    example: "Intel Core Processor (Skylake, IBRS)"
       run:
         type: object
         description: Hardware requirements for run time
@@ -242,6 +266,30 @@ definitions:
                 minLength: 1
                 description: CPU Memory requested at run time
                 example: 256Mi
+              hardware:
+                type: object
+                description: Set hardware requirements for run time.
+                required:
+                  - cpu_family
+                  - cpu_model
+                  - processor
+                properties:
+                  cpu_family:
+                    type: integer
+                    description: CPU family number from CPU proc info.
+                    example: 6
+                  cpu_model:
+                    type: integer
+                    description: Model number of CPU from CPU proc info.
+                    example: 94
+                  physical_cpus:
+                    type: integer
+                    description: Number of physical physical CPUs.
+                    example: 32
+                  processor:
+                    type: string
+                    description: Name of the CPU model name of CPU proc info.
+                    example: "Intel Core Processor (Skylake, IBRS)"
       files:
         type: array
         description: Files passed to the context.
