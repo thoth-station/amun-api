@@ -148,7 +148,6 @@
                 "sha256:b370ab4abd925309db69a14a4723487948e9a83de60ca92782ec14992b741c89",
                 "sha256:c80dcf531deca2037105df09c933355c80830ffbf9e496b5e6a3967ac6809ef7"
             ],
-            "markers": "extra == 'openshift'",
             "version": "==6.0.0"
         },
         "markupsafe": {
@@ -203,7 +202,6 @@
             "hashes": [
                 "sha256:aab848277e61ad10446e6187c79781ba65256392ffd13aa874619a588c238dae"
             ],
-            "markers": "extra == 'openshift'",
             "version": "==0.6.2"
         },
         "pyasn1": {
@@ -332,7 +330,6 @@
                 "sha256:dfb9522f9b501db042358b3f6e86b644cc5dd083e162d9b77c7e6b64aeb9a8fe",
                 "sha256:e23abfae8fd775428a5b0e61214a04646299c61e31d1e46536448a3a04400cb6"
             ],
-            "markers": "extra == 'swagger-ui'",
             "version": "==0.0.2"
         },
         "thoth-common": {
