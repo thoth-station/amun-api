@@ -198,5 +198,5 @@ def get_inspection_specification(specification_id: str):
 
     return {
         'parameters': parameters,
-        'specification' build['metadata']['annotations']['amun_specification']
+        'specification': build['metadata']['annotations']['amun_specification']
     }
