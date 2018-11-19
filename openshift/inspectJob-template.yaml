@@ -46,11 +46,11 @@ objects:
                   port: 80
               resources:
                 limits:
-                  cpu: ${AMUN_JOB_CPU}
-                  memory: ${AMUN_JOB_MEMORY}
+                  cpu: ${AMUN_CPU}
+                  memory: ${AMUN_MEMORY}
                 requests:
-                  cpu: ${AMUN_JOB_CPU}
-                  memory: ${AMUN_JOB_MEMORY}
+                  cpu: ${AMUN_CPU}
+                  memory: ${AMUN_MEMORY}
               volumeMounts:
                 - mountPath: /home/amun/hwinfo
                   name: hw-info-volume
@@ -78,12 +78,14 @@ parameters:
     displayName: Inspection id
     required: true
 
-  - name: AMUN_JOB_CPU
+  - name: AMUN_CPU
     description: CPU cores requested for build
     displayName: Build CPU
     default: 750m
+    required: true
 
-  - name: AMUN_JOB_MEMORY
+  - name: AMUN_MEMORY
     description: Memory requested for build
     displayName: Build Memory
     default: 256Mi
+    required: true

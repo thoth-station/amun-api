@@ -27,29 +27,30 @@ from .configuration import Configuration
 _LOGGER = logging.getLogger(__name__)
 
 
-def _construct_parameters_dict(specificaiton: dict) -> dict:
+def _construct_parameters_dict(specification: dict) -> dict:
     """Construct parameters that should be passed to build or inspection job."""
     # Name of parameters are shared in build/job templates so parameters are constructed regardless build or job.
     parameters = {}
     use_hw_template = False
 
-    if 'cpu' in specification['requests']:
+    if 'cpu' in specification.get('requests', {}):
         parameters['AMUN_CPU'] = specification['requests']['cpu']
-    if 'memory' in specification:
+
+    if 'memory' in specification.get('requests', {}):
         parameters['AMUN_MEMORY'] = specification['requests']['memory']
 
-    if 'hardware' in specification['requests']:
-        hardware_specification = specification['requests']['hardware']
+    if 'hardware' in specification.get('requests', {}):
+        hardware_specification = specification.get('requests', {}).get('hardware', {})
         use_hw_template = True
 
         if 'cpu_family' in hardware_specification:
             parameters['CPU_FAMILY'] = hardware_specification['cpu_family']
 
         if 'cpu_model' in hardware_specification:
-            parameters['CPU_MODEL'] = hardware_specificaiton['cpu_model']
+            parameters['CPU_MODEL'] = hardware_specification['cpu_model']
 
         if 'physical_cpus' in hardware_specification:
-            parameters['PHYSICAL_CPUS'] = hardware_specificaiton['physical_cpus']
+            parameters['PHYSICAL_CPUS'] = hardware_specification['physical_cpus']
 
         if 'processor' in hardware_specification:
             parameters['PROCESSOR'] = hardware_specification['processor']
@@ -90,13 +91,13 @@ def create_inspect_imagestream(openshift: OpenShift, inspection_id: str) -> str:
 
 def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerfile: str, specification: dict) -> None:
     """Create build config for the given image stream."""
-    parameters, use_hw_template = _construct_parameters_dict(specification['build'])
-    parameters['AMUN_INSPECTION_ID'] = inspection_id,
-    parameters['AMUN_GENERATED_DOCKERFILE'] = dockerfile,
-    parameters['AMUN_SPECIFICATION'] json.dumps(specification)
+    parameters, use_hw_template = _construct_parameters_dict(specification.get('build', {}))
+    parameters['AMUN_INSPECTION_ID'] = inspection_id
+    parameters['AMUN_GENERATED_DOCKERFILE'] = dockerfile
+    parameters['AMUN_SPECIFICATION'] = json.dumps(specification)
 
     if use_hw_template:
-        label_selector = 'template=amun-inspect-buildconfig-cpu-hw'
+        label_selector = 'template=amun-inspect-buildconfig-with-cpu'
     else:
         label_selector = 'template=amun-inspect-buildconfig'
 
@@ -132,11 +133,11 @@ def create_inspect_buildconfig(openshift: OpenShift, inspection_id: str, dockerf
 
 def create_inspect_job(openshift: OpenShift, image_stream_name: str, specification: dict) -> None:
     """Create the actual inspect job."""
-    parameters, use_hw_template = _construct_parameters_dict(specification['run'])
+    parameters, use_hw_template = _construct_parameters_dict(specification.get('run', {}))
     parameters['AMUN_INSPECTION_ID'] = image_stream_name
 
     if use_hw_template:
-        label_selector = 'template=amun-inspect-job-cpu-hw'
+        label_selector = 'template=amun-inspect-job-with-cpu'
     else:
         label_selector = 'template=amun-inspect-job'
 

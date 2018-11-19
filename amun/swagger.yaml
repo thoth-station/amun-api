@@ -260,7 +260,7 @@ definitions:
                 type: string
                 minLength: 1
                 description: CPU cores requested at run time
-                example: 500mi
+                example: 500m
               memory:
                 type: string
                 minLength: 1
@@ -311,6 +311,9 @@ definitions:
       script:
         type: string
         description: A script that should be executed in inspection run.
+        example: |
+          #!/usr/bin/bash
+          echo "Here should be run tests..."
   InspectionSpecificationResponse:
     type: object
     description: Response for an inspection for the given inspection.
