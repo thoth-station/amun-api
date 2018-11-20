@@ -138,7 +138,7 @@ def get_inspection_build_log(inspection_id: str) -> dict:
         }, 404
 
     return {
-        'status': status,
+        'log': status,
         'parameters': parameters
     }, 200
 
