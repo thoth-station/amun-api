@@ -19,6 +19,7 @@
 
 import logging
 import random
+import json
 
 from thoth.common import OpenShift
 from thoth.common.exceptions import NotFoundException
@@ -197,5 +198,5 @@ def get_inspection_specification(inspection_id: str):
 
     return {
         'parameters': parameters,
-        'specification': build['metadata']['annotations']['amun_specification']
+        'specification': json.loads(build['metadata']['annotations']['amun_specification'])
     }
