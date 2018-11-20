@@ -180,7 +180,7 @@ def get_inspection_status(inspection_id: str) -> dict:
     }, 200
 
 
-def get_inspection_specification(specification_id: str):
+def get_inspection_specification(inspection_id: str):
     """Get specification for the given build."""
     parameters = {'inspection_id': inspection_id}
 
