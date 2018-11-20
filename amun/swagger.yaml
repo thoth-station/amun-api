@@ -245,7 +245,7 @@ definitions:
                   processor:
                     type: string
                     description: Name of the CPU model name of CPU proc info.
-                    example: "Intel Core Processor (Skylake, IBRS)"
+                    example: "Intel-Xeon-Processor-Skylake-IBRS"
       run:
         type: object
         description: Hardware requirements for run time
@@ -289,7 +289,7 @@ definitions:
                   processor:
                     type: string
                     description: Name of the CPU model name of CPU proc info.
-                    example: "Intel Core Processor (Skylake, IBRS)"
+                    example: "Intel-Xeon-Processor-Skylake-IBRS"
       files:
         type: array
         description: Files passed to the context.
