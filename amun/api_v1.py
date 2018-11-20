@@ -187,7 +187,7 @@ def get_inspection_specification(inspection_id: str):
     try:
         # Check get_inspection_status for explanation of build name construction.
         build = _OPENSHIFT.get_build(
-            inspection_id + '-1-build',
+            inspection_id + '-1',
             Configuration.AMUN_INSPECTION_NAMESPACE
         )
     except NotFoundException:
