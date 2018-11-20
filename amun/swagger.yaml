@@ -240,7 +240,7 @@ definitions:
                     example: 94
                   physical_cpus:
                     type: integer
-                    description: Number of physical physical CPUs.
+                    description: Number of physical CPUs.
                     example: 32
                   processor:
                     type: string
@@ -284,7 +284,7 @@ definitions:
                     example: 94
                   physical_cpus:
                     type: integer
-                    description: Number of physical physical CPUs.
+                    description: Number of physical CPUs.
                     example: 32
                   processor:
                     type: string
