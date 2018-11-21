@@ -39,7 +39,9 @@ _EXEC_STDERR_FILE = '/home/amun/script.stderr'
 # Executable to be run.
 _EXEC_FILE = '/home/amun/script'
 
+
 def main():
+    """Entrypoint for inspection container."""
     # Load hardware info.
     with open(_HWINFO_FILE, 'r') as hwinfo_file:
         hwinfo = json.load(hwinfo_file)
@@ -58,7 +60,7 @@ def main():
         except Exception:
             # We were not able to load JSON, pass string as output.
             pass
-        
+
     with open(_EXEC_STDERR_FILE, 'r') as stderr_file:
         stderr = stderr_file.read()
         try:
@@ -88,6 +90,7 @@ def main():
 
     json.dump(report, sys.stdout, sort_keys=True, indent=2)
     sys.exit(report['exit_code'])
+
 
 if __name__ == '__main__':
     main()

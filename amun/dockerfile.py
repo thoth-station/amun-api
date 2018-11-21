@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# thoth-storages
+# Amun
 # Copyright(C) 2018 Fridolin Pokorny
 #
 # This program is free software: you can redistribute it and / or modify
@@ -114,7 +114,7 @@ def create_dockerfile(specification: dict) -> tuple:
 
         dockerfile += 'RUN chmod a+x /home/amun/script /home/amun/entrypoint && ' \
             'touch /home/amun/script.stderr /home/amun/script.stdout && ' \
-            'chmod 777 /home/amun/script.stderr /home/amun/script.stdout\n' 
+            'chmod 777 /home/amun/script.stderr /home/amun/script.stdout\n'
         dockerfile += 'CMD ["/home/amun/entrypoint"]\n'
 
     # An arbitrary user.
