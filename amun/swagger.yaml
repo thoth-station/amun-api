@@ -542,9 +542,36 @@ definitions:
       - parameters
     properties:
       log:
-        type: string
+        type: object
         description: Inspection job logs printed to stdout/stderr as a plain text.
         x-nullable: true
+        additionalProperties: false
+        required:
+          - exit_code
+          - hwinfo
+          - script_sha256
+          - stderr
+          - stdout
+        properties:
+          exit_code:
+            type: integer
+            description:
+              Exit code of user provided script (matches exit code of the inspect job)
+            example: 0
+          hwinfo:
+            type: object
+            additionalProperties: true
+            description: Hardware information as provided by Amun's hwinfo.
+          script_sha256:
+            type: string
+            description: SHA 256 digest of user provided script
+          stderr:
+            type: string
+            description: Standard error output produced by user provided script.
+          stdout:
+            # TODO: stdout can be a dict
+            type: string
+            description: Standard output prodiced by user provided script.
       parameters:
         type: object
         description: Parameters echoed back to user for debugging.

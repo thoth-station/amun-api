@@ -19,6 +19,7 @@
 
 import logging
 import random
+import json
 
 from thoth.common import OpenShift
 from thoth.common.exceptions import NotFoundException
@@ -115,6 +116,15 @@ def get_inspection_job_log(inspection_id: str) -> dict:
             'error': 'Job log for the given inspection id was not found',
             'parameters': parameters
         }, 404
+
+    try:
+        log = json.loads(log)
+    except Exception as exc:
+        _LOGGER.exception("Failed to load inspection job log for %r", inspection_id)
+        return {
+            'error': 'Job failed, please contact administrator for more details',
+            'parameters': parameters
+        }, 500
 
     return {
         'log': log,
