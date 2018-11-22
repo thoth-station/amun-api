@@ -117,6 +117,15 @@ def get_inspection_job_log(inspection_id: str) -> dict:
             'parameters': parameters
         }, 404
 
+    try:
+        log = json.loads(log)
+    except Exception as exc:
+        _LOGGER.exception("Failed to load inspection job log for %r", inspection_id)
+        return {
+            'error': 'Job failed, please contact administrator for more details',
+            'parameters': parameters
+        }, 500
+
     return {
         'log': log,
         'parameters': parameters
