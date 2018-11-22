@@ -56,7 +56,7 @@ def main():
     with open(_EXEC_STDOUT_FILE, 'r') as stdout_file:
         stdout = stdout_file.read()
         try:
-            stdout = json.loads(stdout)
+            stdout = json.loads(str(stdout))
         except Exception:
             # We were not able to load JSON, pass string as output.
             pass
