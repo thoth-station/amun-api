@@ -28,6 +28,9 @@ from .exceptions import ScriptObtainingError
 
 _LOGGER = logging.getLogger(__name__)
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_ENTRYPOINT_PY = os.path.join(_HERE, 'inspect.py')
+
 
 def _determine_update_string() -> str:
     """Determine how to update the system to the latest version based on binaries present in the image."""
@@ -103,8 +106,16 @@ def create_dockerfile(specification: dict) -> tuple:
         script_present = True
         content = _obtain_script(specification['script'])
         dockerfile += _write_file_string(content, '/home/amun/script')
-        dockerfile += f'RUN chmod a+x /home/amun/script\n'
-        dockerfile += 'CMD ["/home/amun/script"]\n'
+        with open(_ENTRYPOINT_PY, 'r') as entrypoint_file:
+            dockerfile += _write_file_string(
+                entrypoint_file.read(),
+                '/home/amun/entrypoint'
+            )
+
+        dockerfile += 'RUN chmod a+x /home/amun/script /home/amun/entrypoint && ' \
+            'touch /home/amun/script.stderr /home/amun/script.stdout && ' \
+            'chmod 777 /home/amun/script.stderr /home/amun/script.stdout\n'
+        dockerfile += 'CMD ["/home/amun/entrypoint"]\n'
 
     # An arbitrary user.
     dockerfile += "USER 1042\n"
