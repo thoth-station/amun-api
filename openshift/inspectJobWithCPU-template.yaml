@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: amun-inspect-job
+  name: amun-inspect-job-with-cpu
   annotations:
     description: Amun - Execution engine for Thoth
     openshift.io/display-name: Amun API
@@ -12,7 +12,7 @@ metadata:
       This template defines resources needed to run Amun's inspection job on OpenShift.
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
-    template: amun-inspect-job
+    template: amun-inspect-job-with-cpu
     app: amun
     component: amun-inspect
 
@@ -71,6 +71,27 @@ objects:
             from:
               kind: ImageStreamTag
               name: '${AMUN_INSPECTION_ID}:latest'
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: CPU_FAMILY
+                    operator: In
+                    values:
+                      - ${CPU_FAMILY}
+                  - key: CPU_MODEL
+                    operator: In
+                    values:
+                      - ${CPU_MODEL}
+                  - key: PHYSICAL_CPUS
+                    operator: In
+                    values:
+                      - ${PHYSICAL_CPUS}
+                  - key: processor
+                    operator: In
+                    values:
+                      - ${PROCESSOR}
 
 parameters:
   - name: AMUN_INSPECTION_ID
@@ -88,4 +109,24 @@ parameters:
     description: Memory requested for build
     displayName: Build Memory
     default: 256Mi
+    required: true
+
+  - name: CPU_FAMILY
+    description: Family number of CPU.
+    displayName: CPU Family
+    required: true
+
+  - name: CPU_MODEL
+    description: Modelnumber of CPU.
+    displayName: CPU model
+    required: true
+
+  - name: PHYSICAL_CPUS
+    description: Number of physical CPUs.
+    displayName: Physical CPUS
+    required: true
+
+  - name: PROCESSOR
+    description: Name of processor.
+    displayName: Processor name
     required: true
