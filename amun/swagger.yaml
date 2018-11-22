@@ -620,9 +620,9 @@ definitions:
             type: string
             description: Standard error output produced by user provided script.
           stdout:
-            # TODO: stdout can be a dict
-            type: string
+            type: object
             description: Standard output prodiced by user provided script.
+            additionalProperties: true
       parameters:
         type: object
         description: Parameters echoed back to user for debugging.
