@@ -63,11 +63,6 @@ def main():
 
     with open(_EXEC_STDERR_FILE, 'r') as stderr_file:
         stderr = stderr_file.read()
-        try:
-            stderr = json.loads(stderr)
-        except Exception:
-            # We were not able to load JSON, pass string as output.
-            pass
 
     # Compute script SHA-256.
     sha256 = hashlib.sha256()
