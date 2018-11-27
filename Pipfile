@@ -6,11 +6,13 @@ name = "pypi"
 [packages]
 requests = "*"
 gunicorn = "*"
-connexion = {extras = ["swagger-ui"], version = "*"}
+connexion = {extras = ["swagger-ui"],version = "*"}
 flask = "*"
-thoth-common = {version = "*", extras = ["openshift"]}
+thoth-common = {version = "*",extras = ["openshift"]}
 flask-script = "*"
 toml = "*"
+prometheus-flask-exporter = "*"
+prometheus-client = "*"
 
 [dev-packages]
 pylint = "*"
