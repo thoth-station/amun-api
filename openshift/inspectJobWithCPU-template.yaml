@@ -37,6 +37,8 @@ objects:
           containers:
             - name: inspect
               env:
+                - name: LANG
+                  value: 'en_US.UTF-8'
                 - name: HOME
                   value: '/home/amun/'
                 - name: PIPENV_CACHE_DIR
