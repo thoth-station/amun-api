@@ -27,6 +27,17 @@ objects:
       annotations:
         amun_specification: ${AMUN_SPECIFICATION}
     spec:
+      env:
+        - name: HOME
+          value: '/home/amun/'
+        - name: PIPENV_CACHE_DIR
+          value: '/home/amun/.cache'
+        - name: PIPENV_COLORBLIND
+          value: '1'
+        - name: PIPENV_HIDE_EMOJIS
+          value: '1'
+        - name: PIPENV_NOSPIN
+          value: '1'
       output:
         to:
           kind: ImageStreamTag
