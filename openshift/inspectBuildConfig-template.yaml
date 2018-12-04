@@ -28,6 +28,8 @@ objects:
         amun_specification: ${AMUN_SPECIFICATION}
     spec:
       env:
+        - name: HOME
+          value: '/home/amun/'
         - name: PIPENV_CACHE_DIR
           value: '/home/amun/.cache'
         - name: PIPENV_COLORBLIND
