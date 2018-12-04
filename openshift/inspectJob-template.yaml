@@ -36,7 +36,17 @@ objects:
           restartPolicy: Never
           containers:
             - name: inspect
-              env: []
+              env:
+                - name: HOME
+                  value: '/home/amun/'
+                - name: PIPENV_CACHE_DIR
+                  value: '/home/amun/.cache'
+                - name: PIPENV_COLORBLIND
+                  value: '1'
+                - name: PIPENV_HIDE_EMOJIS
+                  value: '1'
+                - name: PIPENV_NOSPIN
+                  value: '1'
               image: '${AMUN_INSPECTION_ID}:latest'
               livenessProbe:
                 failureThreshold: 1
