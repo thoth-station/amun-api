@@ -47,7 +47,7 @@ def main():
         hwinfo = json.load(hwinfo_file)
 
     # Execute the supplied script.
-    args = [_EXEC_FILE]
+    args = ['pipenv', 'run', _EXEC_FILE]
     with open(_EXEC_STDOUT_FILE, 'w') as stdout_file, open(_EXEC_STDERR_FILE) as stderr_file:
         process = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file, universal_newlines=True)
         process.wait()
