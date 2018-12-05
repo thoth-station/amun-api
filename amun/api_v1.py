@@ -34,6 +34,14 @@ from .exceptions import ScriptObtainingError
 _LOGGER = logging.getLogger('amun.api_v1')
 _OPENSHIFT = OpenShift()
 
+# These are default requests for inspection builds and runs if not stated
+# otherwise. We explicitly assign defaults to requests coming to API so that
+# the specification always carries these values in inspection documents.
+_DEFAULT_REQUESTS = {
+    "cpu": "500m",
+    "memory": "256Mi"
+}
+
 
 def _do_create_dockerfile(specification: dict) -> tuple:
     """Wrap dockerfile generation and report back an error if any."""
@@ -67,6 +75,14 @@ def post_generate_dockerfile(specification: dict):
     }, 200
 
 
+def _adjust_default_requests(dict_: dict) -> None:
+    """Explicitly assign default requests so that they are carried within the requested inspection run."""
+    new_requests = dict(_DEFAULT_REQUESTS)
+    requests = dict_.get('requests', {})
+    new_requests.update(requests)
+    dict_['requests'] = new_requests
+
+
 def post_inspection(specification: dict) -> dict:
     """Create new inspection for the given software stack."""
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
@@ -77,6 +93,15 @@ def post_inspection(specification: dict) -> dict:
             # If not dockerfile is produced, run_job holds the error message.
             'error': run_job
         }, 400
+
+    if 'build' not in specification:
+        specification['build'] = {}
+
+    if 'run' not in specification:
+        specification['run'] = {}
+
+    _adjust_default_requests(specification['run'])
+    _adjust_default_requests(specification['build'])
 
     inspection_id = _generate_inspection_id()
     create_inspect_imagestream(_OPENSHIFT, inspection_id)
