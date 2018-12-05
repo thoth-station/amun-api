@@ -57,6 +57,8 @@ objects:
               value: '1'
             - name: PIPENV_NOSPIN
               value: '1'
+            - name: PIPENV_VERBOSITY
+              value: '1'
       triggers:
         - type: ConfigChange
 
