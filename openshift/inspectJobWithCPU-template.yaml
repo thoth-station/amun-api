@@ -24,6 +24,8 @@ objects:
       labels:
         app: amun
         component: amun-inspect
+        operator: event
+        task: inspection
     spec:
       backoffLimit: 0
       template:
