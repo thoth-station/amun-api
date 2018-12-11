@@ -52,14 +52,12 @@
             "version": "==1.2.2"
         },
         "connexion": {
-            "extras": [
-                "swagger-ui"
-            ],
             "hashes": [
-                "sha256:4061139474d62733ef370928fbb2892e78d0d6f06350d6ec1fe0692dac8ff7ce"
+                "sha256:54bc34fae9d3bdb60b138776e3affc5d4ac20ab799cd0881dbf9ef48b33fef88",
+                "sha256:6f0169cc91ff389be628807c751ddd4d8ba79a594a7272c9d7663d243795b323"
             ],
             "index": "pypi",
-            "version": "==2.0.2"
+            "version": "==2.1.0"
         },
         "daiquiri": {
             "hashes": [
