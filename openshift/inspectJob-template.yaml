@@ -24,7 +24,7 @@ objects:
       labels:
         app: amun
         component: amun-inspect
-        operator: event
+        operator: graph-sync
         task: inspection
     spec:
       backoffLimit: 0
