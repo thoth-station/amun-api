@@ -26,6 +26,7 @@ objects:
         component: amun-inspect
         operator: event
         task: inspection
+        mark: cleanup
     spec:
       backoffLimit: 0
       template:
@@ -33,6 +34,7 @@ objects:
           labels:
             app: amun
             component: amun-inspect
+            mark: cleanup
         spec:
           automountServiceAccountToken: false
           restartPolicy: Never

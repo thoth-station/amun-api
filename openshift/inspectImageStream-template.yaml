@@ -26,6 +26,7 @@ objects:
       labels:
         app: amun
         component: inspect-imagestream
+        mark: cleanup
       name: ${AMUN_INSPECTION_ID}
     spec:
       name: latest
