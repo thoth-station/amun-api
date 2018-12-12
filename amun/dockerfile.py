@@ -30,6 +30,11 @@ _LOGGER = logging.getLogger(__name__)
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _ENTRYPOINT_PY = os.path.join(_HERE, 'inspect.py')
+# Make sure pip and Pipenv trust the AICoE index.
+_PIP_CONF = """
+[global]
+trusted-host = tensorflow.pypi.thoth-station.ninja
+"""
 
 
 def _determine_update_string() -> str:
@@ -100,6 +105,7 @@ def create_dockerfile(specification: dict) -> tuple:
         pipfile_lock_content = json.dumps(specification['python']['requirements_locked'], sort_keys=True, indent=4)
         dockerfile += _write_file_string(pipfile_content, '/home/amun/Pipfile')
         dockerfile += _write_file_string(pipfile_lock_content, '/home/amun/Pipfile.lock')
+        dockerfile += _write_file_string(_PIP_CONF, "/etc/pip.conf")
         dockerfile += 'RUN cd /home/amun && pipenv install --deploy\n'
 
     if 'script' in specification:
