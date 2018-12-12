@@ -24,6 +24,7 @@ objects:
       labels:
         app: amun
         component: inspect-buildconfig
+        mark: cleanup
       annotations:
         amun_specification: ${AMUN_SPECIFICATION}
     spec:
