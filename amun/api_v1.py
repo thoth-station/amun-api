@@ -111,7 +111,7 @@ def _adjust_default_requests(dict_: dict) -> None:
     dict_['requests'] = new_requests
 
 
-def post_inspection(specification: dict) -> dict:
+def post_inspection(specification: dict) -> tuple:
     """Create new inspection for the given software stack."""
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
     dockerfile, run_job = _do_create_dockerfile(specification)
@@ -154,7 +154,7 @@ def post_inspection(specification: dict) -> dict:
     }, 202
 
 
-def get_inspection_job_log(inspection_id: str) -> dict:
+def get_inspection_job_log(inspection_id: str) -> tuple:
     """Get logs of the given inspection."""
     parameters = {'inspection_id': inspection_id}
     try:
@@ -193,7 +193,7 @@ def get_inspection_job_log(inspection_id: str) -> dict:
     }, 200
 
 
-def get_inspection_build_log(inspection_id: str) -> dict:
+def get_inspection_build_log(inspection_id: str) -> tuple:
     """Get build log of an inspection."""
     parameters = {'inspection_id': inspection_id}
 
@@ -214,7 +214,7 @@ def get_inspection_build_log(inspection_id: str) -> dict:
     }, 200
 
 
-def get_inspection_status(inspection_id: str) -> dict:
+def get_inspection_status(inspection_id: str) -> tuple:
     """Get status of an inspection."""
     parameters = {'inspection_id': inspection_id}
 
