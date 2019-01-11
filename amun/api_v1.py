@@ -25,13 +25,10 @@ from thoth.common import OpenShift
 from thoth.common.exceptions import NotFoundException
 
 from .configuration import Configuration
-from .core import create_inspect_buildconfig
-from .core import create_inspect_imagestream
-from .core import create_inspect_job
 from .dockerfile import create_dockerfile
 from .exceptions import ScriptObtainingError
 
-_LOGGER = logging.getLogger('amun.api_v1')
+_LOGGER = logging.getLogger(__name__)
 _OPENSHIFT = OpenShift()
 
 # These are default requests for inspection builds and runs if not stated
@@ -41,6 +38,37 @@ _DEFAULT_REQUESTS = {
     "cpu": "500m",
     "memory": "256Mi"
 }
+
+
+def _construct_parameters_dict(specification: dict) -> tuple:
+    """Construct parameters that should be passed to build or inspection job."""
+    # Name of parameters are shared in build/job templates so parameters are constructed regardless build or job.
+    parameters = {}
+    use_hw_template = False
+
+    if 'cpu' in specification.get('requests', {}):
+        parameters['AMUN_CPU'] = specification['requests']['cpu']
+
+    if 'memory' in specification.get('requests', {}):
+        parameters['AMUN_MEMORY'] = specification['requests']['memory']
+
+    if 'hardware' in specification.get('requests', {}):
+        hardware_specification = specification.get('requests', {}).get('hardware', {})
+        use_hw_template = True
+
+        if 'cpu_family' in hardware_specification:
+            parameters['CPU_FAMILY'] = hardware_specification['cpu_family']
+
+        if 'cpu_model' in hardware_specification:
+            parameters['CPU_MODEL'] = hardware_specification['cpu_model']
+
+        if 'physical_cpus' in hardware_specification:
+            parameters['PHYSICAL_CPUS'] = hardware_specification['physical_cpus']
+
+        if 'processor' in hardware_specification:
+            parameters['PROCESSOR'] = hardware_specification['processor']
+
+    return parameters, use_hw_template
 
 
 def _do_create_dockerfile(specification: dict) -> tuple:
@@ -83,7 +111,7 @@ def _adjust_default_requests(dict_: dict) -> None:
     dict_['requests'] = new_requests
 
 
-def post_inspection(specification: dict) -> dict:
+def post_inspection(specification: dict) -> tuple:
     """Create new inspection for the given software stack."""
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
     dockerfile, run_job = _do_create_dockerfile(specification)
@@ -104,11 +132,19 @@ def post_inspection(specification: dict) -> dict:
     _adjust_default_requests(specification['build'])
 
     inspection_id = _generate_inspection_id()
-    create_inspect_imagestream(_OPENSHIFT, inspection_id)
-    create_inspect_buildconfig(_OPENSHIFT, inspection_id, dockerfile, specification)
+    _OPENSHIFT.create_inspection_imagestream(inspection_id)
+
+    parameters, use_hw_template = _construct_parameters_dict(specification.get('build', {}))
+    parameters['AMUN_INSPECTION_ID'] = inspection_id
+
+    # Create buildconfig, extend parameters with specification and generated dockerfile for build.
+    build_parameters = dict(parameters)
+    build_parameters['AMUN_GENERATED_DOCKERFILE'] = dockerfile
+    build_parameters['AMUN_SPECIFICATION'] = json.dumps(specification)
+    _OPENSHIFT.create_inspection_buildconfig(build_parameters, use_hw_template)
 
     if run_job:
-        create_inspect_job(_OPENSHIFT, inspection_id, specification)
+        _OPENSHIFT.schedule_inspection_job(parameters, use_hw_template)
 
     return {
         'parameters': specification,
@@ -118,7 +154,7 @@ def post_inspection(specification: dict) -> dict:
     }, 202
 
 
-def get_inspection_job_log(inspection_id: str) -> dict:
+def get_inspection_job_log(inspection_id: str) -> tuple:
     """Get logs of the given inspection."""
     parameters = {'inspection_id': inspection_id}
     try:
@@ -157,7 +193,7 @@ def get_inspection_job_log(inspection_id: str) -> dict:
     }, 200
 
 
-def get_inspection_build_log(inspection_id: str) -> dict:
+def get_inspection_build_log(inspection_id: str) -> tuple:
     """Get build log of an inspection."""
     parameters = {'inspection_id': inspection_id}
 
@@ -178,7 +214,7 @@ def get_inspection_build_log(inspection_id: str) -> dict:
     }, 200
 
 
-def get_inspection_status(inspection_id: str) -> dict:
+def get_inspection_status(inspection_id: str) -> tuple:
     """Get status of an inspection."""
     parameters = {'inspection_id': inspection_id}
 
