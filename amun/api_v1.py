@@ -144,7 +144,7 @@ def post_inspection(specification: dict) -> tuple:
     _OPENSHIFT.create_inspection_buildconfig(build_parameters, use_hw_template)
 
     if run_job:
-        _OPENSHIFT.schedule_inspection_job(parameters, use_hw_template)
+        _OPENSHIFT.schedule_inspection_job(inspection_id, parameters, use_hw_template)
 
     return {
         'parameters': specification,
