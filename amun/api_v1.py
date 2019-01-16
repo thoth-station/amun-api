@@ -45,13 +45,6 @@ def _construct_parameters_dict(specification: dict) -> tuple:
     # Name of parameters are shared in build/job templates so parameters are constructed regardless build or job.
     parameters = {}
     use_hw_template = False
-
-    if 'cpu' in specification.get('requests', {}):
-        parameters['AMUN_CPU'] = specification['requests']['cpu']
-
-    if 'memory' in specification.get('requests', {}):
-        parameters['AMUN_MEMORY'] = specification['requests']['memory']
-
     if 'hardware' in specification.get('requests', {}):
         hardware_specification = specification.get('requests', {}).get('hardware', {})
         use_hw_template = True
@@ -135,6 +128,15 @@ def post_inspection(specification: dict) -> tuple:
     _OPENSHIFT.create_inspection_imagestream(inspection_id)
 
     parameters, use_hw_template = _construct_parameters_dict(specification.get('build', {}))
+
+    cpu_requests = None
+    if 'cpu' in specification.get('requests', {}):
+        cpu_requests = specification['requests']['cpu']
+
+    memory_requests = None
+    if 'memory' in specification.get('requests', {}):
+        memory_requests = specification['requests']['memory']
+
     parameters['AMUN_INSPECTION_ID'] = inspection_id
 
     # Create buildconfig, extend parameters with specification and generated dockerfile for build.
@@ -144,7 +146,13 @@ def post_inspection(specification: dict) -> tuple:
     _OPENSHIFT.create_inspection_buildconfig(build_parameters, use_hw_template)
 
     if run_job:
-        _OPENSHIFT.schedule_inspection_job(inspection_id, parameters, use_hw_template)
+        _OPENSHIFT.schedule_inspection_job(
+            inspection_id,
+            parameters,
+            use_hw_template=use_hw_template,
+            memory_requests=memory_requests,
+            cpu_requests=cpu_requests
+        )
 
     return {
         'parameters': specification,
