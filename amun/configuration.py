@@ -26,5 +26,5 @@ class Configuration:
 
     APP_SECRET_KEY = os.environ['AMUN_API_APP_SECRET_KEY']
     SWAGGER_YAML_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'swagger.yaml')
-    AMUN_INSPECTION_NAMESPACE = os.environ['AMUN_INSPECTION_NAMESPACE']
-    AMUN_INFRA_NAMESPACE = os.environ['AMUN_INFRA_NAMESPACE']
+    AMUN_INSPECTION_NAMESPACE = os.environ['THOTH_AMUN_INSPECTION_NAMESPACE']
+    AMUN_INFRA_NAMESPACE = os.environ['THOTH_AMUN_INFRA_NAMESPACE']
