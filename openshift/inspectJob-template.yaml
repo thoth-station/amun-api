@@ -86,10 +86,8 @@ parameters:
     description: CPU cores requested for build
     displayName: Build CPU
     default: 750m
-    required: true
 
   - name: AMUN_MEMORY
     description: Memory requested for build
     displayName: Build Memory
     default: 256Mi
-    required: true
