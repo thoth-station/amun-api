@@ -71,12 +71,12 @@ objects:
                   value: '0'
                 - name: AMUN_DEBUG
                   value: '0'
-                - name: AMUN_INSPECTION_NAMESPACE
+                - name: THOTH_AMUN_INSPECTION_NAMESPACE
                   valueFrom:
                     configMapKeyRef:
                       name: amun
                       key: amun-inspection-namespace
-                - name: AMUN_INFRA_NAMESPACE
+                - name: THOTH_AMUN_INFRA_NAMESPACE
                   valueFrom:
                     configMapKeyRef:
                       name: amun
