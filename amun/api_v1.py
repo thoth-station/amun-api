@@ -129,13 +129,13 @@ def post_inspection(specification: dict) -> tuple:
 
     parameters, use_hw_template = _construct_parameters_dict(specification.get('build', {}))
 
-    cpu_requests = None
-    if 'cpu' in specification.get('requests', {}):
-        cpu_requests = specification['requests']['cpu']
+    run_cpu_requests = None
+    if 'cpu' in specification['run'].get('requests', {}):
+        run_cpu_requests = specification['run']['requests']['cpu']
 
-    memory_requests = None
-    if 'memory' in specification.get('requests', {}):
-        memory_requests = specification['requests']['memory']
+    run_memory_requests = None
+    if 'memory' in specification['run'].get('requests', {}):
+        run_memory_requests = specification['run']['requests']['memory']
 
     parameters['AMUN_INSPECTION_ID'] = inspection_id
 
@@ -143,6 +143,8 @@ def post_inspection(specification: dict) -> tuple:
     build_parameters = dict(parameters)
     build_parameters['AMUN_GENERATED_DOCKERFILE'] = dockerfile
     build_parameters['AMUN_SPECIFICATION'] = json.dumps(specification)
+    build_parameters['AMUN_CPU'] = specification['build'].get('requests', {}).get('cpu')
+    build_parameters['AMUN_MEMORY'] = specification['build'].get('requests', {}).get('memory')
     _OPENSHIFT.create_inspection_buildconfig(build_parameters, use_hw_template)
 
     if run_job:
@@ -150,8 +152,8 @@ def post_inspection(specification: dict) -> tuple:
             inspection_id,
             parameters,
             use_hw_template=use_hw_template,
-            memory_requests=memory_requests,
-            cpu_requests=cpu_requests
+            memory_requests=run_memory_requests,
+            cpu_requests=run_cpu_requests
         )
 
     return {
