@@ -145,7 +145,7 @@ def post_inspection(specification: dict) -> tuple:
     build_parameters['AMUN_SPECIFICATION'] = json.dumps(specification)
     build_parameters['AMUN_CPU'] = specification['build'].get('requests', {}).get('cpu')
     build_parameters['AMUN_MEMORY'] = specification['build'].get('requests', {}).get('memory')
-    _OPENSHIFT.create_inspection_buildconfig(build_parameters, use_hw_template)
+    _OPENSHIFT.schedule_inspection_build(build_parameters, inspection_id, use_hw_template)
 
     if run_job:
         _OPENSHIFT.schedule_inspection_job(
