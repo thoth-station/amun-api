@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: amun-inspect-job-with-cpu
+  name: amun-inspection-job-with-cpu
   annotations:
     description: Amun - Execution engine for Thoth
     openshift.io/display-name: Amun API
@@ -12,9 +12,9 @@ metadata:
       This template defines resources needed to run Amun's inspection job on OpenShift.
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
-    template: amun-inspect-job-with-cpu
+    template: amun-inspection-job-with-cpu
     app: amun
-    component: amun-inspect
+    component: amun-inspection-job
 
 objects:
   - apiVersion: batch/v1
@@ -23,7 +23,8 @@ objects:
       name: "${AMUN_INSPECTION_ID}"
       labels:
         app: amun
-        component: amun-inspect
+        component: amun-inspection-job
+        amun_template: amun-inspection-job-with-cpu
         operator: graph-sync
         task: inspection
         mark: cleanup
@@ -33,7 +34,8 @@ objects:
         metadata:
           labels:
             app: amun
-            component: amun-inspect
+            component: amun-inspection-job
+            amun_template: amun-inspection-job-with-cpu
             mark: cleanup
         spec:
           automountServiceAccountToken: false

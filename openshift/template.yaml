@@ -39,7 +39,28 @@ objects:
         name: inspector
         namespace: ${AMUN_API_NAMESPACE}
 
+  # TODO: do not assign cluser-wise edit, but define own Amun roles
+  - apiVersion: v1
+    kind: RoleBinding
+    metadata:
+      name: role-inspector-binding
+      namespace: ${AMUN_API_NAMESPACE}
+      labels:
+        app: amun
+    roleRef:
+      kind: ClusterRole
+      name: edit
+    subjects:
+      - kind: ServiceAccount
+        name: inspector
+        namespace: ${AMUN_API_NAMESPACE}
+
 parameters:
+  - description: Namespace for infrastructure for Amun.
+    displayName: Amun Infra Namespace
+    required: true
+    name: AMUN_INFRA_NAMESPACE
+
   - description: Namespace where Amun API service sits.
     displayName: Amun API Namespace
     required: true

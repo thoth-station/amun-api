@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: amun-inspect-imagestream
+  name: amun-inspection-imagestream
   annotations:
     description: >
       This is Thoth Adviser ImageStream, this template is meant to be used by Jenkins, but could also
       be used by humans
-    openshift.io/display-name: Dynamically generated ImageStream for dynamic inspect builds.
+    openshift.io/display-name: Dynamically generated ImageStream for dynamic inspection builds.
     version: 0.2.0
     tags: poc,amun,thoth,ai-stacks,adviser
     template.openshift.io/documentation-url: https://github.com/Thoth-Station
@@ -16,8 +16,8 @@ metadata:
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
     app: amun
-    component: inspect-imagestream
-    template: amun-inspect-imagestream
+    component: amun-inspection-imagestream
+    template: amun-inspection-imagestream
 
 objects:
   - apiVersion: image.openshift.io/v1
@@ -25,7 +25,7 @@ objects:
     metadata:
       labels:
         app: amun
-        component: inspect-imagestream
+        component: amun-inspection-imagestream
         mark: cleanup
       name: ${AMUN_INSPECTION_ID}
     spec:
