@@ -78,7 +78,7 @@ def _generate_inspection_id():
     # but it looks like there is a bug in OpenShift as it did not generated any
     # name and failed with regexp issues (that were not related to the
     # generateName configuration).
-    return 'inspect-' + "%016x" % random.getrandbits(64)
+    return 'inspection-' + "%016x" % random.getrandbits(64)
 
 
 def post_generate_dockerfile(specification: dict):
