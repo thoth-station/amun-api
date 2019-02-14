@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: amun-core
+  name: amun-core-api
   annotations:
     description: This is Amun configuration template
     openshift.io/display-name: "Amun core components"
