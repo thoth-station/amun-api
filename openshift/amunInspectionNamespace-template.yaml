@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: This is Amun configuration template
     openshift.io/display-name: "Amun core components"
-    version: 0.3.0
+    version: 0.4.0
     tags: amun,thoth,ai-stacks,aistacks,machinelearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
@@ -15,36 +15,10 @@ metadata:
     app: amun
 
 objects:
-  - kind: ServiceAccount
+  - kind: RoleBinding
     apiVersion: v1
     metadata:
-      name: inspector
-      namespace: ${AMUN_API_NAMESPACE}
-      labels:
-        app: amun
-    automountServiceAccountToken: true
-
-  - apiVersion: v1
-    kind: RoleBinding
-    metadata:
       name: role-inspector-binding
-      namespace: ${AMUN_INSPECTION_NAMESPACE}
-      labels:
-        app: amun
-    roleRef:
-      kind: ClusterRole
-      name: edit
-    subjects:
-      - kind: ServiceAccount
-        name: inspector
-        namespace: ${AMUN_API_NAMESPACE}
-
-  # TODO: do not assign cluser-wise edit, but define own Amun roles
-  - apiVersion: v1
-    kind: RoleBinding
-    metadata:
-      name: role-inspector-binding
-      namespace: ${AMUN_API_NAMESPACE}
       labels:
         app: amun
     roleRef:
@@ -60,8 +34,3 @@ parameters:
     displayName: Amun API Namespace
     required: true
     name: AMUN_API_NAMESPACE
-
-  - description: Namespace where inspection is done.
-    displayName: Amun Inspection Namespace
-    required: true
-    name: AMUN_INSPECTION_NAMESPACE
