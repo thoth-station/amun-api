@@ -5,8 +5,8 @@ metadata:
   annotations:
     description: This is Amun configuration template
     openshift.io/display-name: "Amun core components"
-    version: 0.2.0
-    tags: poc,amun,thoth,ai-stacks
+    version: 0.3.0
+    tags: amun,thoth,ai-stacks,aistacks,machinelearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
     template.openshift.io/provider-display-name: Red Hat, Inc.
@@ -56,11 +56,6 @@ objects:
         namespace: ${AMUN_API_NAMESPACE}
 
 parameters:
-  - description: Namespace for infrastructure for Amun.
-    displayName: Amun Infra Namespace
-    required: true
-    name: AMUN_INFRA_NAMESPACE
-
   - description: Namespace where Amun API service sits.
     displayName: Amun API Namespace
     required: true
