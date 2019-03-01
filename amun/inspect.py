@@ -20,17 +20,18 @@
 This script should not use any extern libraries except for Python's standard
 library. It acts as an wrapper around user supplied script and prints command
 results to stdout as a JSON. It also aggregates information from hwinfo
-initcontainer aggregating hardware information.
+init-container aggregating hardware information.
 """
 
+import os
 import json
-import sys
 import subprocess
 import hashlib
 import sys
+import time
 
 
-# A path to file containing hardware information as gathered by initcontainer
+# A path to file containing hardware information as gathered by init-container
 # amun-hwinfo.
 _HWINFO_FILE = '/home/amun/hwinfo/info.json'
 # We use a file for stdout and stderr not to block on pipe.
@@ -39,18 +40,54 @@ _EXEC_STDERR_FILE = '/home/amun/script.stderr'
 # Executable to be run.
 _EXEC_FILE = '/home/amun/script'
 
+_G_PROCESS = None
+_G_CPU_STATS = None
+
+
+def sig_handler(signal_number, _):
+    """Handle SIGCHLD on sub-process when it is in zombie mode to gather CPU statistics."""
+    global _G_PROCESS
+    global _G_CPU_STATS
+
+    with open(f"/proc/{_G_PROCESS.pid}/stat") as stat_file:
+        values = stat_file.readline().split()
+
+    # Refer to:
+    #   http://man7.org/linux/man-pages/man5/proc.5.html
+    clock_ticks = os.sysconf("SC_CLK_TCK")
+    utime = float(values[13]) / clock_ticks
+    stime = float(values[14]) / clock_ticks
+    cutime = float(values[15]) / clock_ticks
+    cstime = float(values[16]) / clock_ticks
+    total_time = utime + stime
+
+    _G_CPU_STATS = {
+        "utime": utime,
+        "stime": stime,
+        "cutime": cutime,
+        "cstime": cstime,
+        "total_time": total_time
+    }
+
 
 def main():
     """Entrypoint for inspection container."""
     # Load hardware info.
+    global _G_PROCESS
+    global _G_CPU_STATS
+
     with open(_HWINFO_FILE, 'r') as hwinfo_file:
         hwinfo = json.load(hwinfo_file)
 
     # Execute the supplied script.
     args = ['pipenv', 'run', _EXEC_FILE]
     with open(_EXEC_STDOUT_FILE, 'w') as stdout_file, open(_EXEC_STDERR_FILE, 'w') as stderr_file:
-        process = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file, universal_newlines=True)
-        process.wait()
+        _G_PROCESS = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file, universal_newlines=True)
+
+    # Wait for process to finish. We need to do it actively from Python interpreter and
+    # cannot use os.waitpid() due to SIGCHLD handler.
+    while _G_PROCESS.poll() is None:
+        time.sleep(0.1)
 
     # Load stdout and stderr.
     with open(_EXEC_STDOUT_FILE, 'r') as stdout_file:
@@ -74,13 +111,14 @@ def main():
 
             sha256.update(data)
 
-    # Name return code as exit_code to be consistent in Thoht.
+    # Name return code as exit_code to be consistent in Thoth.
     report = {
         'hwinfo': hwinfo,
         'stdout': stdout,
         'stderr': stderr,
-        'exit_code': process.returncode,
-        'script_sha256': sha256.hexdigest()
+        'exit_code': _G_PROCESS.returncode,
+        'script_sha256': sha256.hexdigest(),
+        'cpu': _G_CPU_STATS
     }
 
     json.dump(report, sys.stdout, sort_keys=True, indent=2)
