@@ -4,8 +4,8 @@ requirements_format: pipenv
 
 runtime_environments:
   - name: centos:7
-    operating_system: 
-      name: centos:7
-      version: '29'
-    python_version: '3.6'
+    operating_system:
+      name: centos
+      version: "7"
+    python_version: "3.6"
     recommendation_type: latest
