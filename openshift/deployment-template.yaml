@@ -15,6 +15,23 @@ metadata:
     app: amun
     component: amun-api
 
+parameters:
+  - description: Project the ImageStream to be use lives in
+    displayName: ImageStream Project
+    required: true
+    name: IMAGE_STREAM_PROJECT_NAME
+
+  - description: Tag of the ImageStream to be use
+    displayName: ImageStream Tag
+    required: true
+    name: IMAGE_STREAM_TAG
+    value: "latest"
+
+  - description: Service account to be used which allows ... in operated project.
+    displayName: Service account name
+    required: true
+    name: SERVICE_ACCOUNT_NAME
+
 objects:
   - kind: Route
     apiVersion: route.openshift.io/v1
@@ -59,14 +76,15 @@ objects:
           labels:
             service: amun-api
         spec:
-          serviceAccountName: inspector
+          serviceAccountName: "${SERVICE_ACCOUNT_NAME}"
           containers:
             - name: amun-api
+              image: "${IMAGE_STREAM_PROJECT_NAME}/amun-api:${IMAGE_STREAM_TAG}"
               env:
                 - name: APP_MODULE
-                  value: 'amun.entrypoint:app'
+                  value: "amun.entrypoint:app"
                 - name: KUBERNETES_API_URL
-                  value: 'https://kubernetes.default.svc.cluster.local'
+                  value: "https://kubernetes.default.svc.cluster.local"
                 - name: KUBERNETES_VERIFY_TLS
                   value: '0'
                 - name: AMUN_DEBUG
