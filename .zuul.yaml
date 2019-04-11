@@ -4,10 +4,15 @@
       jobs:
         - "thoth-coala"
     gate:
-      queue: "thoth-station/core"
+      queue: "thoth-station/amun-api"
       jobs:
         - "thoth-coala"
+    post:
+      jobs:
+        - "trigger-build":
+            vars:
+              webhook_url: "https://paas.upshift.redhat.com/oapi/v1/namespaces/thoth-test-core/buildconfigs/amun-api"
     kebechet-auto-gate:
-      queue: "thoth-station/core"
+      queue: "thoth-station/amun-api"
       jobs:
         - "thoth-coala"
