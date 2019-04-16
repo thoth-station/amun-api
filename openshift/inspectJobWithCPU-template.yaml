@@ -62,7 +62,7 @@ objects:
                   name: hw-info-volume
           initContainers:
             - name: inspect-hwinfo
-              image: inspect-hwinfo
+              image: "${THOTH_REGISTRY}/${THOTH_INFRA_NAMESPACE}/inspect-hwinfo"
               volumeMounts:
                 - mountPath: /home/amun/hwinfo
                   name: hw-info-volume
@@ -100,6 +100,16 @@ objects:
                       - ${PROCESSOR}
 
 parameters:
+  - name: THOTH_REGISTRY
+    description: Registry server from where Image is to be pulled
+    displayName: Registry
+    required: true
+
+  - name: THOTH_INFRA_NAMESPACE
+    description: Project where ImageStream is present
+    displayName: ImageStream Project
+    required: true
+
   - name: AMUN_INSPECTION_ID
     description: Id of inspection that is run.
     displayName: Inspection id
