@@ -22,6 +22,7 @@ import random
 import json
 
 from thoth.common import OpenShift
+from thoth.common import datetime2datetime_str
 from thoth.common.exceptions import NotFoundException
 
 from .configuration import Configuration
@@ -138,6 +139,8 @@ def post_inspection(specification: dict) -> tuple:
         run_memory_requests = specification['run']['requests']['memory']
 
     parameters['AMUN_INSPECTION_ID'] = inspection_id
+    # Mark this for later use - in get_inspection_specification().
+    specification["@created"] = datetime2datetime_str()
 
     # Create buildconfig, extend parameters with specification and generated dockerfile for build.
     build_parameters = dict(parameters)
@@ -276,7 +279,11 @@ def get_inspection_specification(inspection_id: str):
             'parameters': parameters
         }
 
+    specification = json.loads(build['metadata']['annotations']['amun_specification'])
+    # We inserted created information on our own, pop it not to taint the original specification request.
+    created = specification.pop("@created")
     return {
         'parameters': parameters,
-        'specification': json.loads(build['metadata']['annotations']['amun_specification'])
+        'specification': specification,
+        'created': created,
     }
