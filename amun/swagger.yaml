@@ -321,12 +321,17 @@ definitions:
     required:
       - parameters
       - specification
+      - created
     properties:
       parameters:
         type: object
         description: >
           Parameters echoed back to user (with default parameters if omitted).
       specification: *inspectionSpecification
+      created:
+        type: string
+        description: Creation time of an inspection run.
+        example: "2019-04-17T06:39:30.459116"
   InspectionResponse:
     type: object
     description: Response for a submitted inspection.
