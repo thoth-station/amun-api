@@ -29,6 +29,7 @@ import subprocess
 import hashlib
 import sys
 import time
+import signal
 
 
 # A path to file containing hardware information as gathered by init-container
@@ -80,6 +81,7 @@ def main():
         hwinfo = json.load(hwinfo_file)
 
     # Execute the supplied script.
+    signal.signal(signal.SIGCHLD, sig_handler)
     args = ['pipenv', 'run', _EXEC_FILE]
     with open(_EXEC_STDOUT_FILE, 'w') as stdout_file, open(_EXEC_STDERR_FILE, 'w') as stderr_file:
         _G_PROCESS = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file, universal_newlines=True)
