@@ -153,11 +153,11 @@
         },
         "flask": {
             "hashes": [
-                "sha256:2271c0070dbcb5275fad4a82e29f23ab92682dc45f9dfbc22c02ba9b9322ce48",
-                "sha256:a080b744b7e345ccfcbc77954861cb05b3c63786e93f2b3875e0913d44b43f05"
+                "sha256:ad7c6d841e64296b962296c2c2dabc6543752985727af86a975072dea984b6f3",
+                "sha256:e7d32475d1de5facaa55e3958bc4ec66d3762076b074296aa50ef8fdc5b9df61"
             ],
             "index": "pypi",
-            "version": "==1.0.2"
+            "version": "==1.0.3"
         },
         "flask-script": {
             "hashes": [
@@ -390,26 +390,26 @@
         },
         "ruamel.yaml": {
             "hashes": [
-                "sha256:01e81e9e4b5b9fb56730b86af24baf61bb3efd7cdcb66e44a78997432e07519f",
-                "sha256:083a5cdaf588464b9b46580004ce4902df8dc139df5acb8b7f00b16cbe295a53",
-                "sha256:214c20b7dabbd3843001548526552fc06ab62a473dbbe42df3177f220d282006",
-                "sha256:28dbfb5bfc947f50d65c4224665cc5d5a61eca4ca504ded3cc669e281f81b10b",
-                "sha256:2dd7149626d6c05b0c8081e6d1bd01b5ba9253513ac6299fb0efeef9b52ef2c2",
-                "sha256:2e60998b08a3fc2674dd18ca1cc66a1012a9d0286c2a000f068b44f2ed7b3a13",
-                "sha256:2f24d9954020109910a62ba4cc79f326d4f44786fe365e83a660b24a57935df4",
-                "sha256:4610e820e8ae2cb5258064b9824b7bb7bbf6325c059974d77c85ea0ba3f86ab5",
-                "sha256:6b873c15b216bfb7f06cbefe805fb94590f0d9a1d1f119fb9129e59ce98c5495",
-                "sha256:6c34dcc68dd72edc5dbbd91e8394c264b4688f9a820b37cbfffc29e1203e8e69",
-                "sha256:75293b0c139420bd5c58bd3fc9b60e45ee60eed224dd6284ea357f679e0a527a",
-                "sha256:85e1d3b7218e888482b74041f8c16ba7cef97a1c08d111d430af62a89b6eaa7e",
-                "sha256:af30e16a174b4779f1ab3a2424570ef2308a1e60746c30579d99c0c4b7a6d6d5",
-                "sha256:b1e10a7d32d33f166af2c40a49a21a43649003a160543326398d5a12d2e4d549",
-                "sha256:d5b9c1f61654306931854dab64a1edfa5f73fe1497b3ae5c9a61c22b721d729f",
-                "sha256:d61f2427dc9072946d282cd6ba95e949f132478a2a8d8dbdeb55780b3a406942",
-                "sha256:e05cb4706835154e6eaf51278e2e16943d29bb25f2256f1d1dd29ea7f91cf492",
-                "sha256:fd5e4b871b04227811801816a2c3ab67b2f2949247d1f52af1942fc648aa94ae"
+                "sha256:0372b039c2358db2e7a7d5c77f2a37c552bd45896936f430678b5f00ac9fef08",
+                "sha256:12ebbba6447cfd61491ace18a6972d4edaab6615c933ae8a0016c27c27ee93b7",
+                "sha256:1973a131a7b5a604653ffd904286e53334c08306b575bf964ae87f226d4956cd",
+                "sha256:21c130c2741e8499ad92362d24f68aad70089e77b206e6e85d62e255e6017c92",
+                "sha256:21c6287beabb96c9f51478506b00db269276d84aa41a61f29c88af397406b267",
+                "sha256:2e07d11526c70bfb3a07c77d73c72b7fcfae21cc7f2252c7d6419e25b6349d23",
+                "sha256:32755f26f46816e46bd74fd48c4db63ee500b68cbe2394b2943daab573d12a33",
+                "sha256:343ace5ffbab036536a3da65e4cfd31b8292388a389f6305744984581a479b2a",
+                "sha256:3de37e2de83fa4016886bf40069e9cc7816b51a1f57687e6872cb414f891a573",
+                "sha256:809db4d5213bfb0205e2dcc6118fbfa348e3ae39f3d8f6810e3e6831f3070321",
+                "sha256:8810319a64d4cf5701feb7c2833b03f8bd29e1d6753e4b97cf977f889eb6354d",
+                "sha256:8b91affdcab942ab1319d8d24345a3de8e0e70fd2871d5bb61e19e32b5ae31d9",
+                "sha256:8e3d51a2d20a982a6eb38b0b9bcecdd2acacdcf2137081b0a744ca98cdcca9af",
+                "sha256:97cc58bff414bf40b8b909aeadaa669becad35e182a2b229d0c3d6c9a34e1f15",
+                "sha256:a6f4f214d6dc6253846630af7a701ee00ebd2730eca03c7e8e031d748b0e22e4",
+                "sha256:e1e34869d005e3e5292f44022e01cc4eb3f045291ba01166908f97f4716e7a69",
+                "sha256:effc63d7f86841cec3a4a76ed6c73f441e68c5ea02c3dee3faaaeda9fabc8cd8",
+                "sha256:fc4c69b505f9178aa55b780cd8cde7c17927501046c7f0ebcd66959cd0dba2db"
             ],
-            "version": "==0.15.95"
+            "version": "==0.15.96"
         },
         "sentry-sdk": {
             "hashes": [
