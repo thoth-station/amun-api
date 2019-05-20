@@ -264,23 +264,17 @@
         },
         "openapi-spec-validator": {
             "hashes": [
-                "sha256:3b078fb29805dc34fec20db6b81d0da9417edbccf6fb90e4cdfae7a971822872",
-                "sha256:72d3f7a5de49b9753f6a4ef7c6b835c4e6dcd4cc7e24a35dd13b86a6365439ec",
-                "sha256:bb8596371e08ddcc54b69adb24ff9efa905b29bfda6826d03d6162f3c2793a1e"
+                "sha256:5d0f22167810c32e771fa7e4aab6ef26d09233b70817f4d84f9c13bd9a522a37",
+                "sha256:77c4fb47fe8a7dd527c7433861638221eb416827dc1c5c983505c0a38ca6e9eb",
+                "sha256:873aad19e68c8eeceb9922840f39e671e8ce62b2587f18b4f66f306d9eed8bd9"
             ],
-            "version": "==0.2.6"
+            "version": "==0.2.7"
         },
         "openshift": {
             "hashes": [
                 "sha256:8465c3ffafab9ac54fda32253cecc4645a181dd276426132caf45be1e85200dd"
             ],
             "version": "==0.8.0"
-        },
-        "pathlib": {
-            "hashes": [
-                "sha256:6940718dfc3eff4258203ad5021090933e5c04707d5ca8cc9e73c94a7894ea9f"
-            ],
-            "version": "==1.0.1"
         },
         "prometheus-client": {
             "hashes": [
@@ -291,10 +285,10 @@
         },
         "prometheus-flask-exporter": {
             "hashes": [
-                "sha256:5c239d552164ca14732e0b6041cfc7a7d5e99271da1240964b597ddb0fad6d37"
+                "sha256:d07e3b6f61eee1a6a08d5b1cf0040866ba264ba68f62e180d64d146bfcfb6cda"
             ],
             "index": "pypi",
-            "version": "==0.7.3"
+            "version": "==0.7.4"
         },
         "pyasn1": {
             "hashes": [
@@ -376,10 +370,10 @@
         },
         "rfc5424-logging-handler": {
             "hashes": [
-                "sha256:82cc162eeed5b80b8bc5223dcdb8278780b26c3ed354a06f07a15b79e1c43581",
-                "sha256:c7502c0db19bf89e4adc71bac37d0848ab5f5d1c807380d235c46adcb8efcfdb"
+                "sha256:9ae14073ef6d76d0c730ad6b6e3aeece841a6d413672d282876c0506dc097257",
+                "sha256:eaba528e47fba3e2845d52d559885cbc27a37db42a9d265ea539b3b4452d3057"
             ],
-            "version": "==1.4.2"
+            "version": "==1.4.3"
         },
         "rsa": {
             "hashes": [
