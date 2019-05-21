@@ -21,6 +21,11 @@ parameters:
     required: true
     name: IMAGE_STREAM_PROJECT_NAME
 
+  - name: IMAGE_REGISTRY
+    description: Registry server from where Image is to be pulled
+    displayName: Registry
+    required: true
+
   - description: Tag of the ImageStream to be use
     displayName: ImageStream Tag
     required: true
@@ -79,7 +84,7 @@ objects:
           serviceAccountName: "${SERVICE_ACCOUNT_NAME}"
           containers:
             - name: amun-api
-              image: "${IMAGE_STREAM_PROJECT_NAME}/amun-api:${IMAGE_STREAM_TAG}"
+              image: "${IMAGE_REGISTRY}/${IMAGE_STREAM_PROJECT_NAME}/amun-api:${IMAGE_STREAM_TAG}"
               env:
                 - name: APP_MODULE
                   value: "amun.entrypoint:app"
@@ -155,6 +160,7 @@ objects:
               - amun-api
             from:
               kind: ImageStreamTag
+              namespace: "${IMAGE_STREAM_PROJECT_NAME}"
               name: 'amun-api:latest'
 
   - kind: ImageStream
