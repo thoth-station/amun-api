@@ -104,6 +104,7 @@ parameters:
     description: Registry server from where Image is to be pulled
     displayName: Registry
     required: true
+    default: docker-registry.default.svc:5000
 
   - name: THOTH_INFRA_NAMESPACE
     description: Project where ImageStream is present
