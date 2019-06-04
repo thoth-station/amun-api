@@ -24,7 +24,7 @@ paths:
             $ref: "#/definitions/InspectionSpecification"
       responses:
         202:
-          description: Successful response with insection id.
+          description: Successful response with inspection id.
           schema:
             $ref: "#/definitions/InspectionGenerateDockerfileResponse"
         400:
@@ -47,7 +47,7 @@ paths:
             $ref: "#/definitions/InspectionSpecification"
       responses:
         202:
-          description: Successful response with insection id.
+          description: Successful response with inspection id.
           schema:
             $ref: "#/definitions/InspectionResponse"
         400:
@@ -70,7 +70,7 @@ paths:
           description: Id of inspection build.
       responses:
         200:
-          description: Successful response with insection build log.
+          description: Successful response with inspection build log.
           schema:
             $ref: "#/definitions/InspectionBuildLogResponse"
         400:
@@ -97,7 +97,7 @@ paths:
           description: Id of inspection run.
       responses:
         200:
-          description: Successful response with insection run log.
+          description: Successful response with inspection run log.
           schema:
             $ref: "#/definitions/InspectionJobLogResponse"
         202:
@@ -128,7 +128,7 @@ paths:
           description: Id of inspection run.
       responses:
         200:
-          description: Successful response with insection status.
+          description: Successful response with inspection status.
           schema:
             $ref: "#/definitions/InspectionStatusResponse"
         400:
@@ -155,7 +155,7 @@ paths:
           description: Id of inspection run.
       responses:
         200:
-          description: Successful response with insection specification.
+          description: Successful response with inspection specification.
           schema:
             $ref: "#/definitions/InspectionSpecificationResponse"
         400:
