@@ -30,6 +30,7 @@ import hashlib
 import sys
 import time
 import signal
+from datetime import datetime
 
 
 # A path to file containing hardware information as gathered by init-container
@@ -120,7 +121,8 @@ def main():
         'stderr': stderr,
         'exit_code': _G_PROCESS.returncode,
         'script_sha256': sha256.hexdigest(),
-        'cpu': _G_CPU_STATS
+        'cpu': _G_CPU_STATS,
+        'datetime': datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
     }
 
     json.dump(report, sys.stdout, sort_keys=True, indent=2)
