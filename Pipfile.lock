@@ -282,10 +282,10 @@
         },
         "prometheus-flask-exporter": {
             "hashes": [
-                "sha256:9b5384e965926894862427adbdf503956b62dffcb47a54214a1080473659d74e"
+                "sha256:c7376fc431d7b869f999561cf747a69b0bbf0ded174b0d0a993aa4f66b6c3340"
             ],
             "index": "pypi",
-            "version": "==0.8.0"
+            "version": "==0.8.1"
         },
         "pyasn1": {
             "hashes": [
@@ -418,11 +418,10 @@
         },
         "swagger-ui-bundle": {
             "hashes": [
-                "sha256:0009f3cb6e60b36a57a595eabbff79ecb364c44e0cdf718667d90a93265f2cf2",
-                "sha256:c7947ebf03632426b64082f85cb9857e42d4a57075ee962be6f0ec6f32ffe8ec",
-                "sha256:ce6a4f9af1e38ce2e5eace4cc3d4805aa05ea40881b7b57b1efab8c1d2bf3afd"
+                "sha256:ca781a8e450996cd756020f70d1f1ac43c61d0e73882a9ff1f8d41e3be04856d",
+                "sha256:cea04fca6a37d26bfe0f0e3d78b51c023c30ba1105f7eaa5a709ed3725e570ea"
             ],
-            "version": "==0.0.3"
+            "version": "==0.0.4"
         },
         "thoth-common": {
             "hashes": [
