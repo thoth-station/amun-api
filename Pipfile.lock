@@ -107,11 +107,11 @@
         },
         "connexion": {
             "hashes": [
-                "sha256:24a0f02e601c37de81840a91dff68bbfa48df819ac75b7f8a9cd7e0e2ec8af95",
-                "sha256:3511c369fb1fd1be56ac1d7ba2910f710f59b9cdb36338135afbf0fe51af189e"
+                "sha256:0fce66b7bb76a5c42e580982d09b73d209d5ea324ae366193c6e0ce9199ce71d",
+                "sha256:52bee0bc60edffa2ee6e0a9efc3d1cb1ea6b93df0147534caade612ac34e8036"
             ],
             "index": "pypi",
-            "version": "==2.2.0"
+            "version": "==2.3.0"
         },
         "cryptography": {
             "hashes": [
