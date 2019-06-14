@@ -191,6 +191,12 @@ def get_inspection_job_log(inspection_id: str) -> tuple:
             'parameters': parameters
         }, 404
 
+    if not log:
+        return {
+            'error': 'Inspection run did not produce any log or it was deleted by OpenShift',
+            'parameters': parameters,
+        }, 404
+
     try:
         log = json.loads(log)
     except Exception as exc:
