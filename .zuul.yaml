@@ -11,7 +11,9 @@
       jobs:
         - "trigger-build":
             vars:
-              webhook_url: "https://paas.upshift.redhat.com/oapi/v1/namespaces/thoth-test-core/buildconfigs/amun-api"
+              cluster: "paas.psi.redhat.com"
+              namespace: "thoth-test-core"
+              buildConfigName: "amun-api"
     kebechet-auto-gate:
       queue: "thoth-station/amun-api"
       jobs:

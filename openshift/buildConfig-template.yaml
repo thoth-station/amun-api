@@ -57,6 +57,10 @@ objects:
         - type: ConfigChange
         - type: ImageChange
           imageChange: {}
+        - type: "Generic"
+          generic:
+            secretReference:
+              name: generic-webhook-secret
 
 parameters:
   - description: Name of the GitHub repository for Amun API
