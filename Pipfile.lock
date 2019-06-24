@@ -282,10 +282,10 @@
         },
         "prometheus-flask-exporter": {
             "hashes": [
-                "sha256:c7376fc431d7b869f999561cf747a69b0bbf0ded174b0d0a993aa4f66b6c3340"
+                "sha256:79a85a3f79a45cb93b9f6fafe96964674c3f71660b7801aff201b3106b123ded"
             ],
             "index": "pypi",
-            "version": "==0.8.1"
+            "version": "==0.8.2"
         },
         "pyasn1": {
             "hashes": [
