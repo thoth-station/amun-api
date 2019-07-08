@@ -150,11 +150,11 @@
         },
         "flask": {
             "hashes": [
-                "sha256:a31adc27de06034c657a8dc091cc5fcb0227f2474798409bff0e9674de31a026",
-                "sha256:b5ae63812021cb04174fcff05d560a98387a44d9cccd4652a2bfa131ba4e4c9b"
+                "sha256:13f9f196f330c7c2c5d7a5cf91af894110ca0215ac051b5844701f2bfd934d52",
+                "sha256:45eb5a6fd193d6cf7e0cf5d8a5b31f83d5faae0293695626f539a823e93b13f6"
             ],
             "index": "pypi",
-            "version": "==1.1.0"
+            "version": "==1.1.1"
         },
         "flask-script": {
             "hashes": [
@@ -404,10 +404,10 @@
         },
         "sentry-sdk": {
             "hashes": [
-                "sha256:692aa93637273365166041ee8e06ccd6b61d5f06560765d78828edbaac83fae1",
-                "sha256:7c9db0e419fb0fb31c1b1d2ec9247667d2b77bd4f3136119ee6f1464e9b088a4"
+                "sha256:14cfbc61e44f7acb18c91b27a0912249c7bf941ecd7e248646e81492464faee0",
+                "sha256:ff50be281cebb77525f0a7ad43aabaf04ee61131ba09885be2544acf959e0451"
             ],
-            "version": "==0.9.5"
+            "version": "==0.10.0"
         },
         "six": {
             "hashes": [
