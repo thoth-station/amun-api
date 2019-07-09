@@ -87,7 +87,7 @@ def create_dockerfile(specification: dict) -> tuple:
     if specification.get('update', False):
         dockerfile += _determine_update_string
 
-    if 'packages' in specification:
+    if specification.get('packages'):
         dockerfile += _determine_installer_string() + " ".join(specification['packages']) + '\n\n'
 
     for file_spec in specification.get('files', []):
