@@ -17,8 +17,8 @@
 
 """This file is run by an inspection pod to gather runtime information.
 
-This script should not use any extern libraries except for Python's standard
-library. It acts as an wrapper around user supplied script and prints command
+This script should not use any external libraries except for Python's standard
+library. It acts as wrapper around user supplied script and prints command
 results to stdout as a JSON. It also aggregates information from hwinfo
 init-container aggregating hardware information.
 """

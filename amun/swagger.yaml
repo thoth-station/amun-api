@@ -187,6 +187,13 @@ definitions:
           type: string
           description: Name of the package to be installed.
           example: 'vim'
+      python_packages:
+        type: array
+        description: A list of python packages that should be installed into the runtime environment.
+        items:
+          type: string
+          description: Name of the package to be installed.
+          example: 'pipenv'
       python:
         type: object
         description: Python application stack to be installed.
