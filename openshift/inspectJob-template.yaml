@@ -83,7 +83,7 @@ parameters:
     description: Registry server from where Image is to be pulled
     displayName: Registry
     required: true
-    default: docker-registry.default.svc:5000
+    value: docker-registry.default.svc:5000
 
   - name: THOTH_INFRA_NAMESPACE
     description: Project where ImageStream is present
@@ -98,9 +98,9 @@ parameters:
   - name: AMUN_CPU
     description: CPU cores requested for build
     displayName: Build CPU
-    default: 750m
+    value: 750m
 
   - name: AMUN_MEMORY
     description: Memory requested for build
     displayName: Build Memory
-    default: 256Mi
+    value: 256Mi
