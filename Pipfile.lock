@@ -381,26 +381,26 @@
         },
         "ruamel.yaml": {
             "hashes": [
-                "sha256:035d1258d1f07c672a55263435a22f3292c50636bf8ed0fa6b90cee0a244e6bd",
-                "sha256:189437e108ef00104d21ee9aa57b2ae3927f3ab61bef0447a2fd21b82c64e4b2",
-                "sha256:25bb32cea6ee4bf7da680d80b51ec42081254f30e02d3f58db0653b041ae8185",
-                "sha256:2852fd6854cd8fb9342ae785d222af3d797e41fa712296f6cf7cd9ae0fee085d",
-                "sha256:340244ab265943bad541220466e56b0409f5bbcfe3750f417c4c15fabed27a9d",
-                "sha256:5cdea389d836f6f7386cf32dbe4c29ef82e517559bdf8ba4470ebe9d85ceda4f",
-                "sha256:6cb78ae9a515936a342adfb114513998a78333441e6599599ab6a7cab90f1999",
-                "sha256:72a89b03d7e9671340e19ef96ba9cc58b86a079190c0ab89b70ee5458b71748c",
-                "sha256:86278b7804111b6295069e05266e6faa06a426616ad11597c5c6fed14055b1bb",
-                "sha256:937908eb1fab3cc997e88960ccce21a44feb31711c2eb00bb2dbdcad645f5e77",
-                "sha256:95c2f135479957b2d6ca577f8a4bd2d22f78d566250cabf308b75b060100bcd4",
-                "sha256:9cecfbf214bb6ab93026ea180e429b76e8cc12782f4e531632b0ea0a407be543",
-                "sha256:a1f78fa84358631025bf393207c0b043b995ae76cb3963ce555be46932792d13",
-                "sha256:aee248b1583b577cb4dbda1fb24e67baae9af2f25eed849b45d9db077fa62c3b",
-                "sha256:bb7438aa4f81a0bed286498ec71e68c04f725b153dc52203fa4eed96ee898013",
-                "sha256:c9685b1788823bc3a34349322cb7268f949a2136d396de2b8044b1cd49cd5370",
-                "sha256:d3557962da02bbed24157b0de16343f6c264c4b691f6424f3b72dfcecbca592e",
-                "sha256:e93c86cbaee4c299fff8dbff5df6b22af78846ddd1e9fcb5e238489a4910cf29"
+                "sha256:0970c0d2a2fd03ec03f0b398fbe33fd8e8d8e38e2b0e91c6a5cc16d599ccae25",
+                "sha256:1f6ca0381b4ad7c9dafee1c4829f30942ca094eb6149281d9e439e9ed8df9e95",
+                "sha256:2a7602d3e5e06598be2a21dc684849503ac3818a2b507d78bfdbe257a0a69913",
+                "sha256:4493b1dfd79ebc914f41b2d4c4a831fb7c4525209a638ef3260b8a21539b67ab",
+                "sha256:586235a3f1debc6fdbbeadf7321bf92b248cbe396a37c48950eccbb3cfd239bd",
+                "sha256:6d81d9cc47fb7fbc42dda42e0e4a374afd7225972d1155cbda4b0d1efa4ba0ca",
+                "sha256:6f4c8ce835984aaa3cc59e331dc506429ecdaf0458993df1dea17a53c745c995",
+                "sha256:902beff66e8fd7c772a2b8ae03ef578e19d8b37310ab79c7698b6c903f14db4b",
+                "sha256:aa13cf79a0d06e642c4901de7b6e69b55ac8205826e9e976f77cf4e80571a25a",
+                "sha256:ade8abb5ac2b9ab210a4018121c5c38e514194540a05c9470e38d186b5a0bb5c",
+                "sha256:b5b3780557f025a47caba85820311c0429417e91bb8330ca678c6e020f16ae47",
+                "sha256:bef3e1920d2d6ea3e9dda5a55ee40c68c7befd134ae18f81f0736e06eb68eeb5",
+                "sha256:d97abb615056ee813faafa9e7fe94236689db2c2dde7bd88766701580dcd7a84",
+                "sha256:de846f3ca53274331f71557fda116da7524e2a37a91391c20b299ba2d543ce1f",
+                "sha256:e06a9ef1dc3c55f1f72f5253c8576fc0c3a73c8616772f1a24a47cd79ea0ab21",
+                "sha256:ef7a865c62e596fee4defc7446d1738e2ac4ba56b4df461f28ec361ab1e69f59",
+                "sha256:f30d9990db882cb150520ccafd036b92cb0100eead0134e3f0001c8b43f1db1b",
+                "sha256:fe5b0e141810293e1508748ce06486d879ab3a8534a47ebdd3cf6b4be9480f5e"
             ],
-            "version": "==0.15.98"
+            "version": "==0.15.99"
         },
         "sentry-sdk": {
             "hashes": [
@@ -426,11 +426,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:1b65a66652f0c19500a75be7dd7615f4792127f77bfbb6b40fd9f33a93bb19c2",
-                "sha256:f6f1c98cc29c42a766c4a74791539badde8408facff0fe78661bf6adefec963b"
+                "sha256:44809240f4c2e71c9168d17e3e39280c9af52e9752977b794917c405a081c3ee",
+                "sha256:72349043a14b56ca2778dcd6c924c169495dabcb09a7ecd8fb500a0739a684b3"
             ],
             "index": "pypi",
-            "version": "==0.9.2"
+            "version": "==0.9.3"
         },
         "toml": {
             "hashes": [
