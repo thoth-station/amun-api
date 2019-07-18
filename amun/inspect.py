@@ -24,6 +24,7 @@ init-container aggregating hardware information.
 """
 
 import os
+import resource
 import json
 import subprocess
 import hashlib
@@ -41,56 +42,47 @@ _EXEC_STDOUT_FILE = '/home/amun/script.stdout'
 _EXEC_STDERR_FILE = '/home/amun/script.stderr'
 # Executable to be run.
 _EXEC_FILE = '/home/amun/script'
-
-_G_PROCESS = None
-_G_CPU_STATS = None
-
-
-def sig_handler(signal_number, _):
-    """Handle SIGCHLD on sub-process when it is in zombie mode to gather CPU statistics."""
-    global _G_PROCESS
-    global _G_CPU_STATS
-
-    with open(f"/proc/{_G_PROCESS.pid}/stat") as stat_file:
-        values = stat_file.readline().split()
-
-    # Refer to:
-    #   http://man7.org/linux/man-pages/man5/proc.5.html
-    clock_ticks = os.sysconf("SC_CLK_TCK")
-    utime = float(values[13]) / clock_ticks
-    stime = float(values[14]) / clock_ticks
-    cutime = float(values[15]) / clock_ticks
-    cstime = float(values[16]) / clock_ticks
-    total_time = utime + stime
-
-    _G_CPU_STATS = {
-        "utime": utime,
-        "stime": stime,
-        "cutime": cutime,
-        "cstime": cstime,
-        "total_time": total_time
-    }
+# Names of items on certain position in return value of resource.getrusage()
+#   https://docs.python.org/3.6/library/resource.html#resource.getrusage
+_RESOURCE_STRUCT_RUSAGE_ITEMS = (
+    "ru_utime",
+    "ru_stime",
+    "ru_maxrss",
+    "ru_ixrss",
+    "ru_idrss",
+    "ru_isrss",
+    "ru_minflt",
+    "ru_majflt",
+    "ru_nswap",
+    "ru_inblock",
+    "ru_oublock",
+    "ru_msgsnd",
+    "ru_msgrcv",
+    "ru_nsignals",
+    "ru_nvcsw",
+    "ru_nivcsw",
+)
 
 
 def main():
     """Entrypoint for inspection container."""
     # Load hardware info.
-    global _G_PROCESS
-    global _G_CPU_STATS
-
+    hwinfo = None
     with open(_HWINFO_FILE, 'r') as hwinfo_file:
         hwinfo = json.load(hwinfo_file)
 
     # Execute the supplied script.
-    signal.signal(signal.SIGCHLD, sig_handler)
     args = ['pipenv', 'run', _EXEC_FILE]
     with open(_EXEC_STDOUT_FILE, 'w') as stdout_file, open(_EXEC_STDERR_FILE, 'w') as stderr_file:
-        _G_PROCESS = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file, universal_newlines=True)
+        process = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file, universal_newlines=True)
 
-    # Wait for process to finish. We need to do it actively from Python interpreter and
-    # cannot use os.waitpid() due to SIGCHLD handler.
-    while _G_PROCESS.poll() is None:
-        time.sleep(0.1)
+    os.waitpid(process.pid, 0)
+
+    usage_info = resource.getrusage(resource.RUSAGE_CHILDREN)
+
+    usage = {}
+    for idx in range(len(_RESOURCE_STRUCT_RUSAGE_ITEMS)):
+        usage[_RESOURCE_STRUCT_RUSAGE_ITEMS[idx]] = usage_info[idx]
 
     # Load stdout and stderr.
     with open(_EXEC_STDOUT_FILE, 'r') as stdout_file:
@@ -119,9 +111,9 @@ def main():
         'hwinfo': hwinfo,
         'stdout': stdout,
         'stderr': stderr,
-        'exit_code': _G_PROCESS.returncode,
+        'exit_code': process.returncode,
         'script_sha256': sha256.hexdigest(),
-        'cpu': _G_CPU_STATS,
+        'usage': usage_info,
         'datetime': datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
     }
 
