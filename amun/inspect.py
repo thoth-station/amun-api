@@ -36,12 +36,12 @@ from datetime import datetime
 
 # A path to file containing hardware information as gathered by init-container
 # amun-hwinfo.
-_HWINFO_FILE = '/home/amun/hwinfo/info.json'
+_HWINFO_FILE = "/home/amun/hwinfo/info.json"
 # We use a file for stdout and stderr not to block on pipe.
-_EXEC_STDOUT_FILE = '/home/amun/script.stdout'
-_EXEC_STDERR_FILE = '/home/amun/script.stderr'
+_EXEC_STDOUT_FILE = "/home/amun/script.stdout"
+_EXEC_STDERR_FILE = "/home/amun/script.stderr"
 # Executable to be run.
-_EXEC_FILE = '/home/amun/script'
+_EXEC_FILE = "/home/amun/script"
 # Names of items on certain position in return value of resource.getrusage()
 #   https://docs.python.org/3.6/library/resource.html#resource.getrusage
 _RESOURCE_STRUCT_RUSAGE_ITEMS = (
@@ -68,12 +68,12 @@ def main():
     """Entrypoint for inspection container."""
     # Load hardware info.
     hwinfo = None
-    with open(_HWINFO_FILE, 'r') as hwinfo_file:
+    with open(_HWINFO_FILE, "r") as hwinfo_file:
         hwinfo = json.load(hwinfo_file)
 
     # Execute the supplied script.
-    args = ['pipenv', 'run', _EXEC_FILE]
-    with open(_EXEC_STDOUT_FILE, 'w') as stdout_file, open(_EXEC_STDERR_FILE, 'w') as stderr_file:
+    args = ["pipenv", "run", _EXEC_FILE]
+    with open(_EXEC_STDOUT_FILE, "w") as stdout_file, open(_EXEC_STDERR_FILE, "w") as stderr_file:
         process = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file, universal_newlines=True)
 
     os.waitpid(process.pid, 0)
@@ -85,7 +85,7 @@ def main():
         usage[_RESOURCE_STRUCT_RUSAGE_ITEMS[idx]] = usage_info[idx]
 
     # Load stdout and stderr.
-    with open(_EXEC_STDOUT_FILE, 'r') as stdout_file:
+    with open(_EXEC_STDOUT_FILE, "r") as stdout_file:
         stdout = stdout_file.read()
         try:
             stdout = json.loads(str(stdout))
@@ -93,12 +93,12 @@ def main():
             # We were not able to load JSON, pass string as output.
             pass
 
-    with open(_EXEC_STDERR_FILE, 'r') as stderr_file:
+    with open(_EXEC_STDERR_FILE, "r") as stderr_file:
         stderr = stderr_file.read()
 
     # Compute script SHA-256.
     sha256 = hashlib.sha256()
-    with open(_EXEC_FILE, 'rb') as script_file:
+    with open(_EXEC_FILE, "rb") as script_file:
         while True:
             data = script_file.read(65536)
             if not data:
@@ -108,18 +108,18 @@ def main():
 
     # Name return code as exit_code to be consistent in Thoth.
     report = {
-        'hwinfo': hwinfo,
-        'stdout': stdout,
-        'stderr': stderr,
-        'exit_code': process.returncode,
-        'script_sha256': sha256.hexdigest(),
-        'usage': usage_info,
-        'datetime': datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        "hwinfo": hwinfo,
+        "stdout": stdout,
+        "stderr": stderr,
+        "exit_code": process.returncode,
+        "script_sha256": sha256.hexdigest(),
+        "usage": usage_info,
+        "datetime": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f"),
     }
 
     json.dump(report, sys.stdout, sort_keys=True, indent=2)
-    sys.exit(report['exit_code'])
+    sys.exit(report["exit_code"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
