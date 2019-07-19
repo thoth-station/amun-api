@@ -29,8 +29,6 @@ import json
 import subprocess
 import hashlib
 import sys
-import time
-import signal
 from datetime import datetime
 
 
