@@ -74,7 +74,7 @@ def main():
     with open(_EXEC_STDOUT_FILE, "w") as stdout_file, open(_EXEC_STDERR_FILE, "w") as stderr_file:
         process = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file, universal_newlines=True)
 
-    os.waitpid(process.pid, 0)
+    process.communicate()
 
     usage_info = resource.getrusage(resource.RUSAGE_CHILDREN)
 
