@@ -73,13 +73,16 @@ def _do_create_dockerfile(specification: dict) -> tuple:
         return None, str(exc)
 
 
-def _generate_inspection_id():
+def _generate_inspection_id(identifier: str = None) -> str:
     """Generate a random identifier for the given inspection."""
     # A very first method used 'generatedName' in ImageStream configuration,
     # but it looks like there is a bug in OpenShift as it did not generated any
     # name and failed with regexp issues (that were not related to the
     # generateName configuration).
-    return 'inspection-' + "%016x" % random.getrandbits(64)
+    if not identifier:
+        return "inspection-" + "%016x" % random.getrandbits(64)
+
+    return ("inspection-%s-" + "%016x") % (identifier, random.getrandbits(64))
 
 
 def post_generate_dockerfile(specification: dict):
@@ -125,7 +128,7 @@ def post_inspection(specification: dict) -> tuple:
     _adjust_default_requests(specification['run'])
     _adjust_default_requests(specification['build'])
 
-    inspection_id = _generate_inspection_id()
+    inspection_id = _generate_inspection_id(specification.get("identifier"))
     _OPENSHIFT.create_inspection_imagestream(inspection_id)
 
     parameters, use_hw_template = _construct_parameters_dict(specification.get('build', {}))
