@@ -210,6 +210,12 @@ definitions:
             type: object
             description: Pipfile.lock with fully pinned down and resolved software stack.
             additionalProperties: true
+      identifier:
+        type: string
+        description:
+          A user-created string which will be inserted into the inspection id to distinguish
+          different inspection runs.
+        example: 'test'
       build:
         type: object
         description: Hardware requirements for build time.
