@@ -107,7 +107,7 @@ def main():
     # Name return code as exit_code to be consistent in Thoth.
     report = {
         "hwinfo": hwinfo,
-        "stdout": stdout,
+        "stdout": stdout or {},
         "stderr": stderr,
         "exit_code": process.returncode,
         "script_sha256": sha256.hexdigest(),
