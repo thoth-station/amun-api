@@ -261,11 +261,11 @@
         },
         "openapi-spec-validator": {
             "hashes": [
-                "sha256:5d0f22167810c32e771fa7e4aab6ef26d09233b70817f4d84f9c13bd9a522a37",
-                "sha256:77c4fb47fe8a7dd527c7433861638221eb416827dc1c5c983505c0a38ca6e9eb",
-                "sha256:873aad19e68c8eeceb9922840f39e671e8ce62b2587f18b4f66f306d9eed8bd9"
+                "sha256:0caacd9829e9e3051e830165367bf58d436d9487b29a09220fa7edb9f47ff81b",
+                "sha256:d4da8aef72bf5be40cf0df444abd20009a41baf9048a8e03750c07a934f1bdd8",
+                "sha256:e489c7a273284bc78277ac22791482e8058d323b4a265015e9fcddf6a8045bcd"
             ],
-            "version": "==0.2.7"
+            "version": "==0.2.8"
         },
         "openshift": {
             "hashes": [
@@ -426,11 +426,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:0b3d166c7cfe5feb0438667a88c06f4d80ad7e5c1f5c7b79b11dc6f0127bc48c",
-                "sha256:b1b0e37ac8a70dcb30238aeea966f26609f463f4e7164cef241addd477b9f735"
+                "sha256:4977c062673bdcfc1cb03528ccf1b3455b9221cf9c4be99614a013fd606003e0",
+                "sha256:914585c6b8211b41c0f28fd2dba982ab7be3cc16e42dc7f49620e95bfa6696f4"
             ],
             "index": "pypi",
-            "version": "==0.9.4"
+            "version": "==0.9.5"
         },
         "toml": {
             "hashes": [
@@ -442,9 +442,10 @@
         },
         "tzlocal": {
             "hashes": [
-                "sha256:4ebeb848845ac898da6519b9b31879cf13b6626f7184c496037b818e238f2c4e"
+                "sha256:11c9f16e0a633b4b60e1eede97d8a46340d042e67b670b290ca526576e039048",
+                "sha256:949b9dd5ba4be17190a80c0268167d7e6c92c62b30026cf9764caf3e308e5590"
             ],
-            "version": "==1.5.1"
+            "version": "==2.0.0"
         },
         "urllib3": {
             "hashes": [
