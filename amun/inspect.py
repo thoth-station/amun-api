@@ -111,7 +111,7 @@ def main():
         "stderr": stderr,
         "exit_code": process.returncode,
         "script_sha256": sha256.hexdigest(),
-        "usage": usage_info,
+        "usage": usage,
         "datetime": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f"),
     }
 
