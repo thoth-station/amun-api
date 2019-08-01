@@ -621,6 +621,7 @@ definitions:
           - script_sha256
           - stderr
           - stdout
+          - usage
         properties:
           exit_code:
             type: integer
@@ -640,6 +641,12 @@ definitions:
           stdout:
             type: object
             description: Standard output prodiced by user provided script.
+            additionalProperties: true
+          usage:
+            type: object
+            description: >
+              Utilization of resources such as user-space or kernel-space CPU time, context
+              switches, shared memory size or page faults (and others).
             additionalProperties: true
       parameters:
         type: object
