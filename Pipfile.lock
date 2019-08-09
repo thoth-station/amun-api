@@ -282,10 +282,10 @@
         },
         "prometheus-flask-exporter": {
             "hashes": [
-                "sha256:6016d49b161083027f1379706335361fadb597884387f0d19e50d71d6698800e"
+                "sha256:3e16b2748bc85e528fb6ec97f5ceb1ddb8b9ac6725bae3913c003ec9ab2aee14"
             ],
             "index": "pypi",
-            "version": "==0.9.0"
+            "version": "==0.9.1"
         },
         "pyasn1": {
             "hashes": [
@@ -383,10 +383,9 @@
         },
         "ruamel.yaml": {
             "hashes": [
-                "sha256:4c1dbad22790b5ea8587c2a0cae97ebc7a9d0d88de5d0edb70dea2eab7d8534a",
-                "sha256:eb4b1ffd095785c50f110118cb6f7bb9cd011ecc013b014436d38b7f8fb7afa9"
+                "sha256:547aeab5c51c93bc750ed2a320c1559b605bde3aa569216aa75fd91d8a1c4623"
             ],
-            "version": "==0.16.0"
+            "version": "==0.16.1"
         },
         "ruamel.yaml.clib": {
             "hashes": [
@@ -409,7 +408,6 @@
                 "sha256:ef8d4522d231cb9b29f6cdd0edc8faac9d9715c60dc7becbd6eb82c915a98e5b",
                 "sha256:f504d45230cc9abf2810623b924ae048b224a90adb01f97db4e766cfdda8e6eb"
             ],
-            "markers": "platform_python_implementation == 'CPython' and python_version < '3.8'",
             "version": "==0.1.2"
         },
         "sentry-sdk": {
