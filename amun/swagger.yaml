@@ -168,7 +168,7 @@ paths:
             $ref: "#/definitions/InspectionResponseError"
 
 definitions:
-  InspectionSpecification: &inspectionSpecification
+  InspectionSpecification:
     type: object
     description: Specification of software stack for inspection.
     additionalProperties: true
@@ -340,7 +340,8 @@ definitions:
         type: object
         description: >
           Parameters echoed back to user (with default parameters if omitted).
-      specification: *inspectionSpecification
+      specification:
+        $ref: "#/definitions/InspectionSpecification"
       created:
         type: string
         description: Creation time of an inspection run.
