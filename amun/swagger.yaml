@@ -324,6 +324,23 @@ definitions:
               type: string
               minLength: 1
               description: A string holding actual content of the file.
+      environment:
+        type: array
+        description: Environment variables supplied into the build process.
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - name
+            - value
+          properties:
+            name:
+              type: string
+              minLength: 1
+              description: Name of the environment variable.
+            value:
+              type: string
+              description: Value for the environment variable.
       script:
         type: string
         description: A script that should be executed in inspection run.

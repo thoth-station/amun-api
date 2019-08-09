@@ -83,6 +83,13 @@ def create_dockerfile(specification: dict) -> tuple:
 
     dockerfile += "USER root\n\n"
 
+    env_str = ''
+    for environ in specification.get("environment", []):
+        env_str += f"{environ['name']}={environ['value']} "
+
+    if env_str:
+        dockerfile += f"ENV {env_str}\n\n"
+
     # Updating the base has to be turned on explicitly.
     if specification.get('update', False):
         dockerfile += _determine_update_string
