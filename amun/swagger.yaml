@@ -180,6 +180,9 @@ definitions:
         minLength: 1
         description: Base image on which the runtime environment should be based on.
         example: 'fedora:28'
+      update:
+        type: boolean
+        description: Perform native packages update.
       packages:
         type: array
         description: A list of native packages that should be installed into the runtime environment.
