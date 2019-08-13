@@ -8,7 +8,7 @@ requests = "*"
 gunicorn = "*"
 connexion = {extras = ["swagger-ui"],version = "*"}
 flask = "*"
-thoth-common = {version = "*",extras = ["openshift"]}
+thoth-common = "*"
 flask-script = "*"
 toml = "*"
 prometheus-flask-exporter = "*"
