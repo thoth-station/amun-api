@@ -37,8 +37,10 @@ A request to Amun API
 
 A single request to API is composed of:
 
+* an identifer of the inspection
 * a base image itself (Fedora:28)
 * a list of native packages (RPM or Deb packages) that should be installed into the requested base image (e.g. Fedora:28)
+* a list of upstream packages should be installed into the requested base image
 * a script (bash, Python or any other scripting language - if the given environment knows how to execute the script; if it has required interpreter)
 * hardware requirements for pod placement performing builds of application stack (installing necessary dependencies)
 * hardware requirements for pod placement performing actual application execution
