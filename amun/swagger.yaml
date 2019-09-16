@@ -643,6 +643,7 @@ definitions:
           - stderr
           - stdout
           - usage
+          - os_release
         properties:
           exit_code:
             type: integer
@@ -669,6 +670,73 @@ definitions:
               Utilization of resources such as user-space or kernel-space CPU time, context
               switches, shared memory size or page faults (and others).
             additionalProperties: true
+          os_release:
+            type: object
+            description: Information about operating system as gathered from /etc/os-release
+            additionalProperties: true
+            x-nullable: true
+            properties:
+              ansi_color:
+                type: string
+                example: "0;34"
+              bug_report_url:
+                type: string
+                example: "https://bugzilla.redhat.com/"
+              cpe_name:
+                type: string
+                example: "cpe:/o:fedoraproject:fedora:29"
+              documentation_url:
+                type: string
+                example: "https://docs.fedoraproject.org/en-US/fedora/f29/system-administrators-guide/"
+              home_url:
+                type: string
+                example: "https://fedoraproject.org/"
+              id:
+                type: string
+                example: "fedora"
+              logo:
+                type: string
+              name:
+                type: string
+                example: "Fedora"
+              platform_id:
+                type: string
+                example: "platform:f29"
+              pretty_name:
+                type: string
+                example: "Fedora 29 (Workstation Edition)"
+              privacy_policy_url:
+                type: string
+                example: "https://fedoraproject.org/wiki/Legal:PrivacyPolicy"
+              redhat_bugzilla_product:
+                type: string
+                example: "Fedora"
+              redhat_bugzilla_product_version:
+                type: string
+                example: "29"
+              redhat_support_product:
+                type: string
+                example: "Fedora"
+              redhat_support_product_version:
+                type: string
+                example: "29"
+              support_url:
+                type: string
+                example: "https://fedoraproject.org/wiki/Communicating_and_getting_help"
+              variant:
+                type: string
+                example: "Workstation Edition"
+              variant_id:
+                type: string
+                example: "workstation"
+              version:
+                type: string
+                example: "29 (Workstation Edition)"
+              version_codename:
+                type: string
+              version_id:
+                type: string
+                example: "29"
       parameters:
         type: object
         description: Parameters echoed back to user for debugging.

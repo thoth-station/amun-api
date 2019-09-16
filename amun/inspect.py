@@ -40,6 +40,7 @@ _EXEC_STDOUT_FILE = "/home/amun/script.stdout"
 _EXEC_STDERR_FILE = "/home/amun/script.stderr"
 # Executable to be run.
 _EXEC_FILE = "/home/amun/script"
+_ETC_OS_RELEASE = "/etc/os-release"
 # Names of items on certain position in return value of resource.getrusage()
 #   https://docs.python.org/3.6/library/resource.html#resource.getrusage
 _RESOURCE_STRUCT_RUSAGE_ITEMS = (
@@ -60,6 +61,31 @@ _RESOURCE_STRUCT_RUSAGE_ITEMS = (
     "ru_nvcsw",
     "ru_nivcsw",
 )
+
+
+def _gather_os_release():
+    """Gather information about operating system used."""
+    if not os.path.isfile(_ETC_OS_RELEASE):
+        return None
+
+    try:
+        with open(_ETC_OS_RELEASE, "r") as os_release_file:
+            content = os_release_file.read()
+    except Exception:
+        return None
+
+    result = {}
+    for line in content.splitlines():
+        parts = line.split("=", maxsplit=1)
+        if len(parts) != 2:
+            continue
+
+        key = parts[0].lower()
+        value = parts[1].strip('"')
+
+        result[key] = value
+
+    return result
 
 
 def main():
@@ -113,6 +139,7 @@ def main():
         "script_sha256": sha256.hexdigest(),
         "usage": usage,
         "datetime": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+        "os_release": _gather_os_release(),
     }
 
     json.dump(report, sys.stdout, sort_keys=True, indent=2)
