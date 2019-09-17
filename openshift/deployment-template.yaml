@@ -114,6 +114,11 @@ objects:
                     secretKeyRef:
                       name: amun
                       key: sentry-dsn
+                - name: THOTH_DEPLOYMENT_NAME
+                  valueFrom:
+                    configMapKeyRef:
+                      key: storage-bucket-name
+                      name: thoth
                 - name: PROMETHEUS_PUSHGATEWAY_HOST
                   valueFrom:
                   configMapKeyRef:
