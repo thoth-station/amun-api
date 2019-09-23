@@ -41,7 +41,7 @@ paths:
       summary: Inspect the given application stack.
       requestBody:
         required: true
-        description: Base image to be used for runtime environment.
+        description: Specification of the software stack that should be created and verified.
         content:
           application/json:
             schema:
