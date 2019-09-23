@@ -92,7 +92,7 @@ def create_dockerfile(specification: dict) -> tuple:
 
     # Updating the base has to be turned on explicitly.
     if specification.get('update', False):
-        dockerfile += _determine_update_string
+        dockerfile += _determine_update_string()
 
     if specification.get('packages'):
         dockerfile += _determine_installer_string() + " ".join(specification['packages']) + '\n\n'
