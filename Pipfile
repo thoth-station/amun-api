@@ -13,9 +13,16 @@ flask-script = "*"
 toml = "*"
 prometheus-flask-exporter = "*"
 prometheus-client = "*"
+grpcio = "*"
+grpcio-opentracing = "*"
+grpcio-tools = "*"
+jaeger-client = "*"
+opentracing-instrumentation = "*"
+
+[pipenv]
+allow_prereleases = false
 
 [dev-packages]
-pylint = "*"
 
 [requires]
 python_version = "3.6"
