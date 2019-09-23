@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# thoth-user-api
+# Amun API
 # Copyright(C) 2018, 2019 Fridolin Pokorny
 #
 # This program is free software: you can redistribute it and / or modify
@@ -30,7 +30,7 @@ class Configuration:
     """Configuration of Amun API service."""
 
     APP_SECRET_KEY = os.environ['AMUN_API_APP_SECRET_KEY']
-    SWAGGER_YAML_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../openapi")
+    SWAGGER_YAML_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../openapi/openapi.yaml")
     AMUN_INSPECTION_NAMESPACE = os.environ['THOTH_AMUN_INSPECTION_NAMESPACE']
     AMUN_INFRA_NAMESPACE = os.environ['THOTH_AMUN_INFRA_NAMESPACE']
 
