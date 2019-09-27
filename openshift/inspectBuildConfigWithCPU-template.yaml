@@ -5,8 +5,8 @@ metadata:
   annotations:
     description: A template for BuildConfig to create build on the fly.
     openshift.io/display-name: Amun inspection BuildConfig
-    version: 0.0.1
-    tags: poc,amun,thoth,ai-stacks
+    version: 0.5.0
+    tags: amun,thoth,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       A template used to create dynamic builds on user requests.
@@ -47,19 +47,19 @@ objects:
         dockerStrategy:
           env:
             - name: LANG
-              value: 'en_US.UTF-8'
+              value: "en_US.UTF-8"
             - name: HOME
-              value: '/home/amun/'
+              value: "/home/amun/"
             - name: PIPENV_CACHE_DIR
-              value: '/home/amun/.cache'
+              value: "/home/amun/.cache"
             - name: PIPENV_COLORBLIND
-              value: '1'
+              value: "1"
             - name: PIPENV_HIDE_EMOJIS
-              value: '1'
+              value: "1"
             - name: PIPENV_NOSPIN
-              value: '1'
+              value: "1"
             - name: PIPENV_VERBOSITY
-              value: '1'
+              value: "1"
       triggers:
         - type: ConfigChange
       affinity:

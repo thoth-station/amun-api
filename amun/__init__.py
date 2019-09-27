@@ -18,6 +18,6 @@
 """Thoth User API."""
 
 
-__name__ = 'amun'
-__author__ = 'Fridolin Pokorny <fridolin@redhat.com>'
-__version__ = '0.0.1'
+__name__ = "amun"
+__author__ = "Fridolin Pokorny <fridolin@redhat.com>"
+__version__ = "0.5.0"

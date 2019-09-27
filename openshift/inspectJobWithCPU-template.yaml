@@ -5,8 +5,8 @@ metadata:
   annotations:
     description: Amun - Execution engine for Thoth
     openshift.io/display-name: Amun API
-    version: 0.0.1
-    tags: poc,amun,thoth,ai-stacks
+    version: 0.5.0
+    tags: amun,thoth,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       This template defines resources needed to run Amun's inspection job on OpenShift.
@@ -43,7 +43,7 @@ objects:
           containers:
             - name: inspect
               env: []
-              image: '${AMUN_INSPECTION_ID}:latest'
+              image: "${AMUN_INSPECTION_ID}:latest"
               livenessProbe:
                 failureThreshold: 1
                 initialDelaySeconds: 3600
@@ -76,7 +76,7 @@ objects:
             containerNames: [inspect]
             from:
               kind: ImageStreamTag
-              name: '${AMUN_INSPECTION_ID}:latest'
+              name: "${AMUN_INSPECTION_ID}:latest"
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
