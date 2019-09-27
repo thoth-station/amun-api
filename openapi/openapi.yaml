@@ -1,13 +1,13 @@
 openapi: "3.0.0"
 info:
   title: Amun API
-  version: "0.2"
+  version: "0.5.0"
 servers:
   - url: "/api/v1/"
 paths:
   /_debug/generate-dockerfile:
     post:
-      tags: ['Debug']
+      tags: ["Debug"]
       x-openapi-router-controller: amun.api_v1
       operationId: post_generate_dockerfile
       summary: >
@@ -35,7 +35,7 @@ paths:
                 $ref: "#/components/schemas/InspectionResponseError"
   /inspect:
     post:
-      tags: ['Inspection']
+      tags: ["Inspection"]
       x-openapi-router-controller: amun.api_v1
       operationId: post_inspection
       summary: Inspect the given application stack.
@@ -62,7 +62,7 @@ paths:
                 $ref: "#/components/schemas/InspectionResponseError"
   /inspect/{inspection_id}/build/log:
     get:
-      tags: ['Inspection']
+      tags: ["Inspection"]
       x-openapi-router-controller: amun.api_v1
       operationId: get_inspection_build_log
       summary: Get log for a specific inspection build.
@@ -94,7 +94,7 @@ paths:
                 $ref: "#/components/schemas/InspectionResponseError"
   /inspect/{inspection_id}/job/log:
     get:
-      tags: ['Inspection']
+      tags: ["Inspection"]
       x-openapi-router-controller: amun.api_v1
       operationId: get_inspection_job_log
       summary: Get log for a specific inspection run.
@@ -132,7 +132,7 @@ paths:
                 $ref: "#/components/schemas/InspectionResponseError"
   /inspect/{inspection_id}/status:
     get:
-      tags: ['Inspection']
+      tags: ["Inspection"]
       x-openapi-router-controller: amun.api_v1
       operationId: get_inspection_status
       summary: Get status of an inspection.
@@ -164,7 +164,7 @@ paths:
                 $ref: "#/components/schemas/InspectionResponseError"
   /inspect/{inspection_id}/specification:
     get:
-      tags: ['Inspection']
+      tags: ["Inspection"]
       x-openapi-router-controller: amun.api_v1
       operationId: get_inspection_specification
       summary: Get specification of the given inspection.
@@ -233,7 +233,7 @@ components:
           type: string
           minLength: 1
           description: Base image on which the runtime environment should be based on.
-          example: 'fedora:28'
+          example: "fedora:28"
         update:
           type: boolean
           description: Perform native packages update.
@@ -243,14 +243,14 @@ components:
           items:
             type: string
             description: Name of the package to be installed.
-            example: 'vim'
+            example: "vim"
         python_packages:
           type: array
           description: A list of python packages that should be installed into the runtime environment.
           items:
             type: string
             description: Name of the package to be installed.
-            example: 'pipenv'
+            example: "pipenv"
         python:
           type: object
           description: Python application stack to be installed.
@@ -272,7 +272,7 @@ components:
           description:
             A user-created string which will be inserted into the inspection id to distinguish
             different inspection runs.
-          example: 'test'
+          example: "test"
         build:
           type: object
           description: Hardware requirements for build time.
@@ -425,7 +425,7 @@ components:
           type: string
           description: >
             An id of submitted inspection for checking its status and its results.
-          example: 'inspect-ABCXYZ'
+          example: "inspect-ABCXYZ"
         parameters:
           type: object
           description: >
@@ -465,8 +465,7 @@ components:
           properties:
             exit_code:
               type: integer
-              description:
-                Exit code of user provided script (matches exit code of the inspect job)
+              description: Exit code of user provided script (matches exit code of the inspect job)
               example: 0
             hwinfo:
               type: object

@@ -4,9 +4,9 @@ metadata:
   name: amun-api-deployment
   annotations:
     description: This is Amun API
-    openshift.io/display-name: 'Amun API'
-    version: 0.4.0
-    tags: poc,amun,thoth,api,ai-stacks
+    openshift.io/display-name: "Amun API"
+    version: 0.5.0
+    tags: amun,thoth,api,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: This is Amun API
     template.openshift.io/provider-display-name: Red Hat, Inc.
@@ -91,9 +91,9 @@ objects:
                 - name: KUBERNETES_API_URL
                   value: "https://kubernetes.default.svc.cluster.local"
                 - name: KUBERNETES_VERIFY_TLS
-                  value: '0'
+                  value: "0"
                 - name: AMUN_DEBUG
-                  value: '0'
+                  value: "0"
                 - name: THOTH_AMUN_INSPECTION_NAMESPACE
                   valueFrom:
                     configMapKeyRef:
@@ -141,7 +141,7 @@ objects:
                   cpu: "500m"
               readinessProbe:
                 httpGet:
-                  path: '/readiness'
+                  path: "/readiness"
                   port: 8080
                   scheme: HTTP
                 initialDelaySeconds: 5
@@ -149,7 +149,7 @@ objects:
                 timeoutSeconds: 10
               livenessProbe:
                 httpGet:
-                  path: '/liveness'
+                  path: "/liveness"
                   port: 8080
                   scheme: HTTP
                 initialDelaySeconds: 5
@@ -166,7 +166,7 @@ objects:
             from:
               kind: ImageStreamTag
               namespace: "${IMAGE_STREAM_PROJECT_NAME}"
-              name: 'amun-api:latest'
+              name: "amun-api:latest"
 
   - kind: ImageStream
     apiVersion: image.openshift.io/v1

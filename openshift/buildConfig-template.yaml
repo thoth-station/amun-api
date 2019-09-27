@@ -4,9 +4,9 @@ metadata:
   name: amun-api-buildconfig
   annotations:
     description: This is Amun API BuildConfig.
-    openshift.io/display-name: 'Amun API: BuildConfig'
-    version: 0.0.1
-    tags: poc,amun,thoth,ai-stacks
+    openshift.io/display-name: "Amun API: BuildConfig"
+    version: 0.5.0
+    tags: amun,thoth,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: This is Amun API BuildConfig.
     template.openshift.io/provider-display-name: Red Hat, Inc.
@@ -48,11 +48,11 @@ objects:
             name: s2i-thoth-ubi8-py36:latest
           env:
             - name: ENABLE_PIPENV
-              value: '1'
+              value: "1"
             - name: UPGRADE_PIP_TO_LATEST
-              value: ''
+              value: ""
             - name: WEB_CONCURRENCY
-              value: '4'
+              value: "4"
             - name: "THOTH_DRY_RUN"
               value: "1"
             - name: "THOTH_ADVISE"
@@ -79,17 +79,17 @@ parameters:
     displayName: Git Repository
     required: true
     name: GITHUB_URL
-    value: 'https://github.com/thoth-station/amun-api'
+    value: "https://github.com/thoth-station/amun-api"
 
   - description: Git reference to be used for Amun API
     displayName: Git Reference
     required: true
     name: GITHUB_REF
-    value: 'master'
+    value: "master"
 
   - description: >
       Tag of the output ImageStream the resulting container image should go to
     displayName: ImageStream Tag
     required: true
     name: IMAGE_STREAM_TAG
-    value: 'latest'
+    value: "latest"
