@@ -388,11 +388,11 @@
         },
         "opentracing-instrumentation": {
             "hashes": [
-                "sha256:2f0dbf4dcbb405d69cf1a479455e02dc5ca9f5bed5a5783d43de6fadd4fcc662",
-                "sha256:744d30178d8cfda08b859a8b79f8f41698d8170da5dd87c7d07c5bccbf53a0df"
+                "sha256:918b1f52e3db035002bb26a366bb6cbaea9715d567015ce9f514e08047f84185",
+                "sha256:a8fb8499c6ab71665313c179e327b406bfa09b0277bd7cb02b2941eaa659d8dd"
             ],
             "index": "pypi",
-            "version": "==3.2.0"
+            "version": "==3.2.1"
         },
         "prometheus-client": {
             "hashes": [
