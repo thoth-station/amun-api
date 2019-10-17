@@ -119,5 +119,12 @@ def internal_server_error(exc):
     )
 
 
+@application.after_request
+def apply_headers(response):
+    """Add headers to each response."""
+    response.headers["X-Amun-Version"] = __version__
+    return response
+
+
 if __name__ == "__main__":
     sys.exit(1)
