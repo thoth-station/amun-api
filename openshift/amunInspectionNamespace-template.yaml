@@ -5,11 +5,12 @@ metadata:
   annotations:
     description: This is Amun configuration template
     openshift.io/display-name: "Amun core components"
-    version: 0.5.0
+    version: 0.5.1
     tags: amun,thoth,ai-stacks,aistacks,machinelearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
     template.openshift.io/provider-display-name: Red Hat, Inc.
+    thoth-station.ninja/template-version: 0.5.1
   labels:
     template: amun-core
     app: amun
@@ -19,6 +20,8 @@ objects:
     apiVersion: v1
     metadata:
       name: role-inspector-binding
+      annotations:
+        thoth-station.ninja/template-version: 0.5.1
       labels:
         app: amun
     roleRef:
