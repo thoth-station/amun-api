@@ -117,3 +117,14 @@ Installation and Deployment
   # Deploy to the OpenShift cluster.
   oc login https://...
   OCP_URL=$(oc whoami --show-server) OCP_TOKEN=$(oc whoami --show-token) ansible-playbook playbooks/provision.yaml
+
+
+An example of an inspection output
+==================================
+
+An example of an inspection job output can `be found here
+<https://pastebin.com/3kyVQ28H>`_. Please note the output does not need to
+reflect the current implementation, but should be good-enough for a
+demonstration example. Please reach out to Thoth team for the recent job
+results.
+
