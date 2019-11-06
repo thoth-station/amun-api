@@ -88,6 +88,22 @@ def _gather_os_release():
     return result
 
 
+def _gather_runtime_environment(os_release: dict):
+    """Gather information about runtime environment."""
+    return {
+        "cuda_version": None,
+        "hardware": {
+            "cpu_family": None,
+            "cpu_model": None
+            },
+        "name": None,
+        "operating_system": {
+            "name": os_release["id"],
+            "version": os_release["version_id"]
+            }
+        }
+
+
 def main():
     """Entrypoint for inspection container."""
     # Load hardware info.
@@ -117,6 +133,12 @@ def main():
             # We were not able to load JSON, pass string as output.
             pass
 
+    # Gather os_release
+    os_release = _gather_os_release()
+
+    # Create runtime environment output
+    runtime_environment = _gather_runtime_environment(os_release)
+
     with open(_EXEC_STDERR_FILE, "r") as stderr_file:
         stderr = stderr_file.read()
 
@@ -139,7 +161,8 @@ def main():
         "script_sha256": sha256.hexdigest(),
         "usage": usage,
         "datetime": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f"),
-        "os_release": _gather_os_release(),
+        "os_release": os_release,
+        "runtime_environment": runtime_environment
     }
 
     json.dump(report, sys.stdout, sort_keys=True, indent=2)
