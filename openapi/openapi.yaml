@@ -462,6 +462,7 @@ components:
             - stdout
             - usage
             - os_release
+            - runtime_environment
           properties:
             exit_code:
               type: integer
@@ -554,6 +555,33 @@ components:
                 version_id:
                   type: string
                   example: "29"
+            runtime_environment:
+              type: object
+              description: Runtime environment information.
+              properties:
+                cuda_version:
+                  type: str
+                  description: CUDA version installed.
+                  nullable: true
+                hardware:
+                  type: dict
+                  description: Hardware information.
+                  properties:
+                    cpu_family:
+                      type: string
+                    cpu_model:
+                      type: string
+                operating_system:
+                  type: dict
+                  description: OS information.
+                  properties:
+                    name:
+                      type: string
+                    version:
+                      type: string
+                python_version:
+                  type: str
+                  description: Python interpreter version.
         parameters:
           type: object
           description: Parameters echoed back to user for debugging.
