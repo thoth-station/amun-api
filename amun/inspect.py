@@ -88,19 +88,19 @@ def _gather_os_release():
     return result
 
 
-def _gather_runtime_environment(os_release: dict):
+def _gather_runtime_environment(os_release: dict, hwinfo: dict):
     """Gather information about runtime environment."""
     return {
         "cuda_version": None,
         "hardware": {
-            "cpu_family": None,
-            "cpu_model": None
+            "cpu_family": hwinfo["cpu_info"].get("family"),
+            "cpu_model": hwinfo["cpu_info"].get("model")
             },
-        "name": None,
         "operating_system": {
             "name": os_release["id"],
             "version": os_release["version_id"]
-            }
+            },
+        "python_version": ".".join(map(str, sys.version_info[0:2]))
         }
 
 
@@ -137,7 +137,7 @@ def main():
     os_release = _gather_os_release()
 
     # Create runtime environment output
-    runtime_environment = _gather_runtime_environment(os_release)
+    runtime_environment = _gather_runtime_environment(os_release, hwinfo)
 
     with open(_EXEC_STDERR_FILE, "r") as stderr_file:
         stderr = stderr_file.read()
