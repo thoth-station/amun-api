@@ -462,6 +462,7 @@ components:
             - stdout
             - usage
             - os_release
+            - runtime_environment
           properties:
             exit_code:
               type: integer
@@ -554,6 +555,18 @@ components:
                 version_id:
                   type: string
                   example: "29"
+            runtime_environment:
+              type: object
+              description: Runtime environment information.
+              properties:
+                cpu_type:
+                  type: dict
+                cpu_info:
+                  type: dict
+                cpu_features:
+                  type: dict
+                platform:
+                  type: dict
         parameters:
           type: object
           description: Parameters echoed back to user for debugging.
