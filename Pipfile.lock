@@ -630,11 +630,10 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:711c3d07c8c9bd8b46e3f4f4f1af2e17ee3122c53f79d9225bc7fa98c408f5b7",
-                "sha256:a868ae77905224380db994c2529817d9b0f496f5ab65c86daf2b3d1e93344350"
+                "sha256:278f23070ccf462407ed7c5b582431fe7a53c7c414fb4fd87fa851800f282404"
             ],
             "index": "pypi",
-            "version": "==0.9.14"
+            "version": "==0.9.15"
         },
         "threadloop": {
             "hashes": [
@@ -678,10 +677,10 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:3de946ffbed6e6746608990594d08faac602528ac7015ac28d33cee6a45b7398",
-                "sha256:9a107b99a5393caf59c7aa3c1249c16e6879447533d0887f4336dde834c7be86"
+                "sha256:a8a318824cc77d1fd4b2bec2ded92646630d7fe8619497b142c84a9e6f5a7293",
+                "sha256:f3c5fd51747d450d4dcf6f923c81f78f811aab8205fda64b0aba34a4e48b0745"
             ],
-            "version": "==1.25.6"
+            "version": "==1.25.7"
         },
         "websocket-client": {
             "hashes": [
