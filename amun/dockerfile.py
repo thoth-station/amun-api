@@ -92,13 +92,15 @@ def create_dockerfile(specification: dict) -> tuple:
 
     # Updating the base has to be turned on explicitly.
     if specification.get('update', False):
-        dockerfile += _determine_update_string()
+        dockerfile += _determine_update_string() + "\n\n"
 
     if specification.get('packages'):
-        dockerfile += _determine_installer_string() + " ".join(specification['packages']) + '\n\n'
+        dockerfile += _determine_installer_string() + \
+            " ".join(specification['packages']) + '\n\n'
 
     if specification.get('python_packages'):
-        dockerfile += "RUN pip3 install " + " ".join(specification["python_packages"]) + '\n\n'
+        dockerfile += "RUN pip3 install " + \
+            " ".join(specification["python_packages"]) + '\n\n'
 
     for file_spec in specification.get('files', []):
         path = file_spec['path']
@@ -112,9 +114,12 @@ def create_dockerfile(specification: dict) -> tuple:
 
     if 'python' in specification:
         pipfile_content = toml.dumps(specification['python']['requirements'])
-        pipfile_lock_content = json.dumps(specification['python']['requirements_locked'], sort_keys=True, indent=4)
-        dockerfile += _write_file_string(pipfile_content, '/home/amun/Pipfile')
-        dockerfile += _write_file_string(pipfile_lock_content, '/home/amun/Pipfile.lock')
+        pipfile_lock_content = json.dumps(
+            specification['python']['requirements_locked'], sort_keys=True, indent=4)
+        dockerfile += _write_file_string(
+            pipfile_content, '/home/amun/Pipfile')
+        dockerfile += _write_file_string(
+            pipfile_lock_content, '/home/amun/Pipfile.lock')
         dockerfile += _write_file_string(_PIP_CONF, "/etc/pip.conf")
         dockerfile += 'RUN cd /home/amun && pipenv install --deploy\n'
 
