@@ -20,9 +20,12 @@
 import json
 import logging
 import os
+import re
 
 import toml
 import requests
+
+from functools import reduce
 
 from .exceptions import ScriptObtainingError
 
@@ -74,6 +77,38 @@ def _write_file_string(content: str, path: str) -> str:
     content = content.replace("\\", "\\\\").replace('"', '\\"').replace('\n', '\\n\\\n')
     path = path.replace('"', '\\"')
     return f'RUN echo -e "{content}" >"{path}"\n'
+
+
+def _format_dockerfile(dockerfile: str) -> str:
+    """Format and prepare the Dockerfile for a Workflow injection."""
+    def _pipeline(steps: list):
+        return lambda obj: reduce(lambda f, g: g(f), steps, obj)
+
+    def _escape_double_quotes(stream: str) -> str:
+        return re.sub(r'([^\\])"', r'\1\\"', stream)
+
+    def _escape_nested_single_quotes(stream: str) -> str:
+        return re.sub(r"\\'", r"\\\\'", stream)
+
+    def _escape_nested_double_quotes(stream: str) -> str:
+        return re.sub(r'\\"', r'\\\\"', stream)
+
+    def _unescape_single_quotes(stream: str) -> str:
+        return re.sub(r"\\\\'", r"'", stream)
+
+    def _strip(stream: str) -> str:
+        return stream.strip("'")
+
+    pipe = _pipeline([
+        repr,
+        _escape_nested_single_quotes,
+        _escape_nested_double_quotes,
+        _escape_double_quotes,
+        _unescape_single_quotes,
+        _strip,
+    ])
+
+    return pipe(dockerfile)
 
 
 def create_dockerfile(specification: dict) -> tuple:
@@ -141,5 +176,7 @@ def create_dockerfile(specification: dict) -> tuple:
     # An arbitrary user.
     dockerfile += "USER 1042\n"
     dockerfile += "WORKDIR /home/amun"
+
+    dockerfile = _format_dockerfile(dockerfile)
 
     return dockerfile, script_present
