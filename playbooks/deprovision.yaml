@@ -5,6 +5,11 @@
   connection: local
   gather_facts: false
 
+  vars:
+    AMUN_INFRA_NAMESPACE: "{{ lookup('env','USER') }}-thoth-dev"
+    AMUN_API_NAMESPACE: "{{ lookup('env','USER') }}-thoth-dev"
+    AMUN_INSPECTION_NAMESPACE: "{{ lookup('env','USER') }}-thoth-dev"
+
   tasks:
     - fail: msg="Bailing out. this play requires 'AMUN_API_NAMESPACE'"
       when: AMUN_API_NAMESPACE is not defined

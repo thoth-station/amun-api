@@ -6,14 +6,18 @@
   gather_facts: false
 
   vars:
-    openshift_master_url: "{{ lookup('env','OCP_URL') }}"
-    token: "{{ lookup('env','OCP_TOKEN') }}"
+    # Defaults to the SA specified in amunInspectionNamespace-template
+    SERVICE_ACCOUNT_NAME: "inspector"
+    # Image registry specific to the cluster (by default for OpenShift)
+    # for minishift use <host>:5000, e.g. 172.30.1.1:5000
+    IMAGE_REGISTRY: docker-registry.default.svc:5000
 
   roles:
     - role: amun
-      AMUN_INFRA_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
-      AMUN_API_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
-      AMUN_INSPECTION_NAMESPACE: "{{ lookup('env','USER') }}-amun-dev"
+      AMUN_INFRA_NAMESPACE: "{{ lookup('env','USER') }}-thoth-dev"
+      AMUN_API_NAMESPACE: "{{ lookup('env','USER') }}-thoth-dev"
+      AMUN_INSPECTION_NAMESPACE: "{{ lookup('env','USER') }}-thoth-dev"
       AMUN_API_APP_SECRET_KEY: "{{ lookup('env','AMUN_API_APP_SECRET_KEY') }}"
       PROMETHEUS_PUSHGATEWAY_HOST: "{{ lookup('env','PROMETHEUS_PUSHGATEWAY_HOST') }}"
       PROMETHEUS_PUSHGATEWAY_PORT: "{{ lookup('env','PROMETHEUS_PUSHGATEWAY_PORT') }}"
+      SENTRY_DSN: "{{ lookup('env','SENTRY_DSN') }}"
