@@ -1,0 +1,159 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: amun-inspection-workflow
+  annotations:
+    description: This is Amun configuration template
+    openshift.io/display-name: "Amun core components"
+    version: 0.5.1
+    tags: amun,argo,thoth,ai-stacks,aistacks,machinelearning,workflows
+    template.openshift.io/documentation-url: https://github.com/thoth-station/
+    template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
+    template.openshift.io/provider-display-name: Red Hat, Inc.
+    thoth-station.ninja/template-version: 0.5.1
+  labels:
+    template: amun-inspection-workflow
+    app: amun
+
+objects:
+- apiVersion: argoproj.io/v1alpha1
+  kind: Workflow
+  metadata:
+    generateName: "${AMUN_INSPECTION_ID}-"
+  labels:
+    app: amun
+    component: amun-inspection-workflow
+  spec:
+    serviceAccountName: "${ARGO_SERVICE_ACCOUNT}"
+
+    entrypoint: main
+    onExit: collect-outputs
+
+    volumes:
+    - name: outputDir
+      emptyDir: {}
+
+    arguments:
+      parameters:
+      # Required workflow parameters
+      - name: dockerfile
+      - name: specification
+      # Defaults
+      - name: inspection-id
+        value: "${AMUN_INSPECTION_ID}"
+      - name: batch-size
+        value: '1'
+      - name: batch-name
+        value: "{{workflow.parameters.inspection-id}}"
+      - name: allowed-failures
+        value: '1'  # i.e., 99% success rate out of 100
+      - name: parallelism
+        value: '1'
+      - name: cpu
+        value: "${AMUN_CPU}"
+      - name: memory
+        value: "${AMUN_MEMORY}"
+      - name: registry
+        value: "${THOTH_REGISTRY}"
+      - name: thoth-infra-namespace
+        value: "${THOTH_INFRA_NAMESPACE}"
+    templates:
+    - name: main
+      steps:
+      - - name: inspection-build
+          arguments:
+            parameters:
+            - name: dockerfile
+              value: "{{workflow.parameters.dockerfile}}"
+            - name: specification
+              value: "{{workflow.parameters.specification}}"
+            - name: inspection-id
+              value: "{{workflow.parameters.inspection-id}}"
+            - name: allowed-failures
+              value: "{{workflow.parameters.allowed-failures}}"
+            - name: batch-name
+              value: "{{workflow.parameters.batch-name}}"
+            - name: parallelism
+              value: "{{workflow.parameters.parallelism}}"
+            - name: cpu
+              value: "{{workflow.parameters.cpu}}"
+            - name: memory
+              value: "{{workflow.parameters.memory}}"
+            - name: registry
+              value: "{{workflow.parameters.registry}}"
+            - name: thoth-infra-namespace
+              value: "{{workflow.parameters.thoth-infra-namespace}}"
+          templateRef:
+            name: inspection-build-template
+            template: main
+      - - name: inspection-run
+          arguments:
+            parameters:
+            - name: batch-name
+              value: "{{workflow.parameters.batch-name}}"
+            - name: batch-size
+              value: "{{workflow.parameters.batch-size}}"
+            - name: inspection-id
+              value: "{{workflow.parameters.inspection-id}}"
+            - name: cpu
+              value: "{{workflow.parameters.cpu}}"
+            - name: memory
+              value: "{{workflow.parameters.memory}}"
+            - name: registry
+              value: "{{workflow.parameters.registry}}"
+            - name: thoth-infra-namespace
+              value: "{{workflow.parameters.thoth-infra-namespace}}"
+          templateRef:
+            name: inspection-run-template
+            template: main
+
+    # exit handler
+    # the outputs should always be collected and stored, even if the workflow fails
+    - name: collect-outputs
+      templateRef:
+        name: collect-outputs-template
+        template: main
+      arguments:
+        parameters:
+        - name: volume
+          value: outputDir
+        - name: kind
+          value: pods
+        - name: selector
+          value: "job-name={{workflow.parameters.batch-name}}"
+        - name: registry
+          value: ${THOTH_REGISTRY}
+        - name: thoth-infra-namespace
+          value: ${THOTH_INFRA_NAMESPACE}
+
+parameters:
+- name: AMUN_INSPECTION_ID
+  description: Id of inspection that is run.
+  displayName: Inspection id
+  required: true
+
+- name: THOTH_INFRA_NAMESPACE
+  description: Project where ImageStream is present
+  displayName: ImageStream Project
+  required: true
+
+- name: THOTH_REGISTRY
+  description: Registry server from where Image is to be pulled
+  displayName: Registry
+  required: true
+  value: docker-registry.default.svc:5000
+
+- name: AMUN_CPU
+  description: CPU cores requested for build
+  displayName: Build CPU
+  value: 750m
+
+- name: AMUN_MEMORY
+  description: Memory requested for build
+  displayName: Build Memory
+  value: 1Gi
+
+- name: ARGO_SERVICE_ACCOUNT
+  description: Service account used by workflow steps
+  displayName: Argo service account
+  value: argo
