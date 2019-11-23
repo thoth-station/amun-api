@@ -177,6 +177,7 @@ def create_dockerfile(specification: dict) -> tuple:
     dockerfile += "USER 1042\n"
     dockerfile += "WORKDIR /home/amun"
 
-    dockerfile = _format_dockerfile(dockerfile)
+    if os.environ.get("THOTH_WORKFLOW_CONTEXT", False):
+        dockerfile = _format_dockerfile(dockerfile)
 
     return dockerfile, script_present
