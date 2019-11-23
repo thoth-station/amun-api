@@ -19,7 +19,7 @@ objects:
 - apiVersion: argoproj.io/v1alpha1
   kind: Workflow
   metadata:
-    generateName: "${AMUN_INSPECTION_ID}-"
+    generateName: "${AMUN_INSPECTION_ID}"
   labels:
     app: amun
     component: amun-inspection-workflow
@@ -27,10 +27,9 @@ objects:
     serviceAccountName: "${ARGO_SERVICE_ACCOUNT}"
 
     entrypoint: main
-    onExit: collect-outputs
 
     volumes:
-    - name: outputDir
+    - name: output-volume
       emptyDir: {}
 
     arguments:
@@ -86,6 +85,7 @@ objects:
           templateRef:
             name: inspection-build-template
             template: main
+
       - - name: inspection-run
           arguments:
             parameters:
@@ -106,25 +106,27 @@ objects:
           templateRef:
             name: inspection-run-template
             template: main
+          continueOn:
+            failed: true
 
-    # exit handler
-    # the outputs should always be collected and stored, even if the workflow fails
-    - name: collect-outputs
-      templateRef:
-        name: collect-outputs-template
-        template: main
-      arguments:
-        parameters:
-        - name: volume
-          value: outputDir
-        - name: kind
-          value: pods
-        - name: selector
-          value: "job-name={{workflow.parameters.batch-name}}"
-        - name: registry
-          value: ${THOTH_REGISTRY}
-        - name: thoth-infra-namespace
-          value: ${THOTH_INFRA_NAMESPACE}
+      - - name: inspection-results
+          arguments:
+            parameters:
+            - name: volume
+              value: output-volume
+            - name: namespace
+              value: "{{workflow.namespace}}"
+            - name: kind
+              value: pods
+            - name: selector
+              value: "job-name={{workflow.parameters.batch-name}}"
+            - name: registry
+              value: ${THOTH_REGISTRY}
+            - name: thoth-infra-namespace
+              value: ${THOTH_INFRA_NAMESPACE}
+          templateRef:
+            name: inspection-results-template
+            template: main
 
 parameters:
 - name: AMUN_INSPECTION_ID
