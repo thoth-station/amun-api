@@ -20,9 +20,9 @@ objects:
   kind: Workflow
   metadata:
     generateName: "${AMUN_INSPECTION_ID}"
-  labels:
-    app: amun
-    component: amun-inspection-workflow
+    labels:
+      app: amun
+      component: amun-inspection-workflow
   spec:
     serviceAccountName: "${ARGO_SERVICE_ACCOUNT}"
 
@@ -56,10 +56,16 @@ objects:
         value: "${THOTH_REGISTRY}"
       - name: thoth-infra-namespace
         value: "${THOTH_INFRA_NAMESPACE}"
+      # Other parameters
+      - name: "target"
+        value: "inspection-result"
+
     templates:
     - name: main
-      steps:
-      - - name: inspection-build
+      dag:
+        target: "{{workflow.parameters.target}}"
+        tasks:
+        - name: inspection-build
           arguments:
             parameters:
             - name: dockerfile
@@ -86,7 +92,8 @@ objects:
             name: inspection-build-template
             template: main
 
-      - - name: inspection-run
+        - name: inspection-run
+          dependencies: [inspection-build]
           arguments:
             parameters:
             - name: batch-name
@@ -109,7 +116,8 @@ objects:
           continueOn:
             failed: true
 
-      - - name: inspection-results
+        - name: inspection-result
+          dependencies: [inspection-run]
           arguments:
             parameters:
             - name: volume
