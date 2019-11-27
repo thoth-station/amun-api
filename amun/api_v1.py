@@ -22,6 +22,7 @@ import random
 import json
 
 from thoth.common import OpenShift
+from thoth.common import WorkflowManager
 from thoth.common import datetime2datetime_str
 from thoth.common.exceptions import NotFoundException
 
@@ -30,7 +31,9 @@ from .dockerfile import create_dockerfile
 from .exceptions import ScriptObtainingError
 
 _LOGGER = logging.getLogger(__name__)
+
 _OPENSHIFT = OpenShift()
+_WORKLFOW_MANAGER = WorkflowManager(ocp_client=_OPENSHIFT)
 
 # These are default requests for inspection builds and runs if not stated
 # otherwise. We explicitly assign defaults to requests coming to API so that
@@ -47,7 +50,8 @@ def _construct_parameters_dict(specification: dict) -> tuple:
     parameters = {}
     use_hw_template = False
     if 'hardware' in specification.get('requests', {}):
-        hardware_specification = specification.get('requests', {}).get('hardware', {})
+        hardware_specification = specification.get(
+            'requests', {}).get('hardware', {})
         use_hw_template = True
 
         if 'cpu_family' in hardware_specification:
@@ -65,10 +69,10 @@ def _construct_parameters_dict(specification: dict) -> tuple:
     return parameters, use_hw_template
 
 
-def _do_create_dockerfile(specification: dict) -> tuple:
+def _do_create_dockerfile(specification: dict, workflow=False) -> tuple:
     """Wrap dockerfile generation and report back an error if any."""
     try:
-        return create_dockerfile(specification)
+        return create_dockerfile(specification, workflow=workflow)
     except ScriptObtainingError as exc:
         return None, str(exc)
 
@@ -105,20 +109,25 @@ def _adjust_default_requests(dict_: dict) -> None:
     if "requests" not in dict_:
         dict_["requests"] = {}
 
-    dict_["requests"]["cpu"] = dict_["requests"].get("cpu") or _DEFAULT_REQUESTS["cpu"]
-    dict_["requests"]["memory"] = dict_["requests"].get("memory") or _DEFAULT_REQUESTS["memory"]
+    dict_["requests"]["cpu"] = dict_["requests"].get(
+        "cpu") or _DEFAULT_REQUESTS["cpu"]
+    dict_["requests"]["memory"] = dict_["requests"].get(
+        "memory") or _DEFAULT_REQUESTS["memory"]
 
 
 def post_inspection(specification: dict) -> tuple:
     """Create new inspection for the given software stack."""
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
-    dockerfile, run_job = _do_create_dockerfile(specification)
+    dockerfile, run_job_or_error = _do_create_dockerfile(
+        specification, workflow=True)
     if dockerfile is None:
         return {
             'parameters:': specification,
             # If not dockerfile is produced, run_job holds the error message.
-            'error': run_job
+            'error': run_job_or_error
         }, 400
+
+    run_job = run_job_or_error
 
     if 'build' not in specification:
         specification['build'] = {}
@@ -130,9 +139,9 @@ def post_inspection(specification: dict) -> tuple:
     _adjust_default_requests(specification['build'])
 
     inspection_id = _generate_inspection_id(specification.get("identifier"))
-    _OPENSHIFT.create_inspection_imagestream(inspection_id)
 
-    parameters, use_hw_template = _construct_parameters_dict(specification.get('build', {}))
+    parameters, use_hw_template = _construct_parameters_dict(
+        specification.get('build', {}))
 
     run_cpu_requests = None
     if 'cpu' in specification['run'].get('requests', {}):
@@ -152,7 +161,8 @@ def post_inspection(specification: dict) -> tuple:
     build_parameters['AMUN_SPECIFICATION'] = json.dumps(specification)
     build_parameters['AMUN_CPU'] = specification['build']['requests']['cpu']
     build_parameters['AMUN_MEMORY'] = specification['build']['requests']['memory']
-    _OPENSHIFT.schedule_inspection_build(build_parameters, inspection_id, use_hw_template)
+    _OPENSHIFT.schedule_inspection_build(
+        build_parameters, inspection_id, use_hw_template)
 
     if run_job:
         _OPENSHIFT.schedule_inspection_job(
@@ -166,6 +176,7 @@ def post_inspection(specification: dict) -> tuple:
     return {
         'parameters': specification,
         'inspection_id': inspection_id,
+        'workflow_id': workflow_id,
         'job_created': run_job,
         'build_created': True
     }, 202
@@ -175,7 +186,8 @@ def get_inspection_job_log(inspection_id: str) -> tuple:
     """Get logs of the given inspection."""
     parameters = {'inspection_id': inspection_id}
     try:
-        log = _OPENSHIFT.get_job_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+        log = _OPENSHIFT.get_job_log(
+            inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException as exc:
         try:
             # Try to get status so a user knows to ask later.
@@ -204,7 +216,8 @@ def get_inspection_job_log(inspection_id: str) -> tuple:
     try:
         log = json.loads(log)
     except Exception as exc:
-        _LOGGER.exception("Failed to load inspection job log for %r", inspection_id)
+        _LOGGER.exception(
+            "Failed to load inspection job log for %r", inspection_id)
         return {
             'error': 'Job failed, please contact administrator for more details',
             'parameters': parameters
@@ -289,7 +302,8 @@ def get_inspection_specification(inspection_id: str):
             'parameters': parameters
         }
 
-    specification = json.loads(build['metadata']['annotations']['amun_specification'])
+    specification = json.loads(
+        build['metadata']['annotations']['amun_specification'])
     # We inserted created information on our own, pop it not to taint the original specification request.
     created = specification.pop("@created")
     return {
