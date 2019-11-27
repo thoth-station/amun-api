@@ -340,10 +340,10 @@
         },
         "jaeger-client": {
             "hashes": [
-                "sha256:6336bead9a7d5597dff411cc4e6e62b66f0950011d7a51e1b700a82c6cf2de31"
+                "sha256:70e02482f6b43d9cb497d490a1e98ef2df25360a24b1a13050517cfd9109a0db"
             ],
             "index": "pypi",
-            "version": "==4.1.0"
+            "version": "==4.2.0"
         },
         "jinja2": {
             "hashes": [
