@@ -111,7 +111,7 @@ def _format_dockerfile(dockerfile: str) -> str:
     return pipe(dockerfile)
 
 
-def create_dockerfile(specification: dict) -> tuple:
+def create_dockerfile(specification: dict, workflow=False) -> tuple:
     """Create a Dockerfile based on software stack specification."""
     script_present = False
     dockerfile = "FROM " + specification['base'] + "\n\n"
@@ -177,7 +177,8 @@ def create_dockerfile(specification: dict) -> tuple:
     dockerfile += "USER 1042\n"
     dockerfile += "WORKDIR /home/amun"
 
-    if os.environ.get("THOTH_WORKFLOW_CONTEXT", False):
+    # Give the argument higher priority
+    if workflow or os.environ.get("THOTH_WORKFLOW_CONTEXT", False):
         dockerfile = _format_dockerfile(dockerfile)
 
     return dockerfile, script_present
