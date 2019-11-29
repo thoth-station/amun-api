@@ -568,11 +568,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:06428da137db85a016ce0ff541e71b71453ad9308e6c43db3dc6d6a72b6ad89d",
-                "sha256:3f97f1e63d545079a674d7e4664138a06c9035c1cb5eb3c53ac624f3f90c602e"
+                "sha256:13e5f70bc838f51ac74b45fa3e580f553464d14a3445c0f42edf600f8e177db9",
+                "sha256:f7406958ee14020b4eb123972aaaed2f79b24498150d90e24370cedb806a0792"
             ],
             "index": "pypi",
-            "version": "==0.9.17"
+            "version": "==0.9.19"
         },
         "threadloop": {
             "hashes": [
