@@ -25,14 +25,21 @@ import connexion
 
 from flask import redirect, jsonify
 from flask_script import Manager
+from flask_cors import CORS
 from prometheus_flask_exporter import PrometheusMetrics
 
 from thoth.common import datetime2datetime_str
 from thoth.common import init_logging
+from thoth.common import __version__ as thoth_common_version
+
 from datetime import datetime
 
-from . import __version__
+from . import __version__ as __amun_version__
 from .configuration import Configuration
+
+
+__version__ = f"{__amun_version__}+thoth_common.{thoth_common_version}"
+
 
 # Configure global application logging using Thoth's init_logging.
 init_logging(logging_env_var_start="AMUN_LOG_")
@@ -52,7 +59,10 @@ manager = Manager(application)
 application.secret_key = Configuration.APP_SECRET_KEY
 
 # static information as metric
-metrics.info("amun_api_info", "Amun API info", version=__version__)
+metrics.info("amun_api_info", "Amun API info", version=__amun_version__)
+
+# Add Cross Origin Request Policy to all
+CORS(app.app)
 
 
 @app.route("/")

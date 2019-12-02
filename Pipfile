@@ -5,24 +5,21 @@ name = "pypi"
 
 [packages]
 requests = "*"
-gunicorn = "*"
-connexion = {extras = ["swagger-ui"],version = "*"}
-flask = "*"
 thoth-common = "*"
-flask-script = "*"
 toml = "*"
 prometheus-flask-exporter = "*"
 prometheus-client = "*"
-grpcio = "*"
-grpcio-opentracing = "*"
-grpcio-tools = "*"
-jaeger-client = "*"
-opentracing-instrumentation = "*"
+gunicorn = "*"
+connexion = {extras = ["swagger-ui"],version = "*"}
+flask = "*"
+flask-cors = "*"
+flask-script = "*"
+
+[dev-packages]
 
 [pipenv]
 allow_prereleases = false
 
-[dev-packages]
 
 [requires]
 python_version = "3.6"
