@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: amun-inspection-workflow
+  name: amun-inspection-with-cpu-workflow
   annotations:
     description: This is Amun configuration template
     openshift.io/display-name: "Amun core components"
@@ -11,7 +11,7 @@ metadata:
     template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
-    template: amun-inspection-workflow
+    template: amun-inspection-with-cpu-workflow
     app: amun
 
 objects:
@@ -81,8 +81,16 @@ objects:
               value: "{{workflow.parameters.parallelism}}"
             - name: cpu
               value: "{{workflow.parameters.cpu}}"
+            - name: cpu-family
+              value: "{{workflow.parameters.cpu-family}}"
+            - name: cpu-model
+              value: "{{workflow.parameters.cpu-model}}"
             - name: memory
               value: "{{workflow.parameters.memory}}"
+            - name: physical-cpus
+              value: "{{workflow.parameters.physical-cpus}}"
+            - name: processor
+              value: "{{workflow.parameters.processor}}"
             - name: registry
               value: "{{workflow.parameters.registry}}"
             - name: thoth-infra-namespace
@@ -103,8 +111,16 @@ objects:
               value: "{{workflow.parameters.inspection-id}}"
             - name: cpu
               value: "{{workflow.parameters.cpu}}"
+            - name: cpu-family
+              value: "{{workflow.parameters.cpu-family}}"
+            - name: cpu-model
+              value: "{{workflow.parameters.cpu-model}}"
             - name: memory
               value: "{{workflow.parameters.memory}}"
+            - name: physical-cpus
+              value: "{{workflow.parameters.physical-cpus}}"
+            - name: processor
+              value: "{{workflow.parameters.processor}}"
             - name: registry
               value: "{{workflow.parameters.registry}}"
             - name: thoth-infra-namespace
@@ -166,3 +182,23 @@ parameters:
   description: Service account used by workflow steps
   displayName: Argo service account
   value: argo
+
+- name: CPU_FAMILY
+  description: Family number of CPU.
+  displayName: CPU Family
+  required: true
+
+- name: CPU_MODEL
+  description: Modelnumber of CPU.
+  displayName: CPU model
+  required: true
+
+- name: PHYSICAL_CPUS
+  description: Number of physical CPUs.
+  displayName: Physical CPUS
+  required: true
+
+- name: PROCESSOR
+  description: Name of processor.
+  displayName: Processor name
+  required: true
