@@ -16,8 +16,8 @@ metadata:
     app: amun
 
 objects:
-  - kind: ServiceAccount
-    apiVersion: v1
+  - apiVersion: v1
+    kind: ServiceAccount
     metadata:
       name: inspector
       annotations:
@@ -26,18 +26,18 @@ objects:
         app: amun
     automountServiceAccountToken: true
 
-  # TODO: do not assign cluser-wise edit, but define own Amun roles
   - apiVersion: v1
     kind: RoleBinding
     metadata:
-      name: role-inspector-binding
+      name: amun-inspector
       annotations:
         thoth-station.ninja/template-version: 0.5.1
       labels:
         app: amun
     roleRef:
-      kind: ClusterRole
-      name: edit
+      kind: Role
+      name: amun
+      namespace: ${AMUN_API_NAMESPACE}
     subjects:
       - kind: ServiceAccount
         name: inspector
