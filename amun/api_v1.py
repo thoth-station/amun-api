@@ -84,9 +84,9 @@ def _generate_inspection_id(identifier: str = None) -> str:
     # name and failed with regexp issues (that were not related to the
     # generateName configuration).
     if not identifier:
-        return "inspection-" + "%016x" % random.getrandbits(64)
+        return "inspection-" + "%08x" % random.getrandbits(32)
 
-    return ("inspection-%s-" + "%016x") % (identifier, random.getrandbits(64))
+    return ("inspection-%s-" + "%08x") % (identifier, random.getrandbits(32))
 
 
 def post_generate_dockerfile(specification: dict, workflow=False):
@@ -177,6 +177,10 @@ def post_inspection(specification: dict) -> tuple:
             memory_requests=run_memory_requests,
             cpu_requests=run_cpu_requests
         )
+
+    # TODO: Check whether the workflow spec has been resolved successfully
+    # The resolution happens on the server side, therefore even if the WF
+    # is submitted successfully, it mail fail due to an invalid spec later on
 
     return {
         'parameters': specification,

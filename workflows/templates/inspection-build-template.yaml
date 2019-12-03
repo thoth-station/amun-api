@@ -33,7 +33,7 @@ spec:
       - name: cpu
         value: "500m"
       - name: memory
-        value: "1Gi"
+        value: "512Mi"
     steps:
     - - name: imagestream
         arguments:
@@ -105,7 +105,6 @@ spec:
           labels:
             app: amun
             component: amun-inspection-buildconfig
-            workflow: "{{workflow.name}}"
             mark: cleanup
           annotations:
             amun_specification: '{{inputs.parameters.specification}}'
