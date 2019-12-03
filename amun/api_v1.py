@@ -89,18 +89,23 @@ def _generate_inspection_id(identifier: str = None) -> str:
     return ("inspection-%s-" + "%016x") % (identifier, random.getrandbits(64))
 
 
-def post_generate_dockerfile(specification: dict):
+def post_generate_dockerfile(specification: dict, workflow=False):
     """Generate Dockerfile out of software stack specification."""
-    dockerfile, error = _do_create_dockerfile(specification)
+    parameters: {
+        'specification': specification,
+        'workflow': workflow
+    }
+
+    dockerfile, error = _do_create_dockerfile(specification, workflow)
     if dockerfile is None:
         return {
-            'parameters': specification,
+            'parameters': parameters,
             'error': error
         }, 400
 
     return {
-        'parameters': specification,
-        'dockefile': dockerfile
+        'parameters': parameters,
+        'dockerfile': dockerfile
     }, 200
 
 
