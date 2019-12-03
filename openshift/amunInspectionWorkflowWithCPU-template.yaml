@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: amun-inspection-with-cpu-workflow
+  name: amun-inspection-workflow-with-cpu
   annotations:
     description: This is Amun configuration template
     openshift.io/display-name: "Amun core components"
@@ -11,7 +11,7 @@ metadata:
     template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
-    template: amun-inspection-with-cpu-workflow
+    template: amun-inspection-workflow-with-cpu
     app: amun
 
 objects:
@@ -49,8 +49,16 @@ objects:
         value: '1'
       - name: cpu
         value: "${AMUN_CPU}"
+      - name: cpu-family
+        value: "${CPU_FAMILY}"
+      - name: cpu-model
+        value: "${CPU_MODEL}"
       - name: memory
         value: "${AMUN_MEMORY}"
+      - name: physical-cpus
+        value: "${PHYSICAL_CPUS}"
+      - name: processor
+        value: "${PROCESSOR}"
       - name: registry
         value: "${THOTH_REGISTRY}"
       - name: thoth-infra-namespace
