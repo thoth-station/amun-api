@@ -117,6 +117,10 @@ objects:
               value: "{{workflow.parameters.batch-size}}"
             - name: inspection-id
               value: "{{workflow.parameters.inspection-id}}"
+            - name: allowed-failures
+              value: "{{workflow.parameters.allowed-failures}}"
+            - name: parallelism
+              value: "{{workflow.parameters.parallelism}}"
             - name: cpu
               value: "{{workflow.parameters.cpu}}"
             - name: cpu-family
