@@ -236,11 +236,21 @@ components:
       required:
         - base
       properties:
+        allowed_failures:
+          type: integer
         base:
           type: string
           minLength: 1
           description: Base image on which the runtime environment should be based on.
           example: "fedora:28"
+        batch_size:
+          type: integer
+          default: 1
+          description: Number of inspection runs
+        parallelism:
+          type: integer
+          default: 1
+          description: Number of inspections that can run in parallel
         update:
           type: boolean
           description: Perform native packages update.
@@ -430,20 +440,25 @@ components:
       properties:
         inspection_id:
           type: string
-          description: >
-            An id of submitted inspection for checking its status and its results.
+          description: >-
+            An id of the submitted inspection for checking its status and its results.
           example: "inspect-ABCXYZ"
         parameters:
           type: object
-          description: >
+          description: >-
             Parameters echoed back to user (with default parameters if omitted).
-        build_created:
-          type: boolean
-          description: True if the build was scheduled for the given.
-        job_created:
-          type: boolean
-          description: >
-            True if there was created a job executing script for the given inspection.
+        workflow_id:
+          type: string
+          description: >-
+            An id of the submitted Workflow for checking its status and its results.
+        workflow_parameters:
+          $ref: '#/components/schemas/InspectionWorkflowParameters'
+          description: >-
+            Parameters of the Workflow
+        workflow_target:
+          type: string
+          enum: [inspection-build, inspection-result]
+
       required:
         - inspection_id
         - parameters
@@ -817,3 +832,65 @@ components:
             state:
               type: string
               example: terminated
+    InspectionWorkflowParameters:
+      type: object
+      description: Inspection Workflow parameters.
+      required:
+        - dockerfile
+        - inspection-id
+        - specification
+      properties:
+        dockerfile:
+          type: string
+          description: Dockerfile.
+        inspection-id:
+          type: string
+          description: ID of the inspection.
+        specification:
+          type: string
+          description: Inspection specification.
+        # Defaults
+        batch-size:
+          type: integer
+          default:  '1'
+          description: Size of the batch.
+        batch-name:
+          type: string
+          description: Name of the batch.
+        allowed-failures:
+          type: integer
+          default: '1'  # i.e., 99% success rate out of 100
+          description: Number of allowed failures.
+        parallelism:
+          type: integer
+          default: '1'
+          description: Number of inspection that can run in parallel.
+        cpu:
+          type: string
+          description: CPU cores requested for the build.
+        cpu-family:
+          type: integer
+          description: Family number of CPU.
+        cpu-model:
+          type: integer
+          description: Modelnumber of CPU.
+        memory:
+          type: string
+          description: Memory requested for build.
+        physical-cpus:
+          type: integer
+          description: Number of physical CPUs.
+        processor:
+          type: string
+          description: Name of processor.
+        registry:
+          type: string
+          description: Registry server from where Image is to be pulled.
+          default: docker-registry.default.svc:5000
+        thoth-infra-namespace:
+          type: string
+          description: Project where ImageStream is present.
+        target:
+          type: string
+          enum: [inspection-build, inspection-result]
+          default: inspection-result

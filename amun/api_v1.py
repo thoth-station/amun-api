@@ -157,6 +157,7 @@ def post_inspection(specification: dict) -> tuple:
         run_memory_requests = specification['run']['requests']['memory']
 
     parameters['AMUN_INSPECTION_ID'] = inspection_id
+
     # Mark this for later use - in get_inspection_specification().
     specification["@created"] = datetime2datetime_str()
 
@@ -183,11 +184,11 @@ def post_inspection(specification: dict) -> tuple:
     # is submitted successfully, it mail fail due to an invalid spec later on
 
     return {
-        'parameters': specification,
         'inspection_id': inspection_id,
+        'parameters': specification,
         'workflow_id': workflow_id,
-        'job_created': run_job,
-        'build_created': True
+        'workflow_parameters': workflow_parameters,
+        'workflow_target': target,
     }, 202
 
 
