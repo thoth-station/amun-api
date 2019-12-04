@@ -1,75 +1,84 @@
 openapi: "3.0.0"
 info:
   title: Amun API
-  version: "0.6.0-dev"
+  version: 0.6.0-dev
 servers:
-  - url: "/api/v1/"
+  - url: /api/v1/
 paths:
   /_debug/generate-dockerfile:
     post:
-      tags: ["Debug"]
+      tags:
+        - Debug
       x-openapi-router-controller: amun.api_v1
       operationId: post_generate_dockerfile
-      summary: >
+      summary: |
         Generate Dockerfile as it would be generated internally for inspections.
       parameters:
         - name: workflow
           in: query
-          description: Whether the Dockerfile should be formatted for a usage within a Workflow
+          description: >-
+            Whether the Dockerfile should be formatted for a usage within a
+            Workflow
           schema:
             type: boolean
             default: false
       requestBody:
         required: true
-        description: Specification of the software stack that should be created and verified.
+        description: >-
+          Specification of the software stack that should be created and
+          verified.
         content:
           application/json:
             schema:
               x-body-name: specification
-              $ref: "#/components/schemas/InspectionSpecification"
+              $ref: '#/components/schemas/InspectionSpecification'
       responses:
-        202:
+        '202':
           description: Successful response with inspection id.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionGenerateDockerfileResponse"
-        400:
+                $ref: '#/components/schemas/InspectionGenerateDockerfileResponse'
+        '400':
           description: On invalid request.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
+                $ref: '#/components/schemas/InspectionResponseError'
   /inspect:
     post:
-      tags: ["Inspection"]
+      tags:
+        - Inspection
       x-openapi-router-controller: amun.api_v1
       operationId: post_inspection
       summary: Inspect the given application stack.
       requestBody:
         required: true
-        description: Specification of the software stack that should be created and verified.
+        description: >-
+          Specification of the software stack that should be created and
+          verified.
         content:
           application/json:
             schema:
               x-body-name: specification
-              $ref: "#/components/schemas/InspectionSpecification"
+              $ref: '#/components/schemas/InspectionSpecification'
       responses:
-        202:
+        '202':
           description: Successful response with inspection id.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponse"
-        400:
+                $ref: '#/components/schemas/InspectionResponse'
+        '400':
           description: On invalid request.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
-  /inspect/{inspection_id}/build/log:
+                $ref: '#/components/schemas/InspectionResponseError'
+  '/inspect/{inspection_id}/build/log':
     get:
-      tags: ["Inspection"]
+      tags:
+        - Inspection
       x-openapi-router-controller: amun.api_v1
       operationId: get_inspection_build_log
       summary: Get log for a specific inspection build.
@@ -81,28 +90,31 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: Successful response with inspection build log.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionBuildLogResponse"
-        400:
+                $ref: '#/components/schemas/InspectionBuildLogResponse'
+        '400':
           description: On invalid request.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
-        404:
-          description: The given inspection build referenced by inspection id was not found.
+                $ref: '#/components/schemas/InspectionResponseError'
+        '404':
+          description: >-
+            The given inspection build referenced by inspection id was not
+            found.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
-  /inspect/{inspection_id}/job/log:
+                $ref: '#/components/schemas/InspectionResponseError'
+  '/inspect/{inspection_id}/job/log':
     get:
       deprecated: true
-      tags: ["Inspection"]
+      tags:
+        - Inspection
       x-openapi-router-controller: amun.api_v1
       operationId: get_inspection_job_log
       summary: Get log for a specific inspection run.
@@ -114,33 +126,34 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: Successful response with inspection run log.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionJobLogResponse"
-        202:
-          description: The inspection job was not scheduled yet, check back later.
+                $ref: '#/components/schemas/InspectionJobLogResponse'
+        '202':
+          description: 'The inspection job was not scheduled yet, check back later.'
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
-        400:
+                $ref: '#/components/schemas/InspectionResponseError'
+        '400':
           description: On invalid request.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
-        404:
+                $ref: '#/components/schemas/InspectionResponseError'
+        '404':
           description: The given inspection job referenced by inspection id was not found.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
-  /inspect/{inspection_id}/status:
+                $ref: '#/components/schemas/InspectionResponseError'
+  '/inspect/{inspection_id}/status':
     get:
-      tags: ["Inspection"]
+      tags:
+        - Inspection
       x-openapi-router-controller: amun.api_v1
       operationId: get_inspection_status
       summary: Get status of an inspection.
@@ -152,27 +165,28 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: Successful response with inspection status.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionStatusResponse"
-        400:
+                $ref: '#/components/schemas/InspectionStatusResponse'
+        '400':
           description: On invalid request.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
-        404:
+                $ref: '#/components/schemas/InspectionResponseError'
+        '404':
           description: The given inspection with provided id was not found.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
-  /inspect/{inspection_id}/specification:
+                $ref: '#/components/schemas/InspectionResponseError'
+  '/inspect/{inspection_id}/specification':
     get:
-      tags: ["Inspection"]
+      tags:
+        - Inspection
       x-openapi-router-controller: amun.api_v1
       operationId: get_inspection_specification
       summary: Get specification of the given inspection.
@@ -184,24 +198,24 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: Successful response with inspection specification.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionSpecificationResponse"
-        400:
+                $ref: '#/components/schemas/InspectionSpecificationResponse'
+        '400':
           description: On invalid request.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
-        404:
+                $ref: '#/components/schemas/InspectionResponseError'
+        '404':
           description: The given inspection with provided id was not found.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InspectionResponseError"
+                $ref: '#/components/schemas/InspectionResponseError'
 components:
   schemas:
     InspectionResponseError:
@@ -242,7 +256,7 @@ components:
           type: string
           minLength: 1
           description: Base image on which the runtime environment should be based on.
-          example: "fedora:28"
+          example: 'fedora:28'
         batch_size:
           type: integer
           default: 1
@@ -256,18 +270,22 @@ components:
           description: Perform native packages update.
         packages:
           type: array
-          description: A list of native packages that should be installed into the runtime environment.
+          description: >-
+            A list of native packages that should be installed into the runtime
+            environment.
           items:
             type: string
             description: Name of the package to be installed.
-            example: "vim"
+            example: vim
         python_packages:
           type: array
-          description: A list of python packages that should be installed into the runtime environment.
+          description: >-
+            A list of python packages that should be installed into the runtime
+            environment.
           items:
             type: string
             description: Name of the package to be installed.
-            example: "pipenv"
+            example: pipenv
         python:
           type: object
           description: Python application stack to be installed.
@@ -278,7 +296,9 @@ components:
           properties:
             requirements:
               type: object
-              description: Pipfile stating software stack (direct dependencies) of an application.
+              description: >-
+                Pipfile stating software stack (direct dependencies) of an
+                application.
               additionalProperties: true
             requirements_locked:
               type: object
@@ -286,10 +306,10 @@ components:
               additionalProperties: true
         identifier:
           type: string
-          description:
-            A user-created string which will be inserted into the inspection id to distinguish
-            different inspection runs.
-          example: "test"
+          description: >-
+            A user-created string which will be inserted into the inspection id
+            to distinguish different inspection runs.
+          example: test
         build:
           type: object
           description: Hardware requirements for build time.
@@ -332,7 +352,7 @@ components:
                     processor:
                       type: string
                       description: Name of the CPU model name of CPU proc info.
-                      example: "Intel-Xeon-Processor-Skylake-IBRS"
+                      example: Intel-Xeon-Processor-Skylake-IBRS
         run:
           type: object
           description: Hardware requirements for run time
@@ -376,7 +396,7 @@ components:
                     processor:
                       type: string
                       description: Name of the CPU model name of CPU proc info.
-                      example: "Intel-Xeon-Processor-Skylake-IBRS"
+                      example: Intel-Xeon-Processor-Skylake-IBRS
         files:
           type: array
           description: Files passed to the context.
@@ -390,7 +410,9 @@ components:
               path:
                 type: string
                 minLength: 1
-                description: Name of the file including an absolute path (relative will be taken from root).
+                description: >-
+                  Name of the file including an absolute path (relative will be
+                  taken from root).
               content:
                 type: string
                 minLength: 1
@@ -428,7 +450,7 @@ components:
           description: Generated Dockerfile as a string.
         parameters:
           type: object
-          description: >
+          description: |
             Parameters echoed back to user (with default parameters if omitted).
       required:
         - dockerfile
@@ -441,29 +463,27 @@ components:
         inspection_id:
           type: string
           description: >-
-            An id of the submitted inspection for checking its status and its results.
-          example: "inspect-ABCXYZ"
+            An id of the submitted inspection for checking its status and its
+            results.
+          example: inspect-ABCXYZ
         parameters:
           type: object
-          description: >-
-            Parameters echoed back to user (with default parameters if omitted).
+          description: Parameters echoed back to user (with default parameters if omitted).
         workflow_id:
           type: string
           description: >-
-            An id of the submitted Workflow for checking its status and its results.
+            An id of the submitted Workflow for checking its status and its
+            results.
         workflow_parameters:
           $ref: '#/components/schemas/InspectionWorkflowParameters'
-          description: >-
-            Parameters of the Workflow
         workflow_target:
           type: string
-          enum: [inspection-build, inspection-result]
-
+          enum:
+            - inspection-build
+            - inspection-result
       required:
         - inspection_id
         - parameters
-        - job_created
-        - build_created
     InspectionJobLogResponse:
       type: object
       description: Job logs for the given inspection.
@@ -488,7 +508,9 @@ components:
           properties:
             exit_code:
               type: integer
-              description: Exit code of user provided script (matches exit code of the inspect job)
+              description: >-
+                Exit code of user provided script (matches exit code of the
+                inspect job)
               example: 0
             hwinfo:
               type: object
@@ -507,76 +529,81 @@ components:
             usage:
               type: object
               description: >
-                Utilization of resources such as user-space or kernel-space CPU time, context
-                switches, shared memory size or page faults (and others).
+                Utilization of resources such as user-space or kernel-space CPU
+                time, context switches, shared memory size or page faults (and
+                others).
               additionalProperties: true
             os_release:
               type: object
-              description: Information about operating system as gathered from /etc/os-release
+              description: >-
+                Information about operating system as gathered from
+                /etc/os-release
               additionalProperties: true
               nullable: true
               properties:
                 ansi_color:
                   type: string
-                  example: "0;34"
+                  example: 0;34
                 bug_report_url:
                   type: string
-                  example: "https://bugzilla.redhat.com/"
+                  example: 'https://bugzilla.redhat.com/'
                 cpe_name:
                   type: string
-                  example: "cpe:/o:fedoraproject:fedora:29"
+                  example: 'cpe:/o:fedoraproject:fedora:29'
                 documentation_url:
                   type: string
-                  example: "https://docs.fedoraproject.org/en-US/fedora/f29/system-administrators-guide/"
+                  example: >-
+                    https://docs.fedoraproject.org/en-US/fedora/f29/system-administrators-guide/
                 home_url:
                   type: string
-                  example: "https://fedoraproject.org/"
+                  example: 'https://fedoraproject.org/'
                 id:
                   type: string
-                  example: "fedora"
+                  example: fedora
                 logo:
                   type: string
                 name:
                   type: string
-                  example: "Fedora"
+                  example: Fedora
                 platform_id:
                   type: string
-                  example: "platform:f29"
+                  example: 'platform:f29'
                 pretty_name:
                   type: string
-                  example: "Fedora 29 (Workstation Edition)"
+                  example: Fedora 29 (Workstation Edition)
                 privacy_policy_url:
                   type: string
-                  example: "https://fedoraproject.org/wiki/Legal:PrivacyPolicy"
+                  example: 'https://fedoraproject.org/wiki/Legal:PrivacyPolicy'
                 redhat_bugzilla_product:
                   type: string
-                  example: "Fedora"
+                  example: Fedora
                 redhat_bugzilla_product_version:
                   type: string
-                  example: "29"
+                  example: '29'
                 redhat_support_product:
                   type: string
-                  example: "Fedora"
+                  example: Fedora
                 redhat_support_product_version:
                   type: string
-                  example: "29"
+                  example: '29'
                 support_url:
                   type: string
-                  example: "https://fedoraproject.org/wiki/Communicating_and_getting_help"
+                  example: >-
+                    https://fedoraproject.org/wiki/Communicating_and_getting_help
                 variant:
                   type: string
-                  example: "Workstation Edition"
+                  example: Workstation Edition
                 variant_id:
                   type: string
-                  example: "workstation"
+                  example: workstation
                 version:
                   type: string
-                  example: "29 (Workstation Edition)"
+                  example: 29 (Workstation Edition)
                 version_codename:
                   type: string
                 version_id:
                   type: string
-                  example: "29"
+                  example: '29'
             runtime_environment:
               type: object
               description: Runtime environment information.
@@ -619,14 +646,14 @@ components:
       properties:
         parameters:
           type: object
-          description: >
+          description: |
             Parameters echoed back to user (with default parameters if omitted).
         specification:
-          $ref: "#/components/schemas/InspectionSpecification"
+          $ref: '#/components/schemas/InspectionSpecification'
         created:
           type: string
           description: Creation time of an inspection run.
-          example: "2019-04-17T06:39:30.459116"
+          example: '2019-04-17T06:39:30.459116'
     InspectionResultResponse:
       type: object
       additionalProperties: false
@@ -664,8 +691,8 @@ components:
             distribution:
               type: object
               description: >
-                Information about environment in which the inspection
-                was performed.
+                Information about environment in which the inspection was
+                performed.
               required:
                 - codename
                 - id
@@ -676,23 +703,24 @@ components:
                 codename:
                   type: string
                   description: >
-                    Codename of environment in which the inspection was perfomed.
+                    Codename of environment in which the inspection was
+                    perfomed.
                 id:
                   type: string
                   description: >
-                    Identifier of environment in which the inspection
-                    was perfomed.
+                    Identifier of environment in which the inspection was
+                    perfomed.
                 like:
                   type: string
                   description: >
-                    Similar environments in comparision to environment in
-                    which the inspection was perfomed.
+                    Similar environments in comparision to environment in which
+                    the inspection was perfomed.
                 version:
                   type: string
                   description: A string representation of environment version.
                 version_parts:
                   type: object
-                  description: >
+                  description: |
                     Parts of version identifier of the analysing environment.
                   properties:
                     build_number:
@@ -777,8 +805,8 @@ components:
             finished_at:
               type: string
               description: >
-                Datetime in ISO format informing about when the inspection
-                has finished.
+                Datetime in ISO format informing about when the inspection has
+                finished.
               nullable: true
             reason:
               type: string
@@ -787,8 +815,8 @@ components:
             started_at:
               type: string
               description: >
-                Datetime in ISO format informing about when the inspection
-                has started.
+                Datetime in ISO format informing about when the inspection has
+                started.
             state:
               type: string
               example: terminated
@@ -817,8 +845,8 @@ components:
             finished_at:
               type: string
               description: >
-                Datetime in ISO format informing about when the inspection
-                has finished.
+                Datetime in ISO format informing about when the inspection has
+                finished.
               nullable: true
             reason:
               type: string
@@ -827,8 +855,8 @@ components:
             started_at:
               type: string
               description: >
-                Datetime in ISO format informing about when the inspection
-                has started.
+                Datetime in ISO format informing about when the inspection has
+                started.
             state:
               type: string
               example: terminated
@@ -849,17 +877,16 @@ components:
         specification:
           type: string
           description: Inspection specification.
-        # Defaults
         batch-size:
           type: integer
-          default:  '1'
+          default: '1'
           description: Size of the batch.
         batch-name:
           type: string
           description: Name of the batch.
         allowed-failures:
           type: integer
-          default: '1'  # i.e., 99% success rate out of 100
+          default: '1'
           description: Number of allowed failures.
         parallelism:
           type: integer
@@ -886,11 +913,13 @@ components:
         registry:
           type: string
           description: Registry server from where Image is to be pulled.
-          default: docker-registry.default.svc:5000
+          default: 'docker-registry.default.svc:5000'
         thoth-infra-namespace:
           type: string
           description: Project where ImageStream is present.
         target:
           type: string
-          enum: [inspection-build, inspection-result]
+          enum:
+            - inspection-build
+            - inspection-result
           default: inspection-result
