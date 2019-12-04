@@ -255,6 +255,12 @@ components:
           minLength: 1
           description: Base image on which the runtime environment should be based on.
           example: 'registry.access.redhat.com/ubi8/python-36'
+        identifier:
+          type: string
+          description: >-
+            A user-created string which will be inserted into the inspection id
+            to distinguish different inspection runs.
+          example: test
         allowed_failures:
           type: string
           default: '1'
@@ -264,14 +270,6 @@ components:
           default: '1'
           example: '1'
           description: Number of inspection runs
-        parallelism:
-          type: string
-          default: '1'
-          example: '1'
-          description: Number of inspections that can run in parallel
-        update:
-          type: boolean
-          description: Perform native packages update.
         packages:
           type: array
           description: >-
@@ -308,12 +306,6 @@ components:
               type: object
               description: Pipfile.lock with fully pinned down and resolved software stack.
               additionalProperties: {}
-        identifier:
-          type: string
-          description: >-
-            A user-created string which will be inserted into the inspection id
-            to distinguish different inspection runs.
-          example: test
         build:
           type: object
           description: Hardware requirements for build time.
@@ -438,12 +430,20 @@ components:
               value:
                 type: string
                 description: Value for the environment variable.
+        parallelism:
+          type: string
+          default: '1'
+          example: '1'
+          description: Number of inspections that can run in parallel
         script:
           type: string
           description: A script that should be executed in inspection run.
           example: |
             #!/usr/bin/bash
             echo "Here should be run tests..."
+        update:
+          type: boolean
+          description: Perform native packages update.
     InspectionGenerateDockerfileResponse:
       type: object
       description: Response for a generated Dockerfile.
