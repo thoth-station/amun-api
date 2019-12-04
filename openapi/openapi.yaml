@@ -256,18 +256,18 @@ components:
           description: Base image on which the runtime environment should be based on.
           example: 'registry.access.redhat.com/ubi8/python-36'
         allowed_failures:
-          type: integer
-          default: 1
-          example: 1
+          type: string
+          default: '1'
+          example: '1'
         batch_size:
-          type: integer
-          default: 1
-          example: 1
+          type: string
+          default: '1'
+          example: '1'
           description: Number of inspection runs
         parallelism:
-          type: integer
-          default: 1
-          example: 1
+          type: string
+          default: '1'
+          example: '1'
           description: Number of inspections that can run in parallel
         update:
           type: boolean
@@ -882,7 +882,7 @@ components:
           type: string
           description: Inspection specification.
         batch-size:
-          type: integer
+          type: string
           default: '1'
           example: '1'
           description: Size of the batch.
@@ -890,12 +890,12 @@ components:
           type: string
           description: Name of the batch.
         allowed-failures:
-          type: integer
+          type: string
           default: '1'
           example: '1'
           description: Number of allowed failures.
         parallelism:
-          type: integer
+          type: string
           default: '1'
           example: '1'
           description: Number of inspection that can run in parallel.
