@@ -74,9 +74,9 @@ def _write_file_string(content: str, path: str) -> str:
     # TODO: accept a list of files so we generate only one layer for all files
     # TODO: escape content
     # TODO: handle it in nice way so we can see it nicely in OpenShift's configuration
-    content = content.replace("\\", "\\\\").replace('"', '\\"').replace('\n', '\\n\\\n')
-    path = path.replace('"', '\\"')
-    return f'RUN echo -e "{content}" >"{path}"\n'
+    content = content.replace('"', '\\"').replace('\n', '\\n\\\n')
+    path = path.replace('"', '\"')
+    return f'RUN echo -e "{content}" > "{path}"\n'
 
 
 def _format_dockerfile(dockerfile: str) -> str:
@@ -148,15 +148,23 @@ def create_dockerfile(specification: dict, workflow=False) -> tuple:
         dockerfile += f'RUN mkdir -p /home/amun && chmod -R 777 /home/amun\n'
 
     if 'python' in specification:
-        pipfile_content = toml.dumps(specification['python']['requirements'])
-        pipfile_lock_content = json.dumps(
-            specification['python']['requirements_locked'], sort_keys=True, indent=4)
-        dockerfile += _write_file_string(
-            pipfile_content, '/home/amun/Pipfile')
-        dockerfile += _write_file_string(
-            pipfile_lock_content, '/home/amun/Pipfile.lock')
-        dockerfile += _write_file_string(_PIP_CONF, "/etc/pip.conf")
-        dockerfile += 'RUN cd /home/amun && pipenv install --deploy\n'
+        requirements = specification['python']['requirements']
+        requirements_locked = specification['python']['requirements_locked']
+
+        if requirements:
+            pipfile_content = toml.dumps(requirements)
+            dockerfile += _write_file_string(
+                pipfile_content, '/home/amun/Pipfile')
+
+        if requirements_locked:
+            pipfile_lock_content = json.dumps(
+                requirements_locked, sort_keys=True, indent=4)
+            dockerfile += _write_file_string(
+                pipfile_lock_content, '/home/amun/Pipfile.lock')
+
+        if any([requirements, requirements_locked]):
+            dockerfile += _write_file_string(_PIP_CONF, "/etc/pip.conf")
+            dockerfile += 'RUN cd /home/amun && pipenv install --deploy\n'
 
     if 'script' in specification:
         script_present = True
