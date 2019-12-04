@@ -14,12 +14,16 @@ connexion = {extras = ["swagger-ui"],version = "*"}
 flask = "*"
 flask-cors = "*"
 flask-script = "*"
+grpcio = "*"
+grpcio-opentracing = "*"
+grpcio-tools = "*"
+jaeger-client = "*"
+opentracing-instrumentation = "*"
 
 [dev-packages]
 
 [pipenv]
 allow_prereleases = false
-
 
 [requires]
 python_version = "3.6"
