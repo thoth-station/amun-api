@@ -94,7 +94,7 @@ def _generate_inspection_id(identifier: str = None) -> str:
 
 def post_generate_dockerfile(specification: dict, workflow=False):
     """Generate Dockerfile out of software stack specification."""
-    parameters: {
+    parameters = {
         'specification': specification,
         'workflow': workflow
     }
