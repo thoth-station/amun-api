@@ -136,18 +136,21 @@ def create_dockerfile(specification: dict, workflow=False) -> tuple:
         requirements = specification['python']['requirements']
         requirements_locked = specification['python']['requirements_locked']
 
-        if requirements:
+        if not any([requirements, requirements_locked]):
+            _LOGGER.debug("No requirements specified.")
+        elif not all([requirements, requirements_locked]):
+            raise ValueError(
+                "Both `requirements` and `requirements_locked` must be provided.")
+        else:
             pipfile_content = toml.dumps(requirements)
             dockerfile += _write_file_string(
                 pipfile_content, '/home/amun/Pipfile')
 
-        if requirements_locked:
             pipfile_lock_content = json.dumps(
                 requirements_locked, sort_keys=True, indent=4)
             dockerfile += _write_file_string(
                 pipfile_lock_content, '/home/amun/Pipfile.lock')
 
-        if any([requirements, requirements_locked]):
             dockerfile += _write_file_string(_PIP_CONF, "/etc/pip.conf")
             dockerfile += 'RUN cd /home/amun && pipenv install --deploy\n'
 
