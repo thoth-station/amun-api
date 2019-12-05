@@ -20,11 +20,14 @@ spec:
       - name: kind
         value: pods
       - name: selector
-        value: ''
+        value: ""
       - name: registry
         value: docker-registry.default.svc:5000
       - name: thoth-infra-namespace
         value: "{{workflow.namespace}}"
+      # Exit
+      - name: exit
+        value: "false"
     outputs:
       artifacts:
       - name: output
@@ -50,6 +53,11 @@ spec:
 
         # Output logs for easier debugging
         cat $results/*.json | jq -s
+
+        if [ "true" == "{{inputs.parameters.exit}}" ]; then
+          >&2 echo "Workflow failure in the previous steps. Exitting."
+          exit 1
+        fi
 
       resources:
         limits:
