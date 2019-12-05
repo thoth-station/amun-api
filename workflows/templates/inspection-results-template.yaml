@@ -49,10 +49,7 @@ spec:
           --selector {{inputs.parameters.selector}} \
           --output json |\
         jq -c '.items[].metadata.name' |\
-        xargs -I{} sh -c 'kubectl logs {} | tee /mnt/output/results/{}.json'
-
-        # Output logs for easier debugging
-        cat $results/*.json | jq -s
+        xargs -I{} sh -c 'kubectl logs {} | tee /mnt/output/results/{}'
 
         if [ "true" == "{{inputs.parameters.exit}}" ]; then
           >&2 echo "Workflow failure in the previous steps. Exitting."
