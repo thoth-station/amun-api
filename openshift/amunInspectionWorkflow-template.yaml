@@ -27,6 +27,10 @@ objects:
   spec:
     serviceAccountName: "${ARGO_SERVICE_ACCOUNT}"
 
+    artifactRepositoryRef:
+      configMap: amun
+      key: artifactRepository
+
     entrypoint: main
 
     volumes:
