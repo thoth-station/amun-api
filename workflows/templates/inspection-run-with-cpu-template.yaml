@@ -72,10 +72,12 @@ spec:
             value: "{{inputs.parameters.thoth-infra-namespace}}"
         template: create-job
         when: "{{inputs.parameters.affinity}} == false"
+
     - - name: job-with-affinity
         arguments: *arguments
         template: create-job-with-affinity
         when: "{{inputs.parameters.affinity}} == true"
+
     - - name: inspection
         arguments:
           parameters:
@@ -86,7 +88,20 @@ spec:
           - name: batch-size
             value: "{{inputs.parameters.batch-size}}"
         template: await-inspection
+        continueOn:
+          failed: true
 
+    - - name: on-failure
+        arguments:
+          parameters:
+          - name: batch-name
+            value: "{{inputs.parameters.batch-name}}"
+        template: on-failure
+        when: "{{steps.inspection.status}} != Succeeded"
+
+
+    # TODO: Run each performance indicator directly from the Workflow
+    # instead of submitting a job and monitoring it
   - name: create-job
     inputs:
       parameters:
@@ -119,6 +134,7 @@ spec:
             name: "{{workflow.name}}"
             uid: "{{workflow.uid}}"
         spec:
+          backoffLimit: 0
           completions: {{inputs.parameters.batch-size}}
           parallelism: {{inputs.parameters.parallelism}}
           template:
@@ -283,3 +299,18 @@ spec:
         kind: Job
         metadata:
           name: "{{inputs.parameters.batch-name}}"
+
+  # Suspend the inspection Job
+  - name: on-failure
+    inputs:
+      parameters:
+      - name: batch-name
+    resource:
+      action: patch
+      manifest: |
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: "{{inputs.parameters.batch-name}}"
+        spec:
+          parallelism: 0
