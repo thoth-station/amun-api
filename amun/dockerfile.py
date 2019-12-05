@@ -81,34 +81,19 @@ def _write_file_string(content: str, path: str) -> str:
 
 def _format_dockerfile(dockerfile: str) -> str:
     """Format and prepare the Dockerfile for a Workflow injection."""
-    def _pipeline(steps: list):
-        return lambda obj: reduce(lambda f, g: g(f), steps, obj)
+    dockerfile = repr(dockerfile)
+    # escape nested single quotes
+    dockerfile = dockerfile.replace(r"\'", r"\\'")
+    # escape nested double quotes
+    dockerfile = dockerfile.replace(r'\"', r'\\"')
+    # escape double quotes
+    dockerfile = re.sub(r'([^\\])"', r'\1\\"', dockerfile)
+    # unescape single quotes
+    dockerfile = dockerfile.replace(r"\\'", r"'")
+    # strip
+    dockerfile = dockerfile.strip("'")
 
-    def _escape_double_quotes(stream: str) -> str:
-        return re.sub(r'([^\\])"', r'\1\\"', stream)
-
-    def _escape_nested_single_quotes(stream: str) -> str:
-        return re.sub(r"\\'", r"\\\\'", stream)
-
-    def _escape_nested_double_quotes(stream: str) -> str:
-        return re.sub(r'\\"', r'\\\\"', stream)
-
-    def _unescape_single_quotes(stream: str) -> str:
-        return re.sub(r"\\\\'", r"'", stream)
-
-    def _strip(stream: str) -> str:
-        return stream.strip("'")
-
-    pipe = _pipeline([
-        repr,
-        _escape_nested_single_quotes,
-        _escape_nested_double_quotes,
-        _escape_double_quotes,
-        _unescape_single_quotes,
-        _strip,
-    ])
-
-    return pipe(dockerfile)
+    return dockerfile
 
 
 def create_dockerfile(specification: dict, workflow=False) -> tuple:

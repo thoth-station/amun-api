@@ -79,8 +79,8 @@ spec:
         when: "{{steps.inspection.status}} != Succeeded"
 
 
-    # TODO: Run each performance indicator directly from the Workflow
-    # instead of submitting a job and monitoring it
+  # TODO: Run each performance indicator directly from the Workflow
+  # instead of submitting a job and monitoring it
   - name: create-job
     inputs:
       parameters:
