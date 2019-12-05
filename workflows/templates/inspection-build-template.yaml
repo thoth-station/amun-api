@@ -41,6 +41,7 @@ spec:
           - name: inspection-id
             value: "{{inputs.parameters.inspection-id}}"
         template: create-imagestream
+
     - - name: buildconfig
         arguments:
           parameters:
@@ -55,12 +56,14 @@ spec:
           - name: memory
             value: "{{inputs.parameters.memory}}"
         template: create-buildconfig
+
     - - name: build
         arguments:
           parameters:
           - name: inspection-id
             value: "{{inputs.parameters.inspection-id}}"
         template: await-build
+
 
   - name: create-imagestream
     inputs:
