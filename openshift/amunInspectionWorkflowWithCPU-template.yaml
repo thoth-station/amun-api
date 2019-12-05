@@ -106,7 +106,7 @@ objects:
             - name: thoth-infra-namespace
               value: "{{workflow.parameters.thoth-infra-namespace}}"
           templateRef:
-            name: inspection-build-template
+            name: inspection-build-with-cpu-template
             template: main
 
         - name: inspection-run
@@ -140,7 +140,7 @@ objects:
             - name: thoth-infra-namespace
               value: "{{workflow.parameters.thoth-infra-namespace}}"
           templateRef:
-            name: inspection-run-template
+            name: inspection-run-with-cpu-template
             template: main
           continueOn:
             failed: true
