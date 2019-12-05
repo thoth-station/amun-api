@@ -15,13 +15,15 @@ metadata:
     app: amun
 
 objects:
-- apiVersion: argoproj.io/v1alpha1
-  kind: Workflow
+- kind: Workflow
+  apiVersion: argoproj.io/v1alpha1
   metadata:
     generateName: "${AMUN_INSPECTION_ID}"
     labels:
       app: amun
       component: amun-inspection-workflow
+    annotations:
+      thoth-station.ninja/template-version: 0.5.1
   spec:
     serviceAccountName: "${ARGO_SERVICE_ACCOUNT}"
 

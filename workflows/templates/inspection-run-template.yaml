@@ -9,8 +9,8 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   name: inspection-run-template
-  labels:
-    mark: cleanup
+  annotations:
+    thoth-station.ninja/template-version: 0.5.1
 spec:
   entrypoint: main
 
