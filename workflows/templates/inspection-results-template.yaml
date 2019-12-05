@@ -5,6 +5,8 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   name: inspection-results-template
+  annotations:
+    thoth-station.ninja/template-version: 0.5.1
 spec:
   templates:
   - name: main
