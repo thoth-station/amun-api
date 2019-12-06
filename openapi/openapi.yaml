@@ -13,15 +13,6 @@ paths:
       operationId: post_generate_dockerfile
       summary: |
         Generate Dockerfile as it would be generated internally for inspections.
-      parameters:
-        - name: workflow
-          in: query
-          description: >-
-            Whether the Dockerfile should be formatted for a usage within a
-            Workflow
-          schema:
-            type: boolean
-            default: false
       requestBody:
         required: true
         description: >-

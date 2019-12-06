@@ -72,10 +72,10 @@ def _construct_parameters_dict(specification: dict) -> tuple:
     return parameters, use_hw_template
 
 
-def _do_create_dockerfile(specification: dict, workflow=False) -> tuple:
+def _do_create_dockerfile(specification: dict) -> tuple:
     """Wrap dockerfile generation and report back an error if any."""
     try:
-        return create_dockerfile(specification, workflow=workflow)
+        return create_dockerfile(specification)
     except ScriptObtainingError as exc:
         return None, str(exc)
 
@@ -92,14 +92,13 @@ def _generate_inspection_id(identifier: str = None) -> str:
     return ("inspection-%s-" + "%08x") % (identifier, random.getrandbits(32))
 
 
-def post_generate_dockerfile(specification: dict, workflow=False):
+def post_generate_dockerfile(specification: dict):
     """Generate Dockerfile out of software stack specification."""
     parameters = {
         'specification': specification,
-        'workflow': workflow
     }
 
-    dockerfile, error = _do_create_dockerfile(specification, workflow)
+    dockerfile, error = _do_create_dockerfile(specification)
     if dockerfile is None:
         return {
             'parameters': parameters,
