@@ -130,8 +130,7 @@ def _adjust_default_requests(dict_: dict) -> None:
 def post_inspection(specification: dict) -> tuple:
     """Create new inspection for the given software stack."""
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
-    dockerfile, run_job_or_error = _do_create_dockerfile(
-        specification, workflow=True)
+    dockerfile, run_job_or_error = _do_create_dockerfile(specification)
     if dockerfile is None:
         return {
             'parameters:': specification,
