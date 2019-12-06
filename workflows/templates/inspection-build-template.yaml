@@ -45,12 +45,12 @@ spec:
     - - name: buildconfig
         arguments:
           parameters:
-          - name: dockerfile
-            value: "{{inputs.parameters.dockerfile}}"
           - name: inspection-id
             value: "{{inputs.parameters.inspection-id}}"
+          - name: dockerfile
+            value: '{{inputs.parameters.dockerfile}}'
           - name: specification
-            value: "{{inputs.parameters.specification}}"
+            value: '{{inputs.parameters.specification}}'
           - name: cpu
             value: "{{inputs.parameters.cpu}}"
           - name: memory
@@ -130,7 +130,7 @@ spec:
               cpu: "{{inputs.parameters.cpu}}"
           source:
             type: Dockerfile
-            dockerfile: "{{inputs.parameters.dockerfile}}"
+            dockerfile: '{{inputs.parameters.dockerfile}}'
           strategy:
             type: Docker
             dockerStrategy:

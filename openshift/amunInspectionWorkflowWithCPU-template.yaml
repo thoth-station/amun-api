@@ -71,7 +71,7 @@ objects:
         value: "${THOTH_INFRA_NAMESPACE}"
       # Other parameters
       - name: "target"
-        value: "inspection-result"
+        value: "inspection-run-result"
 
     templates:
     - name: main
@@ -82,9 +82,9 @@ objects:
           arguments:
             parameters:
             - name: dockerfile
-              value: "{{workflow.parameters.dockerfile}}"
+              value: '{{workflow.parameters.dockerfile}}'
             - name: specification
-              value: "{{workflow.parameters.specification}}"
+              value: '{{workflow.parameters.specification}}'
             - name: inspection-id
               value: "{{workflow.parameters.inspection-id}}"
             - name: allowed-failures

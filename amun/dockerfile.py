@@ -47,9 +47,13 @@ def _determine_update_string() -> str:
 
 def _determine_installer_string() -> str:
     """Determine how to install packages on the system regardless of package manager."""
-    return """RUN { { [ -f '/usr/bin/dnf' ] && INSTALL_CMD='dnf install -y'; } || \
-{ [ -f '/usr/bin/yum' ] && INSTALL_CMD='yum install -y'; } || \
-{ INSTALL_CMD='apt-get install'; } };\\\n eval $INSTALL_CMD  """
+    return (
+        "RUN { \\\n\n"
+        "  { [ -f '/usr/bin/dnf' ] && INSTALL_CMD='dnf install -y'; } || \\\n\n"
+        "  { [ -f '/usr/bin/yum' ] && INSTALL_CMD='yum install -y'; } || \\\n\n"
+        "  { INSTALL_CMD='apt-get install'; } \\\n\n"
+        "}; eval $INSTALL_CMD "
+    )
 
 
 def _obtain_script(script: str) -> str:
@@ -74,29 +78,12 @@ def _write_file_string(content: str, path: str) -> str:
     # TODO: accept a list of files so we generate only one layer for all files
     # TODO: escape content
     # TODO: handle it in nice way so we can see it nicely in OpenShift's configuration
-    content = content.replace('"', '\\"').replace('\n', '\\n\\\n')
+    content = content.replace('"', '\\"').replace('\n', '\\n\\\\n')
     path = path.replace('"', '\"')
-    return f'RUN echo -e "{content}" > "{path}"\n'
+    return f'RUN echo -e "{content}" > "{path}"\n\n'
 
 
-def _format_dockerfile(dockerfile: str) -> str:
-    """Format and prepare the Dockerfile for a Workflow injection."""
-    dockerfile = repr(dockerfile)
-    # escape nested single quotes
-    dockerfile = dockerfile.replace(r"\'", r"\\'")
-    # escape nested double quotes
-    dockerfile = dockerfile.replace(r'\"', r'\\"')
-    # escape double quotes
-    dockerfile = re.sub(r'([^\\])"', r'\1\\"', dockerfile)
-    # unescape single quotes
-    dockerfile = dockerfile.replace(r"\\'", r"'")
-    # strip
-    dockerfile = dockerfile.strip("'")
-
-    return dockerfile
-
-
-def create_dockerfile(specification: dict, workflow=False) -> tuple:
+def create_dockerfile(specification: dict) -> tuple:
     """Create a Dockerfile based on software stack specification."""
     script_present = False
     dockerfile = "FROM " + specification['base'] + "\n\n"
@@ -130,7 +117,7 @@ def create_dockerfile(specification: dict, workflow=False) -> tuple:
 
     # Create workdir only if needed.
     if 'python' in specification or 'script' in specification:
-        dockerfile += f'RUN mkdir -p /home/amun && chmod -R 777 /home/amun\n'
+        dockerfile += f'RUN mkdir -p /home/amun && chmod -R 777 /home/amun\n\n'
 
     if 'python' in specification:
         requirements = specification['python']['requirements']
@@ -152,7 +139,7 @@ def create_dockerfile(specification: dict, workflow=False) -> tuple:
                 pipfile_lock_content, '/home/amun/Pipfile.lock')
 
             dockerfile += _write_file_string(_PIP_CONF, "/etc/pip.conf")
-            dockerfile += 'RUN cd /home/amun && pipenv install --deploy\n'
+            dockerfile += 'RUN cd /home/amun && pipenv install --deploy\n\n'
 
     if 'script' in specification:
         script_present = True
@@ -166,15 +153,11 @@ def create_dockerfile(specification: dict, workflow=False) -> tuple:
 
         dockerfile += 'RUN chmod a+x /home/amun/script /home/amun/entrypoint && ' \
             'touch /home/amun/script.stderr /home/amun/script.stdout && ' \
-            'chmod 777 /home/amun/script.stderr /home/amun/script.stdout\n'
-        dockerfile += 'CMD ["/home/amun/entrypoint"]\n'
+            'chmod 777 /home/amun/script.stderr /home/amun/script.stdout\n\n'
+        dockerfile += 'CMD ["/home/amun/entrypoint"]\n\n'
 
     # An arbitrary user.
-    dockerfile += "USER 1042\n"
+    dockerfile += "USER 1042\n\n"
     dockerfile += "WORKDIR /home/amun"
-
-    # Give the argument higher priority
-    if workflow or os.environ.get("THOTH_WORKFLOW_CONTEXT", False):
-        dockerfile = _format_dockerfile(dockerfile)
 
     return dockerfile, script_present
