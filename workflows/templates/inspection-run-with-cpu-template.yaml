@@ -89,6 +89,7 @@ spec:
             value: "{{inputs.parameters.batch-size}}"
         template: await-inspection
         continueOn:
+          error: true
           failed: true
 
     - - name: on-failure
