@@ -79,15 +79,12 @@
             "version": "==1.2.2"
         },
         "connexion": {
-            "extras": [
-                "swagger-ui"
-            ],
             "hashes": [
-                "sha256:6e0569b646f2e6229923dc4e4c6e0325e223978bd19105779fd81e16bcb22fdf",
-                "sha256:7b4268e9ea837241e530738b35040345b78c8748d05d2c22805350aca0cd5b1c"
+                "sha256:0fa5776a44b32668f20d59e6e478f15a1dc19def8e4d07d837e10d837379c2ba",
+                "sha256:4b643821a775927b2ec6220c427779b6d9c3a83ddf43662d69e68dcdad4be603"
             ],
             "index": "pypi",
-            "version": "==2.4.0"
+            "version": "==2.5.0"
         },
         "contextlib2": {
             "hashes": [
@@ -98,10 +95,10 @@
         },
         "daiquiri": {
             "hashes": [
-                "sha256:14f0c0746df96cb9c1c5b12ff4dca0bcb977d072c6f4424adcc54e1c0f548cd7",
-                "sha256:c13a236b82b0ff6eda514bba71df595c61f12de024bc53c703a4c7511ddc94c1"
+                "sha256:471749af8d6cad0ab473243d751d1225bfd6ce4409e28a600a7b7cdc05f45ded",
+                "sha256:f9999bd9f7a1c9177a2592726d53e2ea0ed4ca87b27a3201b27354a0d5d66cd7"
             ],
-            "version": "==1.6.0"
+            "version": "==1.6.1"
         },
         "dictdiffer": {
             "hashes": [
@@ -550,6 +547,7 @@
                 "sha256:a0ff786d2a7dbe55f9544b3f6ebbcc495d7e730df92a08434604f6f470b899c5",
                 "sha256:b1b7fcee6aedcdc7e62c3a73f238b3d080c7ba6650cd808bce8d7761ec484070",
                 "sha256:b66832ea8077d9b3f6e311c4a53d06273db5dc2db6e8a908550f3c14d67e718c",
+                "sha256:be018933c2f4ee7de55e7bd7d0d801b3dfb09d21dad0cce8a97995fd3e44be30",
                 "sha256:d0d3ac228c9bbab08134b4004d748cf9f8743504875b3603b3afbb97e3472947",
                 "sha256:d10e9dd744cf85c219bf747c75194b624cc7a94f0c80ead624b06bfa9f61d3bc",
                 "sha256:ea4362548ee0cbc266949d8a441238d9ad3600ca9910c3fe4e82ee3a50706973",
