@@ -112,7 +112,9 @@ spec:
       - name: memory
     resource:
       action: create
-      validate: false
+      flags: [
+        "--validate=false"
+      ]
       manifest: |
         kind: BuildConfig
         apiVersion: build.openshift.io/v1
