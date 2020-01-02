@@ -70,7 +70,7 @@ objects:
               image: "${AMUN_INSPECTION_ID}:latest"
               livenessProbe:
                 failureThreshold: 1
-                initialDelaySeconds: 3600
+                initialDelaySeconds: 7200
                 periodSeconds: 10
                 tcpSocket:
                   port: 80
