@@ -136,7 +136,7 @@ spec:
                 image: "{{inputs.parameters.inspection-id}}:latest"
                 livenessProbe:
                   failureThreshold: 1
-                  initialDelaySeconds: 3600
+                  initialDelaySeconds: 7200
                   periodSeconds: 10
                   tcpSocket:
                     port: 80
