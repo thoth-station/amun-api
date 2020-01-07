@@ -80,27 +80,6 @@ objects:
             from:
               kind: ImageStreamTag
               name: "${AMUN_INSPECTION_ID}:latest"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: CPU_FAMILY
-                    operator: In
-                    values:
-                      - ${CPU_FAMILY}
-                  - key: CPU_MODEL
-                    operator: In
-                    values:
-                      - ${CPU_MODEL}
-                  - key: PHYSICAL_CPUS
-                    operator: In
-                    values:
-                      - ${PHYSICAL_CPUS}
-                  - key: processor
-                    operator: In
-                    values:
-                      - ${PROCESSOR}
 
 parameters:
   - name: THOTH_REGISTRY
