@@ -558,6 +558,7 @@ components:
             runtime_environment:
               type: object
               description: Runtime environment information.
+              additionalProperties: true
               properties:
                 cuda_version:
                   type: string
@@ -568,9 +569,9 @@ components:
                   description: Hardware information.
                   properties:
                     cpu_family:
-                      type: string
+                      type: integer
                     cpu_model:
-                      type: string
+                      type: integer
                 operating_system:
                   type: object
                   description: OS information.
