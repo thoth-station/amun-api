@@ -39,7 +39,7 @@ trusted-host = tensorflow.pypi.thoth-station.ninja
 
 def _determine_update_string() -> str:
     """Determine how to update the system to the latest version based on binaries present in the image."""
-    return "RUN dnf update || yum update || apt-cache update"
+    return "RUN dnf update -y || yum update -y || apt-cache update"
 
 
 def _determine_installer_string() -> str:
