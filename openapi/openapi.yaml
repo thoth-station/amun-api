@@ -560,11 +560,11 @@ components:
               description: Runtime environment information.
               properties:
                 cuda_version:
-                  type: str
+                  type: string
                   description: CUDA version installed.
                   nullable: true
                 hardware:
-                  type: dict
+                  type: object
                   description: Hardware information.
                   properties:
                     cpu_family:
@@ -572,7 +572,7 @@ components:
                     cpu_model:
                       type: string
                 operating_system:
-                  type: dict
+                  type: object
                   description: OS information.
                   properties:
                     name:
@@ -580,7 +580,7 @@ components:
                     version:
                       type: string
                 python_version:
-                  type: str
+                  type: string
                   description: Python interpreter version.
         parameters:
           type: object
