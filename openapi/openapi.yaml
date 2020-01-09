@@ -225,7 +225,6 @@ components:
     InspectionSpecification:
       type: object
       description: Specification of software stack for inspection.
-      additionalProperties: true
       required:
         - base
       properties:
