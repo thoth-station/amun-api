@@ -83,7 +83,7 @@ def create_dockerfile(specification: dict) -> tuple:
 
     dockerfile += "USER root\n\n"
 
-    env_str = 'LC_ALL=en_US.utf8 '
+    env_str = ''
     for environ in specification.get("environment", []):
         env_str += f"{environ['name']}={environ['value']} "
 
