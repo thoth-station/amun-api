@@ -285,7 +285,7 @@ components:
                   type: string
                   minLength: 1
                   description: CPU cores requested at build time.
-                  example: 500m
+                  example: "1"
                 memory:
                   type: string
                   minLength: 1
@@ -329,7 +329,7 @@ components:
                   type: string
                   minLength: 1
                   description: CPU cores requested at run time
-                  example: 500m
+                  example: "1"
                 memory:
                   type: string
                   minLength: 1
