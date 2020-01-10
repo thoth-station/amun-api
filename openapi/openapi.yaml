@@ -285,12 +285,12 @@ components:
                   type: string
                   minLength: 1
                   description: CPU cores requested at build time.
-                  example: 500m
+                  example: "1"
                 memory:
                   type: string
                   minLength: 1
                   description: CPU Memory requested at build time.
-                  example: 256Mi
+                  example: 1Gi
                 hardware:
                   type: object
                   description: Set hardware requirements for build time.
@@ -329,12 +329,12 @@ components:
                   type: string
                   minLength: 1
                   description: CPU cores requested at run time
-                  example: 500m
+                  example: "1"
                 memory:
                   type: string
                   minLength: 1
                   description: CPU Memory requested at run time
-                  example: 256Mi
+                  example: 512Mi
                 hardware:
                   type: object
                   description: Set hardware requirements for run time.
