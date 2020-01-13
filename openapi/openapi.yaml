@@ -257,6 +257,7 @@ components:
           required:
             - requirements
             - requirements_locked
+            - runtime_environment
           properties:
             requirements:
               type: object
@@ -266,6 +267,8 @@ components:
               type: object
               description: Pipfile.lock with fully pinned down and resolved software stack.
               additionalProperties: true
+            runtime_environment:
+              $ref: "#/components/schemas/RuntimeEnvironment"
         identifier:
           type: string
           description:
@@ -441,6 +444,33 @@ components:
         - parameters
         - job_created
         - build_created
+    RuntimeEnvironment:
+      type: object
+      description: Runtime environment information.
+      properties:
+        cuda_version:
+          type: string
+          description: CUDA version installed.
+          nullable: true
+        hardware:
+          type: object
+          description: Hardware information.
+          properties:
+            cpu_family:
+              type: integer
+            cpu_model:
+              type: integer
+        operating_system:
+          type: object
+          description: OS information.
+          properties:
+            name:
+              type: string
+            version:
+              type: string
+        python_version:
+          type: string
+          description: Python interpreter version.
     InspectionJobLogResponse:
       type: object
       description: Job logs for the given inspection.
@@ -555,33 +585,7 @@ components:
                   type: string
                   example: "29"
             runtime_environment:
-              type: object
-              description: Runtime environment information.
-              additionalProperties: true
-              properties:
-                cuda_version:
-                  type: string
-                  description: CUDA version installed.
-                  nullable: true
-                hardware:
-                  type: object
-                  description: Hardware information.
-                  properties:
-                    cpu_family:
-                      type: integer
-                    cpu_model:
-                      type: integer
-                operating_system:
-                  type: object
-                  description: OS information.
-                  properties:
-                    name:
-                      type: string
-                    version:
-                      type: string
-                python_version:
-                  type: string
-                  description: Python interpreter version.
+              $ref: "#/components/schemas/RuntimeEnvironment"
         parameters:
           type: object
           description: Parameters echoed back to user for debugging.
