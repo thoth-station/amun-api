@@ -36,7 +36,7 @@ from .exceptions import ScriptObtainingError
 _LOGGER = logging.getLogger(__name__)
 
 _OPENSHIFT = OpenShift()
-_WORKLFOW_MANAGER = WorkflowManager(ocp_client=_OPENSHIFT)
+_WORKLFOW_MANAGER = WorkflowManager(openshift=_OPENSHIFT)
 
 # These are default requests for inspection builds and runs if not stated
 # otherwise. We explicitly assign defaults to requests coming to API so that
@@ -318,28 +318,33 @@ def get_inspection_status(inspection_id: str) -> tuple:
     }, 200
 
 
-# TODO: Retrieve inspection specification from the Workflow parameters
 @versionchanged(
     version="0.6.0",
-    reason="The function no longer retrieves specification from an existing BuildConfig."
+    reason="The function retrieves specification from a Workflow spec."
 )
 def get_inspection_specification(inspection_id: str):
     """Get specification for the given build."""
     parameters = {'inspection_id': inspection_id}
 
     try:
-        build = _OPENSHIFT.get_buildconfig(
-            inspection_id,
-            Configuration.AMUN_INSPECTION_NAMESPACE
+        wf: Dict[str, Any] = _OPENSHIFT.get_workflow(
+            label_selector=f"inspection_id={inspection_id}",
+            namespace=_OPENSHIFT.amun_inspection_namespace
         )
-    except NotFoundException:
+    except NotFoundException as exc:
         return {
-            'error': 'The given inspection id build was not found',
+            'error': 'A Workflow for the given inspection id as not found',
             'parameters': parameters
         }
 
-    specification = json.loads(
-        build['metadata']['annotations']['amun_specification'])
+    parameters: List[Dict[str, Any]] = wf["spec"]["arguments"]["parameters"]
+
+    specification, = map(
+        lambda s: s["value"],
+        filter(lambda p: p["name"] == "specification", parameters)
+    )
+    specification = json.loads(specification)
+
     # We inserted created information on our own, pop it not to taint the original specification request.
     created = specification.pop("@created")
     return {
