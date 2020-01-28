@@ -102,10 +102,11 @@ def post_generate_dockerfile(specification: dict):
 
 def _adjust_default_requests(dict_: dict) -> None:
     """Explicitly assign default requests so that they are carried within the requested inspection run."""
-    new_requests = dict(_DEFAULT_REQUESTS)
-    requests = dict_.get('requests', {})
-    new_requests.update(requests)
-    dict_['requests'] = new_requests
+    if "requests" not in dict_:
+        dict_["requests"] = {}
+
+    dict_["requests"]["cpu"] = dict_["requests"].get("cpu") or _DEFAULT_REQUESTS["cpu"]
+    dict_["requests"]["memory"] = dict_["requests"].get("memory") or _DEFAULT_REQUESTS["memory"]
 
 
 def post_inspection(specification: dict) -> tuple:
@@ -149,8 +150,8 @@ def post_inspection(specification: dict) -> tuple:
     build_parameters = dict(parameters)
     build_parameters['AMUN_GENERATED_DOCKERFILE'] = dockerfile
     build_parameters['AMUN_SPECIFICATION'] = json.dumps(specification)
-    build_parameters['AMUN_CPU'] = specification['build'].get('requests', {}).get('cpu')
-    build_parameters['AMUN_MEMORY'] = specification['build'].get('requests', {}).get('memory')
+    build_parameters['AMUN_CPU'] = specification['build']['requests']['cpu']
+    build_parameters['AMUN_MEMORY'] = specification['build']['requests']['memory']
     _OPENSHIFT.schedule_inspection_build(build_parameters, inspection_id, use_hw_template)
 
     if run_job:
