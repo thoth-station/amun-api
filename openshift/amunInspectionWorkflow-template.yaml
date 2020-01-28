@@ -22,6 +22,7 @@ objects:
     labels:
       app: amun
       component: amun-inspection-workflow
+      inspection_id: "${AMUN_INSPECTION_ID}"
     annotations:
       thoth-station.ninja/template-version: 0.5.1
   spec:
