@@ -318,10 +318,6 @@ def get_inspection_status(inspection_id: str) -> tuple:
     }, 200
 
 
-@versionchanged(
-    version="0.6.0",
-    reason="The function retrieves specification from a Workflow spec."
-)
 def get_inspection_specification(inspection_id: str):
     """Get specification for the given build."""
     parameters = {'inspection_id': inspection_id}
