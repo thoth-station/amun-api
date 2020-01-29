@@ -99,7 +99,7 @@ def create_dockerfile(specification: dict) -> tuple:
             " ".join(specification['packages']) + '\n\n'
 
     if specification.get('python_packages'):
-        dockerfile += "RUN pip3 install " + \
+        dockerfile += "RUN pip3 install --force-reinstall --upgrade " + \
             " ".join(specification["python_packages"]) + '\n\n'
 
     for file_spec in specification.get('files', []):
