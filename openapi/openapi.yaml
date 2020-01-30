@@ -101,6 +101,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InspectionResponseError'
+  '/inspect/{inspection_id}/job/logs':
+    get:
+      tags:
+        - Inspection
+      x-openapi-router-controller: amun.api_v1
+      operationId: get_inspection_job_logs
+      summary: Get log for a specific inspection run.
+      parameters:
+        - name: inspection_id
+          in: path
+          required: true
+          description: Id of inspection run.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response with inspection run log.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionJobLogsResponse'
+        '202':
+          description: 'The inspection job was not scheduled yet, check back later.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionResponseError'
+        '400':
+          description: On invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionResponseError'
+        '404':
+          description: The given inspection job referenced by inspection id was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionResponseError'
   '/inspect/{inspection_id}/job/log':
     get:
       deprecated: true
@@ -218,6 +257,8 @@ components:
         error:
           type: string
           description: Error information for user.
+        status:
+          $ref: '#/components/schemas/InspectionStatus'
         parameters:
           type: object
           description: Parameters echoed back to user for debugging.
@@ -483,10 +524,10 @@ components:
       type: object
       description: Job logs for the given inspection.
       required:
-        - log
+        - logs
         - parameters
       properties:
-        log:
+        logs:
           type: object
           description: Inspection job logs printed to stdout/stderr as a plain text.
           nullable: true
@@ -630,6 +671,161 @@ components:
         parameters:
           type: object
           description: Parameters echoed back to user for debugging.
+    InspectionJobLogsResponse:
+      type: object
+      description: Job logs for the given inspection.
+      required:
+        - logs
+        - parameters
+      properties:
+        logs:
+          type: array
+          items:
+            type: object
+            description: Inspection job logs printed to stdout/stderr as a plain text.
+            nullable: true
+            additionalProperties: false
+            required:
+              - exit_code
+              - hwinfo
+              - script_sha256
+              - stderr
+              - stdout
+              - usage
+              - os_release
+              - runtime_environment
+            properties:
+              exit_code:
+                type: integer
+                description: >-
+                  Exit code of user provided script (matches exit code of the
+                  inspect job)
+                example: 0
+              hwinfo:
+                type: object
+                additionalProperties: true
+                description: Hardware information as provided by Amun's hwinfo.
+              script_sha256:
+                type: string
+                description: SHA 256 digest of user provided script
+              stderr:
+                type: string
+                description: Standard error output produced by user provided script.
+              stdout:
+                type: object
+                description: Standard output prodiced by user provided script.
+                additionalProperties: true
+              usage:
+                type: object
+                description: >
+                  Utilization of resources such as user-space or kernel-space CPU
+                  time, context switches, shared memory size or page faults (and
+                  others).
+                additionalProperties: true
+              os_release:
+                type: object
+                description: >-
+                  Information about operating system as gathered from
+                  /etc/os-release
+                additionalProperties: true
+                nullable: true
+                properties:
+                  ansi_color:
+                    type: string
+                    example: 0;34
+                  bug_report_url:
+                    type: string
+                    example: 'https://bugzilla.redhat.com/'
+                  cpe_name:
+                    type: string
+                    example: 'cpe:/o:fedoraproject:fedora:29'
+                  documentation_url:
+                    type: string
+                    example: >-
+                      https://docs.fedoraproject.org/en-US/fedora/f29/system-administrators-guide/
+                  home_url:
+                    type: string
+                    example: 'https://fedoraproject.org/'
+                  id:
+                    type: string
+                    example: fedora
+                  logo:
+                    type: string
+                  name:
+                    type: string
+                    example: Fedora
+                  platform_id:
+                    type: string
+                    example: 'platform:f29'
+                  pretty_name:
+                    type: string
+                    example: Fedora 29 (Workstation Edition)
+                  privacy_policy_url:
+                    type: string
+                    example: 'https://fedoraproject.org/wiki/Legal:PrivacyPolicy'
+                  redhat_bugzilla_product:
+                    type: string
+                    example: Fedora
+                  redhat_bugzilla_product_version:
+                    type: string
+                    example: '29'
+                  redhat_support_product:
+                    type: string
+                    example: Fedora
+                  redhat_support_product_version:
+                    type: string
+                    example: '29'
+                  support_url:
+                    type: string
+                    example: >-
+                      https://fedoraproject.org/wiki/Communicating_and_getting_help
+                  variant:
+                    type: string
+                    example: Workstation Edition
+                  variant_id:
+                    type: string
+                    example: workstation
+                  version:
+                    type: string
+                    example: 29 (Workstation Edition)
+                  version_codename:
+                    type: string
+                  version_id:
+                    type: string
+                    example: '29'
+              runtime_environment:
+                type: object
+                description: Runtime environment information.
+                additionalProperties: true
+                properties:
+                  cuda_version:
+                    type: string
+                    description: CUDA version installed.
+                    nullable: true
+                  hardware:
+                    type: object
+                    description: Hardware information.
+                    properties:
+                      cpu_family:
+                        type: integer
+                      cpu_model:
+                        type: integer
+                  operating_system:
+                    type: object
+                    description: OS information.
+                    properties:
+                      name:
+                        type: string
+                      version:
+                        type: string
+                  python_version:
+                    type: string
+                    description: Python interpreter version.
+        status:
+          $ref: '#/components/schemas/InspectionStatus'
+        parameters:
+          type: object
+          description: Parameters echoed back to user for debugging.
     InspectionSpecificationResponse:
       type: object
       description: Response for an inspection for the given inspection.
@@ -764,60 +960,30 @@ components:
           description: Actual result of an inspection run.
     InspectionStatusResponse:
       type: object
-      description: Status about the current job run of inspection.
+      description: Status report about the current inspection Workflow.
       additionalProperties: false
       required:
+        - status
         - parameters
-        - build
-        - job
       properties:
         parameters:
           type: object
           description: Parameters echoed back to user for debugging.
           additionalProperties: true
+        status:
+          $ref: '#/components/schemas/InspectionStatus'
+    InspectionStatus:
+      type: object
+      description: Status of the current inspection Workflow.
+      additionalProperties: false
+      required:
+        - build
+        - job
+        - workflow
+      properties:
         build:
           type: object
           description: Status information for the inspection build.
-          additionalProperties: false
-          required:
-            - container
-            - exit_code
-            - finished_at
-            - reason
-            - started_at
-            - state
-          properties:
-            container:
-              type: string
-              description: SHA of container image in which the inspection is done.
-              nullable: true
-            exit_code:
-              type: integer
-              description: >
-                Return code of the process perfoming inspection (user supplied
-                script return value).
-              nullable: true
-            finished_at:
-              type: string
-              description: >
-                Datetime in ISO format informing about when the inspection has
-                finished.
-              nullable: true
-            reason:
-              type: string
-              description: Reasoning on finished inspection run.
-              nullable: true
-            started_at:
-              type: string
-              description: >
-                Datetime in ISO format informing about when the inspection has
-                started.
-            state:
-              type: string
-              example: terminated
-        job:
-          type: object
-          description: Status information for the inspection job.
           additionalProperties: false
           required:
             - container
@@ -855,6 +1021,52 @@ components:
             state:
               type: string
               example: terminated
+        job:
+          type: array
+          items:
+            type: object
+            description: Status information for the inspection job.
+            additionalProperties: false
+            required:
+              - container
+              - exit_code
+              - finished_at
+              - reason
+              - started_at
+              - state
+            properties:
+              container:
+                type: string
+                description: SHA of container image in which the inspection is done.
+                nullable: true
+              exit_code:
+                type: integer
+                description: >
+                  Return code of the process performing inspection (user supplied
+                  script return value).
+                nullable: true
+              finished_at:
+                type: string
+                description: >
+                  Datetime in ISO format informing about when the inspection has
+                  finished.
+                nullable: true
+              reason:
+                type: string
+                description: Reasoning on finished inspection run.
+                nullable: true
+              started_at:
+                type: string
+                description: >
+                  Datetime in ISO format informing about when the inspection has
+                  started.
+              state:
+                type: string
+                example: terminated
+        workflow:
+          type: object
+          description: Status of the submitted inspection Workflow.
+          additionalProperties: true
     InspectionWorkflowParameters:
       type: object
       description: Inspection Workflow parameters.

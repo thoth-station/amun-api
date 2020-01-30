@@ -29,7 +29,9 @@ import json
 import subprocess
 import hashlib
 import sys
+
 from datetime import datetime
+from pathlib import Path
 
 
 # A path to file containing hardware information as gathered by init-container
@@ -165,7 +167,16 @@ def main():
         "runtime_environment": runtime_environment
     }
 
-    json.dump(report, sys.stdout, sort_keys=True, indent=2)
+    output = json.dumps(report, sort_keys=True, indent=2)
+
+    output_fp = os.environ.get("OUTPUT_ARTIFACT")
+    if output_fp:
+        output_file = Path(output_fp)
+
+        output_file.touch(exist_ok=True)
+        output_file.write_text(output)
+
+    sys.stdout.write(output)
     sys.exit(report["exit_code"])
 
 
