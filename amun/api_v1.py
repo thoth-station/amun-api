@@ -293,8 +293,6 @@ def get_inspection_build_log(inspection_id: str) -> tuple:
     return {"log": status, "parameters": parameters}, 200
 
 
-# TODO: Return a Workflow status instead of a pod status
-@versionchanged(version="0.6.0", reason="The function now returns the Workflow status.")
 def get_inspection_status(inspection_id: str) -> tuple:
     """Get status of an inspection."""
     parameters = {"inspection_id": inspection_id}
@@ -324,7 +322,6 @@ def get_inspection_status(inspection_id: str) -> tuple:
     )
 
 
-@versionchanged(version="0.6.0", reason="The function retrieves specification from a Workflow spec.")
 def get_inspection_specification(inspection_id: str):
     """Get specification for the given build."""
     parameters = {"inspection_id": inspection_id}
