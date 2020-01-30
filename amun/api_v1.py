@@ -41,10 +41,7 @@ _WORKFLOW_MANAGER = WorkflowManager(openshift=_OPENSHIFT)
 # These are default requests for inspection builds and runs if not stated
 # otherwise. We explicitly assign defaults to requests coming to API so that
 # the specification always carries these values in inspection documents.
-_DEFAULT_REQUESTS = {
-    "cpu": "500m",
-    "memory": "256Mi"
-}
+_DEFAULT_REQUESTS = {"cpu": "500m", "memory": "256Mi"}
 
 
 def _construct_parameters_dict(specification: dict) -> tuple:
@@ -52,22 +49,21 @@ def _construct_parameters_dict(specification: dict) -> tuple:
     # Name of parameters are shared in build/job templates so parameters are constructed regardless build or job.
     parameters = {}
     use_hw_template = False
-    if 'hardware' in specification.get('requests', {}):
-        hardware_specification = specification.get(
-            'requests', {}).get('hardware', {})
+    if "hardware" in specification.get("requests", {}):
+        hardware_specification = specification.get("requests", {}).get("hardware", {})
         use_hw_template = True
 
-        if 'cpu_family' in hardware_specification:
-            parameters['CPU_FAMILY'] = hardware_specification['cpu_family']
+        if "cpu_family" in hardware_specification:
+            parameters["CPU_FAMILY"] = hardware_specification["cpu_family"]
 
-        if 'cpu_model' in hardware_specification:
-            parameters['CPU_MODEL'] = hardware_specification['cpu_model']
+        if "cpu_model" in hardware_specification:
+            parameters["CPU_MODEL"] = hardware_specification["cpu_model"]
 
-        if 'physical_cpus' in hardware_specification:
-            parameters['PHYSICAL_CPUS'] = hardware_specification['physical_cpus']
+        if "physical_cpus" in hardware_specification:
+            parameters["PHYSICAL_CPUS"] = hardware_specification["physical_cpus"]
 
-        if 'processor' in hardware_specification:
-            parameters['PROCESSOR'] = hardware_specification['processor']
+        if "processor" in hardware_specification:
+            parameters["PROCESSOR"] = hardware_specification["processor"]
 
     return parameters, use_hw_template
 
@@ -94,21 +90,13 @@ def _generate_inspection_id(identifier: str = None) -> str:
 
 def post_generate_dockerfile(specification: dict):
     """Generate Dockerfile out of software stack specification."""
-    parameters = {
-        'specification': specification,
-    }
+    parameters = {"specification": specification}
 
     dockerfile, error = _do_create_dockerfile(specification)
     if dockerfile is None:
-        return {
-            'parameters': parameters,
-            'error': error
-        }, 400
+        return {"parameters": parameters, "error": error}, 400
 
-    return {
-        'parameters': parameters,
-        'dockerfile': dockerfile
-    }, 200
+    return {"parameters": parameters, "dockerfile": dockerfile}, 200
 
 
 def _adjust_default_requests(dict_: dict) -> None:
@@ -116,10 +104,8 @@ def _adjust_default_requests(dict_: dict) -> None:
     if "requests" not in dict_:
         dict_["requests"] = {}
 
-    dict_["requests"]["cpu"] = dict_["requests"].get(
-        "cpu") or _DEFAULT_REQUESTS["cpu"]
-    dict_["requests"]["memory"] = dict_["requests"].get(
-        "memory") or _DEFAULT_REQUESTS["memory"]
+    dict_["requests"]["cpu"] = dict_["requests"].get("cpu") or _DEFAULT_REQUESTS["cpu"]
+    dict_["requests"]["memory"] = dict_["requests"].get("memory") or _DEFAULT_REQUESTS["memory"]
 
 
 def post_inspection(specification: dict) -> tuple:
@@ -127,47 +113,45 @@ def post_inspection(specification: dict) -> tuple:
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
     dockerfile, run_job_or_error = _do_create_dockerfile(specification)
     if dockerfile is None:
-        return {
-            'parameters:': specification,
-            # If not dockerfile is produced, run_job holds the error message.
-            'error': run_job_or_error
-        }, 400
+        return (
+            {
+                "parameters:": specification,
+                # If not dockerfile is produced, run_job holds the error message.
+                "error": run_job_or_error,
+            },
+            400,
+        )
 
     run_job = run_job_or_error
 
-    if 'build' not in specification:
-        specification['build'] = {}
+    if "build" not in specification:
+        specification["build"] = {}
 
-    if 'run' not in specification:
-        specification['run'] = {}
+    if "run" not in specification:
+        specification["run"] = {}
 
-    _adjust_default_requests(specification['run'])
-    _adjust_default_requests(specification['build'])
+    _adjust_default_requests(specification["run"])
+    _adjust_default_requests(specification["build"])
 
     inspection_id = _generate_inspection_id(specification.get("identifier"))
 
-    parameters, use_hw_template = _construct_parameters_dict(
-        specification.get('build', {}))
+    parameters, use_hw_template = _construct_parameters_dict(specification.get("build", {}))
 
     # Mark this for later use - in get_inspection_specification().
     specification["@created"] = datetime2datetime_str()
 
     template_parameters = dict(parameters)
-    template_parameters['AMUN_INSPECTION_ID'] = inspection_id
-    template_parameters['AMUN_GENERATED_DOCKERFILE'] = dockerfile
-    template_parameters['AMUN_CPU'] = specification['build']['requests']['cpu']
-    template_parameters['AMUN_MEMORY'] = specification['build']['requests']['memory']
-    template_parameters['THOTH_INFRA_NAMESPACE'] = _OPENSHIFT.amun_infra_namespace
+    template_parameters["AMUN_INSPECTION_ID"] = inspection_id
+    template_parameters["AMUN_GENERATED_DOCKERFILE"] = dockerfile
+    template_parameters["AMUN_CPU"] = specification["build"]["requests"]["cpu"]
+    template_parameters["AMUN_MEMORY"] = specification["build"]["requests"]["memory"]
+    template_parameters["THOTH_INFRA_NAMESPACE"] = _OPENSHIFT.amun_infra_namespace
 
     target = "inspection-run-result" if run_job else "inspection-build"
 
     dockerfile = dockerfile.replace("'", "''")
 
-    workflow_parameters = dict(
-        dockerfile=dockerfile,
-        specification=json.dumps(specification),
-        target=target
-    )
+    workflow_parameters = dict(dockerfile=dockerfile, specification=json.dumps(specification), target=target)
 
     if "allowed_failures" in specification:
         workflow_parameters["allowed-failures"] = specification["allowed_failures"]
@@ -177,22 +161,23 @@ def post_inspection(specification: dict) -> tuple:
         workflow_parameters["parallelism"] = specification["parallelism"]
 
     workflow_id = _WORKFLOW_MANAGER.submit_inspection_workflow(
-        inspection_id,
-        template_parameters=template_parameters,
-        workflow_parameters=workflow_parameters,
+        inspection_id, template_parameters=template_parameters, workflow_parameters=workflow_parameters
     )
 
     # TODO: Check whether the workflow spec has been resolved successfully
     # The resolution happens on the server side, therefore even if the WF
     # is submitted successfully, it mail fail due to an invalid spec later on
 
-    return {
-        'inspection_id': inspection_id,
-        'parameters': specification,
-        'workflow_id': workflow_id,
-        'workflow_parameters': workflow_parameters,
-        'workflow_target': target,
-    }, 202
+    return (
+        {
+            "inspection_id": inspection_id,
+            "parameters": specification,
+            "workflow_id": workflow_id,
+            "workflow_parameters": workflow_parameters,
+            "workflow_target": target,
+        },
+        202,
+    )
 
 
 @deprecated(
@@ -200,144 +185,119 @@ def post_inspection(specification: dict) -> tuple:
     reason=(
         "The function will be removed soon."
         "The functionality is limited to a single inspection, i.e. `batch_size = 1`."
-    )
+    ),
 )
 def get_inspection_job_log(inspection_id: str) -> tuple:
     """Get logs of the given inspection."""
-    parameters = {'inspection_id': inspection_id}
+    parameters = {"inspection_id": inspection_id}
     try:
-        log = _OPENSHIFT.get_job_log(
-            inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+        log = _OPENSHIFT.get_job_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException as exc:
         try:
             # Try to get status so a user knows to ask later.
-            _OPENSHIFT.get_job_status_report(
-                inspection_id,
-                Configuration.AMUN_INSPECTION_NAMESPACE
-            )
-            return {
-                'error': 'No logs available yet for the given inspection id',
-                'parameters': parameters
-            }, 202
+            _OPENSHIFT.get_job_status_report(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+            return {"error": "No logs available yet for the given inspection id", "parameters": parameters}, 202
         except NotFoundException:
             pass
 
-        return {
-            'error': 'Job log for the given inspection id was not found',
-            'parameters': parameters
-        }, 404
+        return {"error": "Job log for the given inspection id was not found", "parameters": parameters}, 404
 
     if not log:
-        return {
-            'error': 'Inspection run did not produce any log or it was deleted by OpenShift',
-            'parameters': parameters,
-        }, 404
+        return (
+            {
+                "error": "Inspection run did not produce any log or it was deleted by OpenShift",
+                "parameters": parameters,
+            },
+            404,
+        )
 
     try:
         log = json.loads(log)
     except Exception as exc:
-        _LOGGER.exception(
-            "Failed to load inspection job log for %r", inspection_id)
-        return {
-            'error': 'Job failed, please contact administrator for more details',
-            'parameters': parameters
-        }, 500
+        _LOGGER.exception("Failed to load inspection job log for %r", inspection_id)
+        return {"error": "Job failed, please contact administrator for more details", "parameters": parameters}, 500
 
-    return {
-        'log': log,
-        'parameters': parameters
-    }, 200
+    return {"log": log, "parameters": parameters}, 200
 
 
 def get_inspection_job_logs(inspection_id: str) -> tuple:
     """Get logs of the given inspection."""
-    parameters = {'inspection_id': inspection_id}
-
+    parameters = {"inspection_id": inspection_id}
 
     response, _ = get_inspection_status(inspection_id)
     inspection_status: Dict[str, Any] = response["status"]
 
-    _LOGGER.debug(
-        "Inspection Workflow '%s' status: %r", inspection_id, inspection_status
-    )
+    _LOGGER.debug("Inspection Workflow '%s' status: %r", inspection_id, inspection_status)
     if not inspection_status["build"].get("state") == "terminated":
-        return {
-            "error": "No logs available yet for the given inspection id",
-            "status": inspection_status,
-            "parameters": parameters
-        }, 202
+        return (
+            {
+                "error": "No logs available yet for the given inspection id",
+                "status": inspection_status,
+                "parameters": parameters,
+            },
+            202,
+        )
 
     inspection_logs: List[str] = []
     try:
-        pod_ids: List[str] = _OPENSHIFT._get_pod_ids_from_job(
-            inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+        pod_ids: List[str] = _OPENSHIFT._get_pod_ids_from_job(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
 
         for pod_id in pod_ids:
-            log: str = _OPENSHIFT.get_pod_log(
-                pod_id,
-                namespace=Configuration.AMUN_INSPECTION_NAMESPACE
-            )
+            log: str = _OPENSHIFT.get_pod_log(pod_id, namespace=Configuration.AMUN_INSPECTION_NAMESPACE)
             inspection_logs.append(log)
     except NotFoundException as exc:
-        return {
-            "error": "No logs for the given inspection id was not found",
-            "status": inspection_status,
-            "parameters": parameters
-        }, 404
+        return (
+            {
+                "error": "No logs for the given inspection id was not found",
+                "status": inspection_status,
+                "parameters": parameters,
+            },
+            404,
+        )
 
     if not any(inspection_logs):
-        return {
-            "error": "Inspection run did not produce any log or it was deleted by OpenShift",
-            "status": inspection_status,
-            "parameters": parameters,
-        }, 404
+        return (
+            {
+                "error": "Inspection run did not produce any log or it was deleted by OpenShift",
+                "status": inspection_status,
+                "parameters": parameters,
+            },
+            404,
+        )
 
     try:
         inspection_logs: List[Dict[str, Any]] = [json.loads(log) for log in inspection_logs]
     except Exception as exc:
-        _LOGGER.exception(
-            "Failed to load inspection job log for %r", inspection_id)
-        return {
-            "error": "Job failed, please contact administrator for more details",
-            "status": inspection_status,
-            "parameters": parameters
-        }, 500
+        _LOGGER.exception("Failed to load inspection job log for %r", inspection_id)
+        return (
+            {
+                "error": "Job failed, please contact administrator for more details",
+                "status": inspection_status,
+                "parameters": parameters,
+            },
+            500,
+        )
 
-    return {
-        "logs": inspection_logs,
-        "parameters": parameters
-    }, 200
+    return {"logs": inspection_logs, "parameters": parameters}, 200
 
 
 def get_inspection_build_log(inspection_id: str) -> tuple:
     """Get build log of an inspection."""
-    parameters = {'inspection_id': inspection_id}
+    parameters = {"inspection_id": inspection_id}
 
     try:
-        status = _OPENSHIFT.get_pod_log(
-            inspection_id + '-1-build',
-            Configuration.AMUN_INSPECTION_NAMESPACE
-        )
+        status = _OPENSHIFT.get_pod_log(inspection_id + "-1-build", Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException:
-        return {
-            'error': 'Build log with for the given inspection id was not found',
-            'parameters': parameters
-        }, 404
+        return {"error": "Build log with for the given inspection id was not found", "parameters": parameters}, 404
 
-    return {
-        'log': status,
-        'parameters': parameters
-    }, 200
+    return {"log": status, "parameters": parameters}, 200
 
 
 # TODO: Return a Workflow status instead of a pod status
-@versionchanged(
-    version="0.6.0",
-    reason="The function now returns the Workflow status."
-)
+@versionchanged(version="0.6.0", reason="The function now returns the Workflow status.")
 def get_inspection_status(inspection_id: str) -> tuple:
     """Get status of an inspection."""
-    parameters = {'inspection_id': inspection_id}
+    parameters = {"inspection_id": inspection_id}
 
     build_status = None
     try:
@@ -346,53 +306,35 @@ def get_inspection_status(inspection_id: str) -> tuple:
         # (hopefully) - created per a user request.
         # OpenShift does not expose any endpoint for a build status anyway.
         build_status = _OPENSHIFT.get_pod_status_report(
-            inspection_id + '-1-build',
-            Configuration.AMUN_INSPECTION_NAMESPACE
+            inspection_id + "-1-build", Configuration.AMUN_INSPECTION_NAMESPACE
         )
     except NotFoundException:
-        return {
-            'error': 'The given inspection id was not found',
-            'parameters': parameters
-        }, 404
+        return {"error": "The given inspection id was not found", "parameters": parameters}, 404
 
     job_status = None
     try:
-        job_status = _OPENSHIFT.get_job_status_report(
-            inspection_id,
-            Configuration.AMUN_INSPECTION_NAMESPACE
-        )
+        job_status = _OPENSHIFT.get_job_status_report(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
     except NotFoundException:
         # There was no job scheduled - user did not submitted any script to run the job. Report None.
         pass
 
-    return {
-        'status': {
-            'build': build_status,
-            'job': job_status,
-            'workflow': workflow_status,
-        },
-        'parameters': parameters
-    }, 200
+    return (
+        {"status": {"build": build_status, "job": job_status, "workflow": workflow_status}, "parameters": parameters},
+        200,
+    )
 
 
-@versionchanged(
-    version="0.6.0",
-    reason="The function retrieves specification from a Workflow spec."
-)
+@versionchanged(version="0.6.0", reason="The function retrieves specification from a Workflow spec.")
 def get_inspection_specification(inspection_id: str):
     """Get specification for the given build."""
-    parameters = {'inspection_id': inspection_id}
+    parameters = {"inspection_id": inspection_id}
 
     try:
         wf: Dict[str, Any] = _OPENSHIFT.get_workflow(
-            label_selector=f"inspection_id={inspection_id}",
-            namespace=_OPENSHIFT.amun_inspection_namespace
+            label_selector=f"inspection_id={inspection_id}", namespace=_OPENSHIFT.amun_inspection_namespace
         )
     except NotFoundException as exc:
-        return {
-            'error': 'A Workflow for the given inspection id as not found',
-            'parameters': parameters
-        }
+        return {"error": "A Workflow for the given inspection id as not found", "parameters": parameters}
 
     parameters: List[Dict[str, Any]] = wf["spec"]["arguments"]["parameters"]
 
@@ -402,8 +344,4 @@ def get_inspection_specification(inspection_id: str):
 
     # We inserted created information on our own, pop it not to taint the original specification request.
     created = specification.pop("@created")
-    return {
-        'parameters': parameters,
-        'specification': specification,
-        'created': created,
-    }
+    return {"parameters": parameters, "specification": specification, "created": created}
