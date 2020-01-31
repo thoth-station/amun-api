@@ -104,6 +104,8 @@ objects:
           dependencies: [inspection-build]
           arguments:
             parameters:
+            - name: inspection-id
+              value: "{{workflow.parameters.inspection-id}}"
             - name: exit
               value: "{{tasks.inspection-build.status}} != Succeeded"
             - name: volume
@@ -154,6 +156,8 @@ objects:
           dependencies: [inspection-run]
           arguments:
             parameters:
+            - name: inspection-id
+              value: "{{workflow.parameters.inspection-id}}"
             - name: exit
               value: "{{tasks.inspection-run.status}} != Succeeded"
             - name: volume

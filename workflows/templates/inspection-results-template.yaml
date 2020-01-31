@@ -13,6 +13,7 @@ spec:
     inputs:
       parameters:
       # Required
+      - name: inspection-id
       - name: volume
       # Default
       - name: namespace
@@ -31,25 +32,33 @@ spec:
     outputs:
       artifacts:
       - name: output
-        path: "/mnt/output/results"
+        path: "/mnt/output/{{inputs.parameters.inspection-id}}"
         archive:
           none: {}
     script:
       image: |-
         {{inputs.parameters.registry}}/{{inputs.parameters.thoth-infra-namespace}}/kubectl
-      command: [sh]
+      command: [bash]
       source: |-
         set -euxo pipefail
 
-        results=/mnt/output/results ; mkdir -p "$results"
+        resource_names=$(\
+          kubectl get {{inputs.parameters.kind}}        \
+            --namespace {{inputs.parameters.namespace}} \
+            --selector {{inputs.parameters.selector}}   \
+            --output json |\
+          jq -r '.items[].metadata.name' \
+        )
 
-        kubectl get \
-          {{inputs.parameters.kind}} \
-          --namespace {{inputs.parameters.namespace}} \
-          --selector {{inputs.parameters.selector}} \
-          --output json |\
-        jq -c '.items[].metadata.name' |\
-        xargs -I{} sh -c 'kubectl logs {} | tee /mnt/output/results/{}'
+        results=/mnt/output/{{inputs.parameters.inspection-id}} ; mkdir -p "$results"
+
+        {
+          cnt=0
+          IFS=$'\n' ; for name in $resource_names; do
+            let "cnt+=1";
+            kubectl logs $name | tee "${results}/${cnt}-output"
+          done
+        }
 
         if [ "true" == "{{inputs.parameters.exit}}" ]; then
           >&2 echo "Workflow failure in the previous steps. Exitting."
