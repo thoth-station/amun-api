@@ -21,6 +21,7 @@ grpcio-tools = "*"
 jaeger-client = "*"
 opentracing-instrumentation = "*"
 sentry-sdk = {extras = ["flask"],version = "*"}
+more-itertools = "*"
 
 [dev-packages]
 

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e334c73e7f79bfb63da5f428170ced88277d5a37bc2dbb4d01e79382f5de58ab"
+            "sha256": "4d6f90c5dbb8bef3f18ea79fc06d016a86f6c0073f6ff62f9385e24a6baf4e32"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -103,13 +103,6 @@
             ],
             "version": "==2.0.0"
         },
-        "dictdiffer": {
-            "hashes": [
-                "sha256:1adec0d67cdf6166bda96ae2934ddb5e54433998ceab63c984574d187cc563d2",
-                "sha256:d79d9a39e459fe33497c858470ca0d2e93cb96621751de06d631856adfd9c390"
-            ],
-            "version": "==0.8.1"
-        },
         "deprecated": {
             "hashes": [
                 "sha256:408038ab5fdeca67554e8f6742d1521cd3cd0ee0ff9d47f29318a4f4da31c308",
@@ -120,10 +113,10 @@
         },
         "dictdiffer": {
             "hashes": [
-                "sha256:97cf4ef98ebc1acf737074aed41e379cf48ab5ff528c92109dfb8e2e619e6809",
-                "sha256:b3ad476fc9cca60302b52c50e1839342d2092aeaba586d69cbf9249f87f52463"
+                "sha256:1adec0d67cdf6166bda96ae2934ddb5e54433998ceab63c984574d187cc563d2",
+                "sha256:d79d9a39e459fe33497c858470ca0d2e93cb96621751de06d631856adfd9c390"
             ],
-            "version": "==0.8.0"
+            "version": "==0.8.1"
         },
         "flask": {
             "hashes": [
@@ -378,10 +371,11 @@
         },
         "more-itertools": {
             "hashes": [
-                "sha256:83657d894c90d5681d62155c82bda9c1187827525880eda8ff5df4ec813437c3",
-                "sha256:d157e52d4e5b938c550f39eb2fd15610db062441a9c2747d3dbfa9298211d0f8"
+                "sha256:5dd8bcf33e5f9513ffa06d5ad33d78f31e1931ac9a18f33d37e77a180d393a7c",
+                "sha256:b1ddb932186d8a6ac451e1d95844b382f55e12686d51ca0c68b6f61f2ab7a507"
             ],
-            "version": "==3.0.5"
+            "index": "pypi",
+            "version": "==8.2.0"
         },
         "oauthlib": {
             "hashes": [
@@ -469,20 +463,6 @@
             ],
             "version": "==0.2.8"
         },
-        "pyasn1": {
-            "hashes": [
-                "sha256:39c7e2ec30515947ff4e87fb6f456dfc6e84857d34be479c9d4a4ba4bf46aa5d",
-                "sha256:aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba"
-            ],
-            "version": "==0.4.8"
-        },
-        "pyasn1-modules": {
-            "hashes": [
-                "sha256:0c35a52e00b672f832e5846826f1fb7507907f7d52fba6faa9e3c4cbe874fe4b",
-                "sha256:b6ada4f840fe51abf5a6bd545b45bf537bea62221fa0dde2e8a553ed9f06a4e3"
-            ],
-            "version": "==0.2.7"
-        },
         "pyrsistent": {
             "hashes": [
                 "sha256:cdc7b5e3ed77bed61270a47d35434a30617b9becdf2478af76ad2c6ade307280"
@@ -562,10 +542,10 @@
         },
         "ruamel.yaml": {
             "hashes": [
-                "sha256:0962fd7999e064c4865f96fb1e23079075f4a2a14849bcdc5cdba53a24f9759b",
-                "sha256:099c644a778bf72ffa00524f78dd0b6476bca94a1da344130f4bf3381ce5b954"
+                "sha256:9d59fa89985c55155d35c886663e357813404ae8f94638cb673135b8c8c1a7c7",
+                "sha256:dba517a7e330b6caf476b757022d21efa13c32694bfba1e057ce59a374f18f0a"
             ],
-            "version": "==0.16.10"
+            "version": "==0.16.7"
         },
         "ruamel.yaml.clib": {
             "hashes": [
@@ -620,11 +600,19 @@
         },
         "thoth-common": {
             "hashes": [
+<<<<<<< HEAD
                 "sha256:b0592552be149272d6a2fcee75061b9bc9a36a94a0e20df236b0fea434e73052",
                 "sha256:cf7dbafab13c7f5ecb325ab3fe0697152fd28d0bc6f814fa552a79e4da2974fc"
             ],
             "index": "pypi",
             "version": "==0.10.7"
+=======
+                "sha256:9167fd5147783204ab1e43879a8f43b24a2e5022287e7704e1086be85dfc7f94",
+                "sha256:c354170f25ba11562a3857129e9fb6f015a3201a7e69dabbe8405449180d225f"
+            ],
+            "index": "pypi",
+            "version": "==0.10.2"
+>>>>>>> Added more-itertools to Pipfile to solve version issue
         },
         "threadloop": {
             "hashes": [
