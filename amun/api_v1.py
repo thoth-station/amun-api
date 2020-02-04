@@ -297,6 +297,19 @@ def get_inspection_status(inspection_id: str) -> tuple:
     """Get status of an inspection."""
     parameters = {"inspection_id": inspection_id}
 
+    workflow_status = None
+    try:
+        wf: Dict[str, Any] = _OPENSHIFT.get_workflow(
+            label_selector=f"inspection_id={inspection_id}",
+            namespace=_OPENSHIFT.amun_inspection_namespace
+        )
+        workflow_status = wf["status"]
+    except NotFoundException as exc:
+        return {
+            'error': 'A Workflow for the given inspection id as not found',
+            'parameters': parameters
+        }
+
     build_status = None
     try:
         # As we treat inspection_id same all over the places (dc, dc, job), we can
