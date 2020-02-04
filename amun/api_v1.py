@@ -266,12 +266,14 @@ def get_inspection_job_logs(inspection_id: str) -> tuple:
         )
 
     try:
-        inspection_logs: List[Dict[str, Any]] = [json.loads(log) for log in inspection_logs]
+        inspection_logs: List[Dict[str, Any]] = [
+            json.loads(log) for log in inspection_logs if log
+        ]
     except Exception as exc:
         _LOGGER.exception("Failed to load inspection job log for %r", inspection_id)
         return (
             {
-                "error": "Job failed, please contact administrator for more details",
+                "error": "An exception occurred, please contact administrator for more details",
                 "status": inspection_status,
                 "parameters": parameters,
             },
@@ -306,7 +308,7 @@ def get_inspection_status(inspection_id: str) -> tuple:
         workflow_status = wf["status"]
     except NotFoundException as exc:
         return {
-            'error': 'A Workflow for the given inspection id as not found',
+            'error': 'A Workflow for the given inspection id was not found',
             'parameters': parameters
         }
 
