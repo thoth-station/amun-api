@@ -496,15 +496,12 @@
             ],
             "version": "==2.8.1"
         },
-<<<<<<< HEAD
         "python-json-logger": {
             "hashes": [
                 "sha256:b7a31162f2a01965a5efb94453ce69230ed208468b0bbc7fdfc56e6d8df2e281"
             ],
             "version": "==0.1.11"
         },
-=======
->>>>>>> Added deprecation and versionchanged decorators
         "python-string-utils": {
             "hashes": [
                 "sha256:05d24a8d884b629b534af992dc1f35dc4de4c73678ffdffa0efcbe667058af1f"
