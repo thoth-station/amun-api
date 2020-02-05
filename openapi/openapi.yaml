@@ -1022,47 +1022,69 @@ components:
               type: string
               example: terminated
         job:
-          type: array
-          items:
-            type: object
-            description: Status information for the inspection job.
-            additionalProperties: false
-            required:
-              - container
-              - exit_code
-              - finished_at
-              - reason
-              - started_at
-              - state
-            properties:
-              container:
-                type: string
-                description: SHA of container image in which the inspection is done.
-                nullable: true
-              exit_code:
-                type: integer
-                description: >
-                  Return code of the process performing inspection (user supplied
-                  script return value).
-                nullable: true
-              finished_at:
-                type: string
-                description: >
-                  Datetime in ISO format informing about when the inspection has
-                  finished.
-                nullable: true
-              reason:
-                type: string
-                description: Reasoning on finished inspection run.
-                nullable: true
-              started_at:
-                type: string
-                description: >
-                  Datetime in ISO format informing about when the inspection has
-                  started.
-              state:
-                type: string
-                example: terminated
+          type: object
+          description: Status information for the inspection job.
+          additionalProperties: true
+          required:
+            - completions
+            - nodes
+          properties:
+            completions:
+              type: integer
+              description: Number of times this Job should be successfully ran.
+            finished_at:
+              type: string
+              description: >
+                Datetime in ISO format informing about when the inspection has
+                finished.
+              nullable: true
+            started_at:
+              type: string
+              description: >
+                Datetime in ISO format informing about when the inspection has
+                started.
+            nodes:
+              type: array
+              items:
+                type: object
+                description: Status information for the Pods created by the inspection job.
+                additionalProperties: false
+                required:
+                  - container
+                  - exit_code
+                  - finished_at
+                  - reason
+                  - started_at
+                  - state
+                properties:
+                  container:
+                    type: string
+                    description: SHA of container image in which the inspection is done.
+                    nullable: true
+                  exit_code:
+                    type: integer
+                    description: >
+                      Return code of the process performing inspection (user supplied
+                      script return value).
+                    nullable: true
+                  finished_at:
+                    type: string
+                    description: >
+                      Datetime in ISO format informing about when the inspection has
+                      finished.
+                    nullable: true
+                  reason:
+                    type: string
+                    description: Reasoning on finished inspection run.
+                    nullable: true
+                  started_at:
+                    type: string
+                    description: >
+                      Datetime in ISO format informing about when the inspection has
+                      started.
+                  state:
+                    type: string
+                    example: terminated
         workflow:
           type: object
           description: Status of the submitted inspection Workflow.

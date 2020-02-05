@@ -105,7 +105,9 @@ def _adjust_default_requests(dict_: dict) -> None:
         dict_["requests"] = {}
 
     dict_["requests"]["cpu"] = dict_["requests"].get("cpu") or _DEFAULT_REQUESTS["cpu"]
-    dict_["requests"]["memory"] = dict_["requests"].get("memory") or _DEFAULT_REQUESTS["memory"]
+    dict_["requests"]["memory"] = (
+        dict_["requests"].get("memory") or _DEFAULT_REQUESTS["memory"]
+    )
 
 
 def post_inspection(specification: dict) -> tuple:
@@ -135,7 +137,9 @@ def post_inspection(specification: dict) -> tuple:
 
     inspection_id = _generate_inspection_id(specification.get("identifier"))
 
-    parameters, use_hw_template = _construct_parameters_dict(specification.get("build", {}))
+    parameters, use_hw_template = _construct_parameters_dict(
+        specification.get("build", {})
+    )
 
     # Mark this for later use - in get_inspection_specification().
     specification["@created"] = datetime2datetime_str()
@@ -151,7 +155,9 @@ def post_inspection(specification: dict) -> tuple:
 
     dockerfile = dockerfile.replace("'", "''")
 
-    workflow_parameters = dict(dockerfile=dockerfile, specification=json.dumps(specification), target=target)
+    workflow_parameters = dict(
+        dockerfile=dockerfile, specification=json.dumps(specification), target=target
+    )
 
     if "allowed_failures" in specification:
         workflow_parameters["allowed-failures"] = specification["allowed_failures"]
@@ -161,7 +167,9 @@ def post_inspection(specification: dict) -> tuple:
         workflow_parameters["parallelism"] = specification["parallelism"]
 
     workflow_id = _WORKFLOW_MANAGER.submit_inspection_workflow(
-        inspection_id, template_parameters=template_parameters, workflow_parameters=workflow_parameters
+        inspection_id,
+        template_parameters=template_parameters,
+        workflow_parameters=workflow_parameters,
     )
 
     # TODO: Check whether the workflow spec has been resolved successfully
@@ -191,16 +199,28 @@ def get_inspection_job_log(inspection_id: str) -> tuple:
     """Get logs of the given inspection."""
     parameters = {"inspection_id": inspection_id}
     try:
-        log = _OPENSHIFT.get_job_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+        log = _OPENSHIFT.get_job_log(
+            inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE
+        )
     except NotFoundException as exc:
         try:
-            # Try to get status so a user knows to ask later.
-            _OPENSHIFT.get_job_status_report(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
-            return {"error": "No logs available yet for the given inspection id", "parameters": parameters}, 202
+            return (
+                {
+                    "error": "No logs available yet for the given inspection id",
+                    "parameters": parameters,
+                },
+                202,
+            )
         except NotFoundException:
             pass
 
-        return {"error": "Job log for the given inspection id was not found", "parameters": parameters}, 404
+        return (
+            {
+                "error": "Job log for the given inspection id was not found",
+                "parameters": parameters,
+            },
+            404,
+        )
 
     if not log:
         return (
@@ -215,7 +235,13 @@ def get_inspection_job_log(inspection_id: str) -> tuple:
         log = json.loads(log)
     except Exception as exc:
         _LOGGER.exception("Failed to load inspection job log for %r", inspection_id)
-        return {"error": "Job failed, please contact administrator for more details", "parameters": parameters}, 500
+        return (
+            {
+                "error": "Job failed, please contact administrator for more details",
+                "parameters": parameters,
+            },
+            500,
+        )
 
     return {"log": log, "parameters": parameters}, 200
 
@@ -227,7 +253,9 @@ def get_inspection_job_logs(inspection_id: str) -> tuple:
     response, _ = get_inspection_status(inspection_id)
     inspection_status: Dict[str, Any] = response["status"]
 
-    _LOGGER.debug("Inspection Workflow '%s' status: %r", inspection_id, inspection_status)
+    _LOGGER.debug(
+        "Inspection Workflow '%s' status: %r", inspection_id, inspection_status
+    )
     if not inspection_status["build"].get("state") == "terminated":
         return (
             {
@@ -240,10 +268,14 @@ def get_inspection_job_logs(inspection_id: str) -> tuple:
 
     inspection_logs: List[str] = []
     try:
-        pod_ids: List[str] = _OPENSHIFT._get_pod_ids_from_job(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+        pod_ids: List[str] = _OPENSHIFT._get_pod_ids_from_job(
+            inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE
+        )
 
         for pod_id in pod_ids:
-            log: str = _OPENSHIFT.get_pod_log(pod_id, namespace=Configuration.AMUN_INSPECTION_NAMESPACE)
+            log: str = _OPENSHIFT.get_pod_log(
+                pod_id, namespace=Configuration.AMUN_INSPECTION_NAMESPACE
+            )
             inspection_logs.append(log)
     except NotFoundException as exc:
         return (
@@ -288,9 +320,17 @@ def get_inspection_build_log(inspection_id: str) -> tuple:
     parameters = {"inspection_id": inspection_id}
 
     try:
-        status = _OPENSHIFT.get_pod_log(inspection_id + "-1-build", Configuration.AMUN_INSPECTION_NAMESPACE)
+        status = _OPENSHIFT.get_pod_log(
+            inspection_id + "-1-build", Configuration.AMUN_INSPECTION_NAMESPACE
+        )
     except NotFoundException:
-        return {"error": "Build log with for the given inspection id was not found", "parameters": parameters}, 404
+        return (
+            {
+                "error": "Build log with for the given inspection id was not found",
+                "parameters": parameters,
+            },
+            404,
+        )
 
     return {"log": status, "parameters": parameters}, 200
 
@@ -303,13 +343,13 @@ def get_inspection_status(inspection_id: str) -> tuple:
     try:
         wf: Dict[str, Any] = _OPENSHIFT.get_workflow(
             label_selector=f"inspection_id={inspection_id}",
-            namespace=_OPENSHIFT.amun_inspection_namespace
+            namespace=_OPENSHIFT.amun_inspection_namespace,
         )
         workflow_status = wf["status"]
     except NotFoundException as exc:
         return {
-            'error': 'A Workflow for the given inspection id was not found',
-            'parameters': parameters
+            "error": "A Workflow for the given inspection id was not found",
+            "parameters": parameters,
         }
 
     build_status = None
@@ -322,17 +362,32 @@ def get_inspection_status(inspection_id: str) -> tuple:
             inspection_id + "-1-build", Configuration.AMUN_INSPECTION_NAMESPACE
         )
     except NotFoundException:
-        return {"error": "The given inspection id was not found", "parameters": parameters}, 404
+        return (
+            {
+                "error": "The given inspection id was not found",
+                "parameters": parameters,
+            },
+            404,
+        )
 
     job_status = None
     try:
-        job_status = _OPENSHIFT.get_job_status_report(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+        job_status = _OPENSHIFT.get_job_status_report(
+            inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE
+        )
     except NotFoundException:
         # There was no job scheduled - user did not submitted any script to run the job. Report None.
         pass
 
     return (
-        {"status": {"build": build_status, "job": job_status, "workflow": workflow_status}, "parameters": parameters},
+        {
+            "status": {
+                "build": build_status,
+                "job": job_status,
+                "workflow": workflow_status,
+            },
+            "parameters": parameters,
+        },
         200,
     )
 
@@ -343,17 +398,28 @@ def get_inspection_specification(inspection_id: str):
 
     try:
         wf: Dict[str, Any] = _OPENSHIFT.get_workflow(
-            label_selector=f"inspection_id={inspection_id}", namespace=_OPENSHIFT.amun_inspection_namespace
+            label_selector=f"inspection_id={inspection_id}",
+            namespace=_OPENSHIFT.amun_inspection_namespace,
         )
     except NotFoundException as exc:
-        return {"error": "A Workflow for the given inspection id as not found", "parameters": parameters}
+        return {
+            "error": "A Workflow for the given inspection id as not found",
+            "parameters": parameters,
+        }
 
     parameters: List[Dict[str, Any]] = wf["spec"]["arguments"]["parameters"]
 
-    specification_parameter, = filter(lambda p: p["name"] == "specification", parameters)
+    (specification_parameter,) = filter(
+        lambda p: p["name"] == "specification", parameters
+    )
     specification = specification_parameter["value"]
     specification = json.loads(specification)
 
     # We inserted created information on our own, pop it not to taint the original specification request.
     created = specification.pop("@created")
-    return {"parameters": parameters, "specification": specification, "created": created}
+    return {
+        "parameters": parameters,
+        "specification": specification,
+        "created": created,
+    }
+
