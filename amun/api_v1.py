@@ -266,7 +266,7 @@ def get_inspection_job_logs(inspection_id: str) -> tuple:
             202,
         )
 
-    inspection_logs: List[str] = []
+    pod_logs: List[str] = []
     try:
         pod_ids: List[str] = _OPENSHIFT._get_pod_ids_from_job(
             inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE
@@ -276,40 +276,37 @@ def get_inspection_job_logs(inspection_id: str) -> tuple:
             log: str = _OPENSHIFT.get_pod_log(
                 pod_id, namespace=Configuration.AMUN_INSPECTION_NAMESPACE
             )
-            inspection_logs.append(log)
+            pod_logs.append(log)
     except NotFoundException as exc:
         return (
             {
-                "error": "No logs for the given inspection id was not found",
+                "error": "No pods for the given inspection id was not found",
                 "status": inspection_status,
                 "parameters": parameters,
             },
             404,
         )
+
+    inspection_logs: List[Dict[str, Any]] = []
+    for pod, pod_log in zip(pod_ids, pod_logs):
+        log: Dict[str, Any]
+        try:
+            log = json.loads(pod_log)
+        except json.JSONDecodeError:
+            _LOGGER.exception("Failed to parse log from pod %s: %r", pod, pod_log)
+            continue
+
+        inspection_logs.append(log)
 
     if not any(inspection_logs):
+        _LOGGER.error("Inspection run did not produce any logs or it was deleted by OpenShift")
         return (
             {
-                "error": "Inspection run did not produce any log or it was deleted by OpenShift",
+                "error": "Inspection run did not produce any logs or it was deleted by OpenShift",
                 "status": inspection_status,
                 "parameters": parameters,
             },
             404,
-        )
-
-    try:
-        inspection_logs: List[Dict[str, Any]] = [
-            json.loads(log) for log in inspection_logs if log
-        ]
-    except Exception as exc:
-        _LOGGER.exception("Failed to load inspection job log for %r", inspection_id)
-        return (
-            {
-                "error": "An exception occurred, please contact administrator for more details",
-                "status": inspection_status,
-                "parameters": parameters,
-            },
-            500,
         )
 
     return {"logs": inspection_logs, "parameters": parameters}, 200

@@ -524,12 +524,12 @@ components:
       type: object
       description: Job logs for the given inspection.
       required:
-        - logs
+        - log
         - parameters
       properties:
-        logs:
+        log:
           type: object
-          description: Inspection job logs printed to stdout/stderr as a plain text.
+          description: Inspection job log printed to stdout/stderr as a plain text.
           nullable: true
           additionalProperties: false
           required:
