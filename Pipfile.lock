@@ -356,10 +356,10 @@
         },
         "mock": {
             "hashes": [
-                "sha256:56358390ebde40c927ec5666626be7d4310a2533ae3aed5c2dd7b55b80687f48",
-                "sha256:8fff3fd7c5796ea78ae2847f32e87ad4e111e03fef6e90d03b5efb4882211d78"
+                "sha256:2a572b715f09dd2f0a583d8aeb5bb67d7ed7a8fd31d193cf1227a99c16a67bc3",
+                "sha256:5e48d216809f6f393987ed56920305d8f3c647e6ed35407c1ff2ecb88a9e1151"
             ],
-            "version": "==4.0.0"
+            "version": "==4.0.1"
         },
         "oauthlib": {
             "hashes": [
@@ -584,11 +584,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:58032fc0ec69326853795a048f15f7e14aa0e66e354a5266b28b7e2f32851ceb",
-                "sha256:c5b48c8314efd676ece3796674e2123ccf0a78f16c8e5c196d8fbd4cf48233f2"
+                "sha256:49163c97835ad80a0784e920c251f7f4d9261499e37ad1f4d08b34034588696e",
+                "sha256:cddb95c830a036ed9da9ff2fdd12a04fa7bad83775ab46da43bc215e88689fbb"
             ],
             "index": "pypi",
-            "version": "==0.10.4"
+            "version": "==0.10.5"
         },
         "threadloop": {
             "hashes": [
@@ -646,10 +646,10 @@
         },
         "werkzeug": {
             "hashes": [
-                "sha256:1e0dedc2acb1f46827daa2e399c1485c8fa17c0d8e70b6b875b4e7f54bf408d2",
-                "sha256:b353856d37dec59d6511359f97f6a4b2468442e454bd1c98298ddce53cac1f04"
+                "sha256:169ba8a33788476292d04186ab33b01d6add475033dfc07215e6d219cc077096",
+                "sha256:6dc65cf9091cf750012f56f2cad759fa9e879f511b5ff8685e456b4e3bf90d16"
             ],
-            "version": "==0.16.1"
+            "version": "==1.0.0"
         },
         "wrapt": {
             "hashes": [
