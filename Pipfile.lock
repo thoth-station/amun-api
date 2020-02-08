@@ -405,10 +405,10 @@
         },
         "prometheus-flask-exporter": {
             "hashes": [
-                "sha256:ad74d487c6233b78fc51578d1f1e54ee5576dcfc41cb39e4a6b0ca2dc88b2411"
+                "sha256:13eb1fc302b36d968fe825e801e2bcbd1fc50104bb8a6c5aa743fee21b92f9de"
             ],
             "index": "pypi",
-            "version": "==0.12.1"
+            "version": "==0.12.2"
         },
         "protobuf": {
             "hashes": [
@@ -659,10 +659,10 @@
         },
         "zipp": {
             "hashes": [
-                "sha256:ccc94ed0909b58ffe34430ea5451f07bc0c76467d7081619a454bf5c98b89e28",
-                "sha256:feae2f18633c32fc71f2de629bfb3bd3c9325cd4419642b1f1da42ee488d9b98"
+                "sha256:5c56e330306215cd3553342cfafc73dda2c60792384117893f3a83f8a1209f50",
+                "sha256:d65287feb793213ffe11c0f31b81602be31448f38aeb8ffc2eb286c4f6f6657e"
             ],
-            "version": "==2.1.0"
+            "version": "==2.2.0"
         }
     },
     "develop": {}
