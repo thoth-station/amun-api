@@ -10,3 +10,9 @@ runtime_environments:
     python_version: "3.6"
     recommendation_type: latest
     limit_latest_versions: 5
+
+managers:
+  - name: update
+    configuration:
+      labels: [bot]
+  - name: info
