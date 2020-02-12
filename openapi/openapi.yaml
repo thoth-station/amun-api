@@ -1027,7 +1027,7 @@ components:
           additionalProperties: true
           required:
             - completions
-            - nodes
+            - pods
           properties:
             completions:
               type: integer
@@ -1043,7 +1043,7 @@ components:
               description: >
                 Datetime in ISO format informing about when the inspection has
                 started.
-            nodes:
+            pods:
               type: array
               items:
                 type: object
