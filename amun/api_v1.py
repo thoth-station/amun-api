@@ -18,8 +18,9 @@
 """Implementation of API v1."""
 
 import logging
-import random
 import json
+import random
+import re
 
 from deprecated.sphinx import deprecated
 from deprecated.sphinx import versionchanged
@@ -109,6 +110,104 @@ def _adjust_default_requests(dict_: dict) -> None:
         dict_["requests"].get("memory") or _DEFAULT_REQUESTS["memory"]
     )
 
+def _parse_specification(specification: dict) -> dict:
+    """Parse inspection specification and cast types to comply with Argo."""
+    parsed_specification = specification.copy()
+
+    def _escape_single_quotes(obj):
+        if isinstance(obj, dict):
+            for k in obj:
+                obj[k] = _escape_single_quotes(obj[k])
+        elif isinstance(obj, list):
+            for i, v in enumerate(obj):
+                obj[i] = _escape_single_quotes(v)
+        elif isinstance(obj, str):
+            return re.sub(r"'(?!')", "''", obj)
+
+        return obj
+
+    parsed_specification = _escape_single_quotes(parsed_specification)
+
+    int_to_str = ["allowed_failures", "batch_size", "parallelism"]
+    for key in int_to_str:
+        if not key in specification:
+            continue
+
+        parsed_specification[key] = str(specification[key])
+
+    if "build" not in specification:
+        specification["build"] = {}
+
+    if "run" not in specification:
+        specification["run"] = {}
+
+    return parsed_specification
+
+
+def _parse_specification(specification: dict) -> dict:
+    """Parse inspection specification.
+
+    Cast types to comply with Argo and escapes quotes."""
+    parsed_specification = specification.copy()
+
+    def _escape_single_quotes(obj):
+        if isinstance(obj, dict):
+            for k in obj:
+                obj[k] = _escape_single_quotes(obj[k])
+        elif isinstance(obj, list):
+            for i, v in enumerate(obj):
+                obj[i] = _escape_single_quotes(v)
+        elif isinstance(obj, str):
+            return re.sub(r"'(?!')", "''", obj)
+
+        return obj
+
+    parsed_specification = _escape_single_quotes(parsed_specification)
+
+    int_to_str = ["allowed_failures", "batch_size", "parallelism"]
+    for key in int_to_str:
+        if not key in specification:
+            continue
+
+        parsed_specification[key] = str(specification[key])
+
+    if "build" not in specification:
+        specification["build"] = {}
+
+    if "run" not in specification:
+        specification["run"] = {}
+
+    return parsed_specification
+
+def _unparse_specification(parsed_specification: dict) -> dict:
+    """Unparse inspection specification.
+
+    Casts types to comply with the inspection scheme and unescapes quotes.
+    """
+    specification = parsed_specification.copy()
+
+    def _unescape_single_quotes(obj):
+        if isinstance(obj, dict):
+            for k in obj:
+                obj[k] = _unescape_single_quotes(obj[k])
+        elif isinstance(obj, list):
+            for i, v in enumerate(obj):
+                obj[i] = _unescape_single_quotes(v)
+        elif isinstance(obj, str):
+            return re.sub(r"''", "'", obj)
+
+        return obj
+
+    specification = _unescape_single_quotes(specification)
+
+    str_to_int = ["allowed_failures", "batch_size", "parallelism"]
+    for key in str_to_int:
+        if not key in specification:
+            continue
+
+        specification[key] = int(parsed_specification[key])
+
+    return specification
 
 def post_inspection(specification: dict) -> tuple:
     """Create new inspection for the given software stack."""
@@ -126,11 +225,7 @@ def post_inspection(specification: dict) -> tuple:
 
     run_job = run_job_or_error
 
-    if "build" not in specification:
-        specification["build"] = {}
-
-    if "run" not in specification:
-        specification["run"] = {}
+    specification = _parse_specification(specification)
 
     _adjust_default_requests(specification["run"])
     _adjust_default_requests(specification["build"])
@@ -411,6 +506,7 @@ def get_inspection_specification(inspection_id: str):
     )
     specification = specification_parameter["value"]
     specification = json.loads(specification)
+    specification = _unparse_specification(specification)
 
     # We inserted created information on our own, pop it not to taint the original specification request.
     created = specification.pop("@created")
