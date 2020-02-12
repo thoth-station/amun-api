@@ -294,13 +294,13 @@ components:
             to distinguish different inspection runs.
           example: test
         allowed_failures:
-          type: string
-          default: '1'
-          example: '1'
+          type: integer
+          default: 1
+          example: 1
         batch_size:
-          type: string
-          default: '1'
-          example: '1'
+          type: integer
+          default: 1
+          example: 1
           description: Number of inspection runs
         packages:
           type: array
@@ -463,9 +463,9 @@ components:
                 type: string
                 description: Value for the environment variable.
         parallelism:
-          type: string
-          default: '1'
-          example: '1'
+          type: integer
+          default: 1
+          example: 1
           description: Number of inspections that can run in parallel
         script:
           type: string
