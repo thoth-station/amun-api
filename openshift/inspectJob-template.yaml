@@ -5,13 +5,13 @@ metadata:
   annotations:
     description: Amun - Execution engine for Thoth
     openshift.io/display-name: Amun API
-    version: 0.5.2
+    version: 0.6.0
     tags: amun,thoth,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       This template defines resources needed to run Amun's inspection job on OpenShift.
     template.openshift.io/provider-display-name: Red Hat, Inc.
-    thoth-station.ninja/template-version: 0.5.2
+    thoth-station.ninja/template-version: 0.6.0
   labels:
     template: amun-inspection-job
     app: amun
@@ -23,10 +23,11 @@ objects:
     metadata:
       name: "${AMUN_INSPECTION_ID}"
       annotations:
-        thoth-station.ninja/template-version: 0.5.2
+        thoth-station.ninja/template-version: 0.6.0
       labels:
         app: amun
         component: amun-inspection-job
+        inspection_id: "${AMUN_INSPECTION_ID}"
         operator: graph-sync
         task: inspection
         mark: cleanup

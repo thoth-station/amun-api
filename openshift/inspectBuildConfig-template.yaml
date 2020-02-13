@@ -5,13 +5,13 @@ metadata:
   annotations:
     description: A template for BuildConfig to create build on the fly.
     openshift.io/display-name: Amun inspection BuildConfig
-    version: 0.5.2
+    version: 0.6.0
     tags: amun,thoth,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       A template used to create dynamic builds on user requests.
     template.openshift.io/provider-display-name: Red Hat, Inc.
-    thoth-station.ninja/template-version: 0.5.2
+    thoth-station.ninja/template-version: 0.6.0
   labels:
     template: amun-inspection-buildconfig
     app: amun
@@ -25,10 +25,11 @@ objects:
       labels:
         app: amun
         component: amun-inspection-buildconfig
+        inspection_id: "${AMUN_INSPECTION_ID}"
         mark: cleanup
         ttl: 7200
       annotations:
-        thoth-station.ninja/template-version: 0.5.2
+        thoth-station.ninja/template-version: 0.6.0
         amun_specification: ${AMUN_SPECIFICATION}
     spec:
       output:
