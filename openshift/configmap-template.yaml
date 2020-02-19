@@ -27,6 +27,20 @@ objects:
         app: amun
         component: configmap
     data:
+      artifactRepository: |-
+        archiveLogs: false
+
+        s3:
+          bucket: "thoth"
+          endpoint: "s3.upshift.redhat.com"
+          accessKeySecret:                #omit if accessing via AWS IAM
+            name: argo-artifact-repository-secrets
+            key: accessKey
+          secretKeySecret:                #omit if accessing via AWS IAM
+            name: argo-artifact-repository-secrets
+            key: secretKey
+          keyFormat: "argo/inspection"
+
       amun-inspection-namespace: ${AMUN_INSPECTION_NAMESPACE}
       amun-infra-namespace: ${AMUN_INFRA_NAMESPACE}
       prometheus-pushgateway-host: ${PROMETHEUS_PUSHGATEWAY_HOST}

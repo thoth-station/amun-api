@@ -1,0 +1,195 @@
+# Inspection Run Workflow Template
+#
+# This workflow submits an inspection Job which creates `n` pod replicas and runs them in a sequence.
+#
+# successCondition: `n` pods have finished successfully and are present in the cluster
+# failureCondition: there are more failures than is allowed (a constant to account for potential flakes)
+---
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: inspection-run-template
+  annotations:
+    thoth-station.ninja/template-version: 0.5.1
+spec:
+  entrypoint: main
+
+  templates:
+  - name: main
+    inputs:
+      parameters:
+      # Required
+      - name: batch-name
+      - name: batch-size
+      - name: inspection-id
+      # Defaults
+      - name: allowed-failures
+        value: '1'  # i.e., 99% success rate out of 100
+      - name: parallelism
+        value: '1'
+      - name: cpu
+        value: "750m"
+      - name: memory
+        value: "1Gi"
+      - name: registry
+        value: docker-registry.default.svc:5000
+      - name: thoth-infra-namespace
+        value: "{{workflow.namespace}}"
+    steps:
+    - - name: job
+        arguments:
+          parameters:
+          - name: batch-name
+            value: "{{inputs.parameters.batch-name}}"
+          - name: batch-size
+            value: "{{inputs.parameters.batch-size}}"
+          - name: inspection-id
+            value: "{{inputs.parameters.inspection-id}}"
+          - name: cpu
+            value: "{{inputs.parameters.cpu}}"
+          - name: memory
+            value: "{{inputs.parameters.memory}}"
+          - name: parallelism
+            value: "{{inputs.parameters.parallelism}}"
+          - name: registry
+            value: "{{inputs.parameters.registry}}"
+          - name: thoth-infra-namespace
+            value: "{{inputs.parameters.thoth-infra-namespace}}"
+        template: create-job
+
+    - - name: inspection
+        arguments:
+          parameters:
+          - name: allowed-failures
+            value: "{{inputs.parameters.allowed-failures}}"
+          - name: batch-name
+            value: "{{inputs.parameters.batch-name}}"
+          - name: batch-size
+            value: "{{inputs.parameters.batch-size}}"
+        template: await-inspection
+        continueOn:
+          error: true
+          failed: true
+
+    - - name: on-failure
+        arguments:
+          parameters:
+          - name: batch-name
+            value: "{{inputs.parameters.batch-name}}"
+        template: on-failure
+        when: "{{steps.inspection.status}} != Succeeded"
+
+
+  # TODO: Run each performance indicator directly from the Workflow
+  # instead of submitting a job and monitoring it
+  - name: create-job
+    inputs:
+      parameters:
+      - name: inspection-id
+      - name: batch-name
+      - name: batch-size
+      - name: cpu
+      - name: memory
+      - name: parallelism
+      - name: registry
+      - name: thoth-infra-namespace
+    resource:
+      action: create
+      manifest: |
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: "{{inputs.parameters.batch-name}}"
+          labels:
+              app: amun
+              component: amun-inspection-job
+              amun/template: amun-inspection-job
+              amun/inspection-id: "{{inputs.parameters.inspection-id}}"
+              amun/task: inspection
+              operator: graph-sync
+              mark: cleanup
+          ownerReferences:
+          - apiVersion: argoproj.io/v1alpha1
+            kind: Workflow
+            name: "{{workflow.name}}"
+            uid: "{{workflow.uid}}"
+        spec:
+          backoffLimit: 0
+          completions: {{inputs.parameters.batch-size}}
+          parallelism: {{inputs.parameters.parallelism}}
+          template:
+            metadata:
+              name: "{{inputs.parameters.batch-name}}-job"
+              labels:
+                app: amun
+                component: amun-inspection-job
+                amun/inspection-id: "{{inputs.parameters.inspection-id}}"
+                amun/batch-size: "{{inputs.parameters.batch-size}}"
+                amun/batch-name: "{{inputs.parameters.batch-name}}"
+                amun/task: inspection
+            spec:
+              automountServiceAccountToken: false
+              restartPolicy: Never
+              containers:
+              - name: inspect
+                env: []
+                image: "{{inputs.parameters.inspection-id}}:latest"
+                livenessProbe:
+                  failureThreshold: 1
+                  initialDelaySeconds: 7200
+                  periodSeconds: 10
+                  tcpSocket:
+                    port: 80
+                resources:
+                  limits:
+                    memory: "{{inputs.parameters.memory}}"
+                    cpu: "{{inputs.parameters.cpu}}"
+                  requests:
+                    memory: "{{inputs.parameters.memory}}"
+                    cpu: "{{inputs.parameters.cpu}}"
+                volumeMounts:
+                  - mountPath: /home/amun/hwinfo
+                    name: hw-info-volume
+              initContainers:
+              - name: inspect-hwinfo
+                image: |-
+                  {{inputs.parameters.registry}}/{{inputs.parameters.thoth-infra-namespace}}/inspect-hwinfo
+                volumeMounts:
+                  - mountPath: /home/amun/hwinfo
+                    name: hw-info-volume
+              volumes:
+              - name: hw-info-volume
+                emptyDir: {}
+
+
+  - name: await-inspection
+    inputs:
+      parameters:
+      - name: allowed-failures
+      - name: batch-name
+      - name: batch-size
+    resource:
+      action: get
+      successCondition: status.succeeded == {{inputs.parameters.batch-size}}
+      failureCondition: status.failed > {{inputs.parameters.allowed-failures}}
+      manifest: |
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: "{{inputs.parameters.batch-name}}"
+
+
+  # Suspend the inspection Job
+  - name: on-failure
+    inputs:
+      parameters:
+      - name: batch-name
+    resource:
+      action: patch
+      manifest: |
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: "{{inputs.parameters.batch-name}}"
+        spec:
+          parallelism: 0
