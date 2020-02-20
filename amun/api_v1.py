@@ -110,40 +110,6 @@ def _adjust_default_requests(dict_: dict) -> None:
 
 
 def _parse_specification(specification: dict) -> dict:
-    """Parse inspection specification and cast types to comply with Argo."""
-    parsed_specification = specification.copy()
-
-    def _escape_single_quotes(obj):
-        if isinstance(obj, dict):
-            for k in obj:
-                obj[k] = _escape_single_quotes(obj[k])
-        elif isinstance(obj, list):
-            for i, v in enumerate(obj):
-                obj[i] = _escape_single_quotes(v)
-        elif isinstance(obj, str):
-            return re.sub(r"'(?!')", "''", obj)
-
-        return obj
-
-    parsed_specification = _escape_single_quotes(parsed_specification)
-
-    int_to_str = ["allowed_failures", "batch_size", "parallelism"]
-    for key in int_to_str:
-        if key not in specification:
-            continue
-
-        parsed_specification[key] = str(specification[key])
-
-    if "build" not in specification:
-        specification["build"] = {}
-
-    if "run" not in specification:
-        specification["run"] = {}
-
-    return parsed_specification
-
-
-def _parse_specification(specification: dict) -> dict:
     """Parse inspection specification.
 
     Cast types to comply with Argo and escapes quotes.
