@@ -510,8 +510,6 @@ components:
           description: >-
             An id of the submitted Workflow for checking its status and its
             results.
-        workflow_parameters:
-          $ref: '#/components/schemas/InspectionWorkflowParameters'
         workflow_target:
           type: string
           enum:
@@ -1089,77 +1087,3 @@ components:
           type: object
           description: Status of the submitted inspection Workflow.
           additionalProperties: true
-    InspectionWorkflowParameters:
-      type: object
-      description: Inspection Workflow parameters.
-      required:
-        - dockerfile
-        - inspection-id
-        - specification
-      properties:
-        dockerfile:
-          type: string
-          description: Dockerfile.
-        inspection-id:
-          type: string
-          description: ID of the inspection.
-        specification:
-          type: string
-          description: Inspection specification.
-        batch-size:
-          type: string
-          default: '1'
-          example: '1'
-          description: Size of the batch.
-        batch-name:
-          type: string
-          description: Name of the batch.
-        allowed-failures:
-          type: string
-          default: '1'
-          example: '1'
-          description: Number of allowed failures.
-        parallelism:
-          type: string
-          default: '1'
-          example: '1'
-          description: Number of inspection that can run in parallel.
-        cpu:
-          type: string
-          example: "500m"
-          description: CPU cores requested for the build.
-        cpu-family:
-          type: integer
-          example: 6
-          description: Family number of CPU.
-        cpu-model:
-          type: integer
-          example: 94
-          description: Modelnumber of CPU.
-        memory:
-          type: string
-          example: "512Mi"
-          description: Memory requested for build.
-        physical-cpus:
-          type: integer
-          example: 32
-          description: Number of physical CPUs.
-        processor:
-          type: string
-          example: "Intel-Xeon-Processor-Skylake-IBRS"
-          description: Name of processor.
-        registry:
-          type: string
-          description: Registry server from where Image is to be pulled.
-          default: 'docker-registry.default.svc:5000'
-          example: 'docker-registry.default.svc:5000'
-        thoth-infra-namespace:
-          type: string
-          description: Project where ImageStream is present.
-        target:
-          type: string
-          enum:
-            - inspection-build
-            - inspection-result
-          default: inspection-result
-          example: inspection-result
