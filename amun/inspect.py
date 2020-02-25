@@ -41,7 +41,8 @@ _HWINFO_FILE = "/home/amun/hwinfo/info.json"
 _EXEC_STDOUT_FILE = "/home/amun/script.stdout"
 _EXEC_STDERR_FILE = "/home/amun/script.stderr"
 # Executable to be run.
-_EXEC_FILE = "/home/amun/script"
+_EXEC_DIR = "/home/amun"
+_EXEC_FILE = os.path.join(_EXEC_DIR, "script")
 _ETC_OS_RELEASE = "/etc/os-release"
 # Names of items on certain position in return value of resource.getrusage()
 #   https://docs.python.org/3.6/library/resource.html#resource.getrusage
@@ -114,7 +115,10 @@ def main():
         hwinfo = json.load(hwinfo_file)
 
     # Execute the supplied script.
-    args = ["pipenv", "run", _EXEC_FILE]
+    if os.path.isfile(os.path.join(_EXEC_DIR, "venv")):
+        args = [os.path.join(_EXEC_DIR, "bin", "python3"), _EXEC_FILE]
+    else:
+        args = ["pipenv", "run", _EXEC_FILE]
     with open(_EXEC_STDOUT_FILE, "w") as stdout_file, open(_EXEC_STDERR_FILE, "w") as stderr_file:
         process = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file, universal_newlines=True)
 
