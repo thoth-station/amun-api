@@ -145,7 +145,16 @@ def create_dockerfile(specification: dict) -> tuple:
             )
 
             dockerfile += _write_file_string(_PIP_CONF, "/etc/pip.conf")
-            dockerfile += "RUN cd /home/amun && pipenv install --deploy\n\n"
+
+            if specification.get("package_manager", "micropipenv") == "micropipenv":
+                dockerfile += "RUN cd /home/amun && " \
+                              "python3 -m venv venv/ && " \
+                              ". venv/bin/activate && " \
+                              "micropipenv install --deploy\n\n"
+            elif specification.get("package_manager") == "pipenv":
+                dockerfile += "RUN cd /home/amun && pipenv install --deploy\n\n"
+            else:
+                raise ValueError(f"Unknown package manager to be used {specification.get('package_manager')!r}")
 
     if "script" in specification:
         script_present = True

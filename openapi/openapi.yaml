@@ -293,6 +293,13 @@ components:
             A user-created string which will be inserted into the inspection id
             to distinguish different inspection runs.
           example: test
+        package_manager:
+          type: string
+          description: Package manager to be used for installing dependencies.
+          enum:
+            - micropipenv
+            - pipenv
+          default: micropipenv
         allowed_failures:
           type: integer
           default: 1
