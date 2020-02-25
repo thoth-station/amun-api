@@ -521,7 +521,7 @@ components:
           type: string
           enum:
             - inspection-build
-            - inspection-result
+            - inspection-run-result
       required:
         - inspection_id
         - parameters
