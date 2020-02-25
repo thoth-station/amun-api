@@ -115,7 +115,7 @@ def main():
         hwinfo = json.load(hwinfo_file)
 
     # Execute the supplied script.
-    if os.path.isfile(os.path.join(_EXEC_DIR, "venv")):
+    if os.path.isdir(os.path.join(_EXEC_DIR, "venv")):
         args = [os.path.join(_EXEC_DIR, "bin", "python3"), _EXEC_FILE]
     else:
         args = ["pipenv", "run", _EXEC_FILE]
