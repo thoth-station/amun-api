@@ -38,6 +38,7 @@ spec:
     script:
       image: |-
         {{inputs.parameters.registry}}/{{inputs.parameters.thoth-infra-namespace}}/kubectl
+      imagePullPolicy: Always
       command: [bash]
       source: |-
         set -euxo pipefail
