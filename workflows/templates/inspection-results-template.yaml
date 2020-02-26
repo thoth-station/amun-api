@@ -57,9 +57,7 @@ spec:
           cnt=0
           IFS=$'\n' ; for name in $resource_names; do
             let "cnt+=1";
-            kubectl logs $name |\
-              tee "${results}/${cnt}-output" |\
-              jq -r '.stdout."@result"?' > "${results}/${cnt}-result"
+            kubectl logs $name > "${results}/${cnt}-output"
           done
         }
 
