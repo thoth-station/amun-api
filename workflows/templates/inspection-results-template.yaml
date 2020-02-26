@@ -70,8 +70,8 @@ spec:
 
       resources:
         limits:
-          cpu: 100m
-          memory: 32Mi
+          cpu: 500m
+          memory: 256Mi
       # Required so that `kubelet/k8sapi` executors could gather outputs
       # NOTE: The volume has to be created by the caller's workflow, since
       # WorkflowTemplateSpec does not allow to specify volumes
