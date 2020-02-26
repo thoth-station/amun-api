@@ -5,12 +5,12 @@ metadata:
   annotations:
     description: This is Amun API BuildConfig.
     openshift.io/display-name: "Amun API: BuildConfig"
-    version: 0.5.1
+    version: 0.5.2
     tags: amun,thoth,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: This is Amun API BuildConfig.
     template.openshift.io/provider-display-name: Red Hat, Inc.
-    thoth-station.ninja/template-version: 0.5.1
+    thoth-station.ninja/template-version: 0.5.2
   labels:
     template: amun-api-buildconfig
     app: amun
@@ -22,7 +22,7 @@ objects:
     metadata:
       name: amun-api
       annotations:
-        thoth-station.ninja/template-version: 0.5.1
+        thoth-station.ninja/template-version: 0.5.2
       labels:
         app: amun
         component: amun-api
@@ -60,6 +60,8 @@ objects:
               value: "1"
             - name: "THOTH_ADVISE"
               value: ${THOTH_ADVISE}
+            - name: "THOTH_ERROR_FALLBACK"
+              value: "1"
             - name: "THAMOS_VERBOSE"
               value: "1"
             - name: "THAMOS_DEBUG"
