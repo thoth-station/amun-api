@@ -302,8 +302,8 @@ components:
           default: micropipenv
         allowed_failures:
           type: integer
-          default: 1
-          example: 1
+          default: 0
+          example: 0
         batch_size:
           type: integer
           default: 1
