@@ -5,12 +5,12 @@ metadata:
   annotations:
     description: This is Amun API
     openshift.io/display-name: "Amun API"
-    version: 0.5.1
+    version: 0.6.0
     tags: amun,thoth,api,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: This is Amun API
     template.openshift.io/provider-display-name: Red Hat, Inc.
-    thoth-station.ninja/template-version: 0.5.1
+    thoth-station.ninja/template-version: 0.6.0
   labels:
     template: amun-api-deployment
     app: amun
@@ -44,7 +44,7 @@ objects:
     metadata:
       name: amun-api
       annotations:
-        thoth-station.ninja/template-version: 0.5.1
+        thoth-station.ninja/template-version: 0.6.0
       labels:
         app: amun
         component: amun-api
@@ -57,7 +57,7 @@ objects:
     apiVersion: v1
     metadata:
       annotations:
-        thoth-station.ninja/template-version: 0.5.1
+        thoth-station.ninja/template-version: 0.6.0
       labels:
         app: amun
         component: amun-api
@@ -74,7 +74,7 @@ objects:
     kind: DeploymentConfig
     metadata:
       annotations:
-        thoth-station.ninja/template-version: 0.5.1
+        thoth-station.ninja/template-version: 0.6.0
       labels:
         app: amun
         component: amun-api
@@ -116,6 +116,21 @@ objects:
                     secretKeyRef:
                       name: amun
                       key: app-secret-key
+                - name: THOTH_CEPH_BUCKET
+                  valueFrom:
+                    configMapKeyRef:
+                      key: ceph-bucket-name
+                      name: thoth
+                - name: THOTH_CEPH_BUCKET_PREFIX
+                  valueFrom:
+                    configMapKeyRef:
+                      key: ceph-bucket-prefix
+                      name: thoth
+                - name: THOTH_S3_ENDPOINT_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      key: ceph-host
+                      name: thoth
                 - name: SENTRY_DSN
                   valueFrom:
                     secretKeyRef:

@@ -17,13 +17,14 @@
 
 """Implementation of API v1."""
 
+import os
 import logging
 import json
 import random
 import re
+from urllib.parse import urlparse
 
 from deprecated.sphinx import deprecated
-from deprecated.sphinx import versionchanged
 
 from thoth.common import OpenShift
 from thoth.common import WorkflowManager
@@ -216,7 +217,15 @@ def post_inspection(specification: dict) -> tuple:
 
     dockerfile = dockerfile.replace("'", "''")
 
-    workflow_parameters = dict(dockerfile=dockerfile, specification=json.dumps(specification), target=target)
+    workflow_parameters = dict(
+        dockerfile=dockerfile,
+        specification=json.dumps(specification),
+        target=target,
+        ceph_bucket_prefix=os.environ["THOTH_CEPH_BUCKET_PREFIX"],
+        ceph_bucket_name=os.environ["THOTH_CEPH_BUCKET"],
+        ceph_host=urlparse(os.environ["THOTH_S3_ENDPOINT_URL"]).netloc,
+        deployment_name=os.environ["THOTH_DEPLOYMENT_NAME"],
+    )
 
     if "allowed_failures" in specification:
         workflow_parameters["allowed-failures"] = specification["allowed_failures"]
