@@ -68,7 +68,7 @@ spec:
           exit 1
         fi
 
-        cat <<EOF >"${results}/Dockerfile"
+        cat <<EOF | jq . >"${results}/Dockerfile"
         {{inputs.parameters.dockerfile}}
         EOF
 
