@@ -5,12 +5,12 @@ metadata:
   annotations:
     description: This is Amun config map
     openshift.io/display-name: Amun ConfigMap
-    version: 0.5.1
+    version: 0.6.0
     tags: amun,thoth,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
     template.openshift.io/provider-display-name: Red Hat, Inc.
-    thoth-station.ninja/template-version: 0.5.1
+    thoth-station.ninja/template-version: 0.6.0
   labels:
     app: amun
     template: amun-configmap
@@ -22,7 +22,7 @@ objects:
     metadata:
       name: amun
       annotations:
-        thoth-station.ninja/template-version: 0.5.1
+        thoth-station.ninja/template-version: 0.6.0
       labels:
         app: amun
         component: configmap
@@ -31,15 +31,15 @@ objects:
         archiveLogs: false
 
         s3:
-          bucket: "thoth"
-          endpoint: "s3.upshift.redhat.com"
+          bucket: "{{workflow.parameters.ceph_bucket_name}}"
+          endpoint: "{{workflow.parameters.ceph_host}}"
           accessKeySecret:                #omit if accessing via AWS IAM
             name: argo-artifact-repository-secrets
             key: accessKey
           secretKeySecret:                #omit if accessing via AWS IAM
             name: argo-artifact-repository-secrets
             key: secretKey
-          keyFormat: "argo/inspection"
+          keyFormat: "{{workflow.parameters.ceph_bucket_prefix}}/{{workflow.parameters.deployment_name}}/inspection"
 
       amun-inspection-namespace: ${AMUN_INSPECTION_NAMESPACE}
       amun-infra-namespace: ${AMUN_INFRA_NAMESPACE}
