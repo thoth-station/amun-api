@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: This is Amun configuration template
     openshift.io/display-name: "Amun core components"
-    version: 0.5.1
+    version: 0..6.0
     tags: amun,argo,thoth,ai-stacks,aistacks,machinelearning,workflows
     template.openshift.io/documentation-url: https://github.com/thoth-station/
     template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
@@ -24,7 +24,7 @@ objects:
       component: amun-inspection-workflow
       inspection_id: "${AMUN_INSPECTION_ID}"
     annotations:
-      thoth-station.ninja/template-version: 0.5.1
+      thoth-station.ninja/template-version: 0.6.0
   spec:
     serviceAccountName: "${ARGO_SERVICE_ACCOUNT}"
 
@@ -196,6 +196,10 @@ objects:
               value: ${THOTH_REGISTRY}
             - name: thoth-infra-namespace
               value: ${THOTH_INFRA_NAMESPACE}
+            - name: dockerfile
+              value: "{{workflow.parameters.dockerfile}}"
+            - name: specification
+              value: "{{workflow.parameters.specification}}"
           templateRef:
             name: inspection-results-template
             template: main

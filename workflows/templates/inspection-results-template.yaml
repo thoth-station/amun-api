@@ -6,7 +6,7 @@ kind: WorkflowTemplate
 metadata:
   name: inspection-results-template
   annotations:
-    thoth-station.ninja/template-version: 0.5.1
+    thoth-station.ninja/template-version: 0.6.0
 spec:
   templates:
   - name: main
@@ -26,6 +26,8 @@ spec:
         value: docker-registry.default.svc:5000
       - name: thoth-infra-namespace
         value: "{{workflow.namespace}}"
+      - name: dockerfile
+      - name: specification
       # Exit
       - name: exit
         value: "false"
@@ -65,6 +67,14 @@ spec:
           >&2 echo "Workflow failure in the previous steps. Exitting."
           exit 1
         fi
+
+        cat <<EOF | jq . >"${results}/Dockerfile"
+        {{inputs.parameters.dockerfile}}
+        EOF
+
+        cat <<EOF >"${results}/specification"
+        {{inputs.parameters.specification}}
+        EOF
 
       resources:
         limits:
