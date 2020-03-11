@@ -38,7 +38,6 @@ from .exceptions import ScriptObtainingError
 _LOGGER = logging.getLogger(__name__)
 
 _OPENSHIFT = OpenShift()
-_WORKFLOW_MANAGER = WorkflowManager(openshift=_OPENSHIFT)
 
 # These are default requests for inspection builds and runs if not stated
 # otherwise. We explicitly assign defaults to requests coming to API so that
@@ -76,18 +75,6 @@ def _do_create_dockerfile(specification: dict) -> tuple:
         return create_dockerfile(specification)
     except ScriptObtainingError as exc:
         return None, str(exc)
-
-
-def _generate_inspection_id(identifier: str = None) -> str:
-    """Generate a random identifier for the given inspection."""
-    # A very first method used 'generatedName' in ImageStream configuration,
-    # but it looks like there is a bug in OpenShift as it did not generated any
-    # name and failed with regexp issues (that were not related to the
-    # generateName configuration).
-    if not identifier:
-        return "inspection-" + "%08x" % random.getrandbits(32)
-
-    return ("inspection-%s-" + "%08x") % (identifier, random.getrandbits(32))
 
 
 def post_generate_dockerfile(specification: dict):
@@ -199,43 +186,20 @@ def post_inspection(specification: dict) -> tuple:
     _adjust_default_requests(specification["run"])
     _adjust_default_requests(specification["build"])
 
-    inspection_id = _generate_inspection_id(specification.get("identifier"))
-
     parameters, use_hw_template = _construct_parameters_dict(specification.get("build", {}))
 
     # Mark this for later use - in get_inspection_specification().
     specification["@created"] = datetime2datetime_str()
 
-    template_parameters = dict(parameters)
-    template_parameters["AMUN_INSPECTION_ID"] = inspection_id
-    template_parameters["AMUN_GENERATED_DOCKERFILE"] = dockerfile
-    template_parameters["AMUN_CPU"] = specification["build"]["requests"]["cpu"]
-    template_parameters["AMUN_MEMORY"] = specification["build"]["requests"]["memory"]
-    template_parameters["THOTH_INFRA_NAMESPACE"] = _OPENSHIFT.amun_infra_namespace
-
     target = "inspection-run-result" if run_job else "inspection-build"
 
     dockerfile = dockerfile.replace("'", "''")
 
-    workflow_parameters = dict(
+    workflow_id = _OPENSHIFT.schedule_inspection(
         dockerfile=dockerfile,
-        specification=json.dumps(specification),
+        specification=specification,
         target=target,
-        ceph_bucket_prefix=os.environ["THOTH_CEPH_BUCKET_PREFIX"],
-        ceph_bucket_name=os.environ["THOTH_CEPH_BUCKET"],
-        ceph_host=urlparse(os.environ["THOTH_S3_ENDPOINT_URL"]).netloc,
-        deployment_name=os.environ["THOTH_DEPLOYMENT_NAME"],
-    )
-
-    if "allowed_failures" in specification:
-        workflow_parameters["allowed-failures"] = specification["allowed_failures"]
-    if "batch_size" in specification:
-        workflow_parameters["batch-size"] = specification["batch_size"]
-    if "parallelism" in specification:
-        workflow_parameters["parallelism"] = specification["parallelism"]
-
-    workflow_id = _WORKFLOW_MANAGER.submit_inspection_workflow(
-        inspection_id, template_parameters=template_parameters, workflow_parameters=workflow_parameters,
+        parameters=parameters
     )
 
     # TODO: Check whether the workflow spec has been resolved successfully
