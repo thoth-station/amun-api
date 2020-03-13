@@ -75,9 +75,6 @@ def _obtain_script(script: str) -> str:
 
 def _write_file_string(content: str, path: str) -> str:
     """Generate Dockerfile instruction that writes down the file content on the given path."""
-    # TODO: accept a list of files so we generate only one layer for all files
-    # TODO: escape content
-    # TODO: handle it in nice way so we can see it nicely in OpenShift's configuration
     content = content.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\\\n")
     path = path.replace('"', '"')
     return f"RUN echo -e $'{content}' > '{path}'\n\n"
