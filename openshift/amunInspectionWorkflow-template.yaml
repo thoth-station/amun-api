@@ -49,7 +49,7 @@ objects:
       - name: batch-size
         value: '1'
       - name: batch-name
-        value: "{{workflow.parameters.inspection-id}}"
+        value: "${AMUN_INSPECTION_ID}"
       - name: allowed-failures
         value: '1'  # i.e., 99% success rate out of 100
       - name: parallelism
