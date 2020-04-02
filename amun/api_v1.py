@@ -207,7 +207,7 @@ def post_inspection(specification: dict) -> tuple:
 
     return (
         {
-            "inspection_id": workflow_id,
+            "inspection_id": inspection_id,
             "parameters": specification,
             "workflow_target": target,
         },
