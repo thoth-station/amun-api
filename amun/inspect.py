@@ -40,7 +40,6 @@ _HWINFO_FILE = "/home/amun/hwinfo/info.json"
 # We use a file for stdout and stderr not to block on pipe.
 _EXEC_STDOUT_FILE = "/home/amun/script.stdout"
 _EXEC_STDERR_FILE = "/home/amun/script.stderr"
-_EXEC_RESULT = "/home/amun/output"
 # Executable to be run.
 _EXEC_DIR = "/home/amun"
 _EXEC_FILE = os.path.join(_EXEC_DIR, "script")
@@ -172,9 +171,16 @@ def main():
         "runtime_environment": runtime_environment
     }
 
-    with open(_EXEC_RESULT, "w") as output_file:
-        json.dump(report, output_file, indent=2, sort_keys=True)
+    output = json.dumps(report, sort_keys=True, indent=2)
 
+    output_fp = os.environ.get("THOTH_OUTPUT_ARTIFACT")
+    if output_fp:
+        output_file = Path(output_fp)
+
+        output_file.touch(exist_ok=True)
+        output_file.write_text(output)
+
+    sys.stdout.write(output)
     sys.exit(report["exit_code"])
 
 
