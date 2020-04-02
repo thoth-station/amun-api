@@ -195,7 +195,7 @@ def post_inspection(specification: dict) -> tuple:
 
     dockerfile = dockerfile.replace("'", "''")
 
-    workflow_id = _OPENSHIFT.schedule_inspection(
+    inspection_id = _OPENSHIFT.schedule_inspection(
         dockerfile=dockerfile,
         specification=specification,
         target=target,
@@ -210,7 +210,6 @@ def post_inspection(specification: dict) -> tuple:
         {
             "inspection_id": inspection_id,
             "parameters": specification,
-            "workflow_id": workflow_id,
             "workflow_target": target,
         },
         202,

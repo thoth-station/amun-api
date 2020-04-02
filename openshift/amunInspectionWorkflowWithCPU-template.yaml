@@ -18,7 +18,7 @@ objects:
 - kind: Workflow
   apiVersion: argoproj.io/v1alpha1
   metadata:
-    generateName: "${AMUN_INSPECTION_ID}"
+    name: "${AMUN_INSPECTION_ID}"
     labels:
       app: amun
       component: amun-inspection-workflow
@@ -202,6 +202,16 @@ objects:
               value: "{{workflow.parameters.specification}}"
           templateRef:
             name: inspection-results-template
+            template: main
+
+        - name: inspection-sync
+          dependencies: [inspection-run, inspection-run-result]
+          arguments:
+            parameters:
+            - name: inspection-id
+              value: "{{workflow.parameters.inspection-id}}"
+          templateRef:
+            name: inspection-sync-template
             template: main
 
 parameters:

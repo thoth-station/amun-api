@@ -512,11 +512,6 @@ components:
         parameters:
           type: object
           description: Parameters echoed back to user (with default parameters if omitted).
-        workflow_id:
-          type: string
-          description: >-
-            An id of the submitted Workflow for checking its status and its
-            results.
         workflow_target:
           type: string
           enum:
