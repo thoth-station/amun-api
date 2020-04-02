@@ -10,7 +10,7 @@ kind: WorkflowTemplate
 metadata:
   name: inspection-run-template
   annotations:
-    thoth-station.ninja/template-version: 0.5.1
+    thoth-station.ninja/template-version: 0.5.2
 spec:
   entrypoint: main
 
@@ -106,7 +106,6 @@ spec:
               amun/template: amun-inspection-job
               amun/inspection-id: "{{inputs.parameters.inspection-id}}"
               amun/task: inspection
-              operator: graph-sync
               mark: cleanup
           ownerReferences:
           - apiVersion: argoproj.io/v1alpha1

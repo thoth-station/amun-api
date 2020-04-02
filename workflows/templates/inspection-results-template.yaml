@@ -6,7 +6,7 @@ kind: WorkflowTemplate
 metadata:
   name: inspection-results-template
   annotations:
-    thoth-station.ninja/template-version: 0.6.0
+    thoth-station.ninja/template-version: 0.6.1
 spec:
   templates:
   - name: main
@@ -18,8 +18,6 @@ spec:
       # Default
       - name: namespace
         value: "{{workflow.namespace}}"
-      - name: kind
-        value: pods
       - name: selector
         value: ""
       - name: registry
@@ -46,7 +44,7 @@ spec:
         set -euxo pipefail
 
         resource_names=$(\
-          kubectl get {{inputs.parameters.kind}}        \
+          kubectl get pods \
             --namespace {{inputs.parameters.namespace}} \
             --selector {{inputs.parameters.selector}}   \
             --output json |\
@@ -59,7 +57,10 @@ spec:
           cnt=0
           IFS=$'\n' ; for name in $resource_names; do
             let "cnt+=1";
-            kubectl logs $name > "${results}/${cnt}-output"
+            kubectl logs $name > "${results}/${cnt}-logs"
+            kubectl cp --container=main \
+              "{{inputs.parameters.namespace}}/$name:/home/amun/output" \
+              "${results}/${cnt}-output"
           done
         }
 
@@ -68,13 +69,13 @@ spec:
           exit 1
         fi
 
-        cat <<EOF | jq . >"${results}/Dockerfile"
+        cat <<__EOF__ | jq . >"${results}/Dockerfile"
         {{inputs.parameters.dockerfile}}
-        EOF
+        __EOF__
 
-        cat <<EOF >"${results}/specification"
+        cat <<__EOF__ >"${results}/specification"
         {{inputs.parameters.specification}}
-        EOF
+        __EOF__
 
       resources:
         limits:

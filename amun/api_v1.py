@@ -17,17 +17,16 @@
 
 """Implementation of API v1."""
 
-import os
 import logging
 import json
-import random
 import re
-from urllib.parse import urlparse
+from typing import Any
+from typing import Dict
+from typing import List
 
 from deprecated.sphinx import deprecated
 
 from thoth.common import OpenShift
-from thoth.common import WorkflowManager
 from thoth.common import datetime2datetime_str
 from thoth.common.exceptions import NotFoundException
 
@@ -125,11 +124,11 @@ def _parse_specification(specification: dict) -> dict:
 
         parsed_specification[key] = str(specification[key])
 
-    if "build" not in specification:
-        specification["build"] = {}
+    if "build" not in parsed_specification:
+        parsed_specification["build"] = {}
 
-    if "run" not in specification:
-        specification["run"] = {}
+    if "run" not in parsed_specification:
+        parsed_specification["run"] = {}
 
     return parsed_specification
 
@@ -208,7 +207,7 @@ def post_inspection(specification: dict) -> tuple:
 
     return (
         {
-            "inspection_id": inspection_id,
+            "inspection_id": workflow_id,
             "parameters": specification,
             "workflow_id": workflow_id,
             "workflow_target": target,
@@ -353,7 +352,7 @@ def get_inspection_status(inspection_id: str) -> tuple:
         return {
             "error": "A Workflow for the given inspection id was not found",
             "parameters": parameters,
-        }
+        }, 404
 
     build_status = None
     try:
