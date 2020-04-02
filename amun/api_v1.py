@@ -17,17 +17,16 @@
 
 """Implementation of API v1."""
 
-import os
 import logging
 import json
-import random
 import re
-from urllib.parse import urlparse
+from typing import Any
+from typing import Dict
+from typing import List
 
 from deprecated.sphinx import deprecated
 
 from thoth.common import OpenShift
-from thoth.common import WorkflowManager
 from thoth.common import datetime2datetime_str
 from thoth.common.exceptions import NotFoundException
 
