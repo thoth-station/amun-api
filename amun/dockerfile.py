@@ -83,6 +83,13 @@ def _write_file_string(content: str, path: str) -> str:
     return f'RUN echo -e "{content}" > "{path}"\n\n'
 
 
+def _write_file_script(content: str, path: str) -> str:
+    """Generate Dockerfile instruction that writes down the file content on the given path."""
+    content = content.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\\\n")
+    path = path.replace('"', '"')
+    return f'RUN echo -e "{content}" > "{path}"\n\n'
+
+
 def create_dockerfile(specification: dict) -> tuple:
     """Create a Dockerfile based on software stack specification."""
     script_present = False
@@ -135,12 +142,12 @@ def create_dockerfile(specification: dict) -> tuple:
             )
         else:
             pipfile_content = toml.dumps(requirements)
-            dockerfile += _write_file_string(pipfile_content, "/home/amun/Pipfile")
+            dockerfile += _write_file_script(pipfile_content, "/home/amun/Pipfile")
 
             pipfile_lock_content = json.dumps(
                 requirements_locked, sort_keys=True, indent=4
             )
-            dockerfile += _write_file_string(
+            dockerfile += _write_file_script(
                 pipfile_lock_content, "/home/amun/Pipfile.lock"
             )
 
@@ -159,7 +166,7 @@ def create_dockerfile(specification: dict) -> tuple:
     if "script" in specification:
         script_present = True
         content = _obtain_script(specification["script"])
-        dockerfile += _write_file_string(content, "/home/amun/script")
+        dockerfile += _write_file_script(content, "/home/amun/script")
         with open(_ENTRYPOINT_PY, "r") as entrypoint_file:
             dockerfile += _write_file_string(
                 entrypoint_file.read(), "/home/amun/entrypoint"
