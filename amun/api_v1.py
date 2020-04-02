@@ -125,11 +125,11 @@ def _parse_specification(specification: dict) -> dict:
 
         parsed_specification[key] = str(specification[key])
 
-    if "build" not in specification:
-        specification["build"] = {}
+    if "build" not in parsed_specification:
+        parsed_specification["build"] = {}
 
-    if "run" not in specification:
-        specification["run"] = {}
+    if "run" not in parsed_specification:
+        parsed_specification["run"] = {}
 
     return parsed_specification
 
