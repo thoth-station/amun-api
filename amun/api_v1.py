@@ -352,7 +352,7 @@ def get_inspection_status(inspection_id: str) -> tuple:
         return {
             "error": "A Workflow for the given inspection id was not found",
             "parameters": parameters,
-        }
+        }, 404
 
     build_status = None
     try:
