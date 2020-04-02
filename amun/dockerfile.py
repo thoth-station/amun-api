@@ -87,7 +87,7 @@ def _write_file_script(content: str, path: str) -> str:
     """Generate Dockerfile instruction that writes down the file content on the given path."""
     content = content.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\\\n")
     path = path.replace('"', '"')
-    return f"RUN echo -e $'{content}' > '{path}'\n\n"
+    return f'RUN echo -e "{content}" > "{path}"\n\n'
 
 
 def create_dockerfile(specification: dict) -> tuple:
@@ -142,12 +142,12 @@ def create_dockerfile(specification: dict) -> tuple:
             )
         else:
             pipfile_content = toml.dumps(requirements)
-            dockerfile += _write_file_string(pipfile_content, "/home/amun/Pipfile")
+            dockerfile += _write_file_script(pipfile_content, "/home/amun/Pipfile")
 
             pipfile_lock_content = json.dumps(
                 requirements_locked, sort_keys=True, indent=4
             )
-            dockerfile += _write_file_string(
+            dockerfile += _write_file_script(
                 pipfile_lock_content, "/home/amun/Pipfile.lock"
             )
 
