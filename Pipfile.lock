@@ -120,11 +120,11 @@
         },
         "flask": {
             "hashes": [
-                "sha256:13f9f196f330c7c2c5d7a5cf91af894110ca0215ac051b5844701f2bfd934d52",
-                "sha256:45eb5a6fd193d6cf7e0cf5d8a5b31f83d5faae0293695626f539a823e93b13f6"
+                "sha256:4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060",
+                "sha256:8a4fdd8936eba2512e9c85df320a37e694c93945b33ef33c89946a340a238557"
             ],
             "index": "pypi",
-            "version": "==1.1.1"
+            "version": "==1.1.2"
         },
         "flask-cors": {
             "hashes": [
@@ -149,10 +149,10 @@
         },
         "google-auth": {
             "hashes": [
-                "sha256:016924388770b7e66c7e9ade1c4c3144ee88812d79697fd6c0dad9abdfcda2fd",
-                "sha256:01d686448f57d3bc027726474faa1aa650ba333bedb392e06938b0add8ec8d3a"
+                "sha256:a5ee4c40fef77ea756cf2f1c0adcf475ecb53af6700cf9c133354cdc9b267148",
+                "sha256:cab6c707e6ee20e567e348168a5c69dc6480384f777a9e5159f4299ad177dcc0"
             ],
-            "version": "==1.12.0"
+            "version": "==1.13.1"
         },
         "grpcio": {
             "hashes": [
