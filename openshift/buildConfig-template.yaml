@@ -29,11 +29,11 @@ objects:
     spec:
       resources:
         requests:
-          cpu: 1
-          memory: 1Gi
+          cpu: "2"
+          memory: 2Gi
         limits:
-          cpu: 1
-          memory: 1Gi
+          cpu: "2"
+          memory: 2Gi
       output:
         to:
           kind: ImageStreamTag
