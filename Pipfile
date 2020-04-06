@@ -15,15 +15,17 @@ connexion = {extras = ["swagger-ui"],version = "*"}
 flask = "*"
 flask-cors = "*"
 flask-script = "*"
-grpcio = "*"
+grpcio = "<1.28"
 grpcio-opentracing = "*"
-grpcio-tools = "*"
+grpcio-tools = "<1.28"
 jaeger-client = "*"
 opentracing-instrumentation = "*"
 sentry-sdk = {extras = ["flask"],version = "*"}
 more-itertools = "*"
 
 [dev-packages]
+grpcio = "<1.28"
+grpcio-tools = "<1.28"
 
 [pipenv]
 allow_prereleases = false
