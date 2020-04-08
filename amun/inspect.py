@@ -36,13 +36,13 @@ from pathlib import Path
 
 # A path to file containing hardware information as gathered by init-container
 # amun-hwinfo.
-_HWINFO_FILE = "/home/amun/hwinfo/info.json"
+_HWINFO_FILE = os.getenv("THOTH_AMUN_HWINFO_PATH", "/home/amun/hwinfo/info.json")
 # We use a file for stdout and stderr not to block on pipe.
-_EXEC_STDOUT_FILE = "/home/amun/script.stdout"
-_EXEC_STDERR_FILE = "/home/amun/script.stderr"
+_EXEC_STDOUT_FILE = os.getenv("THOTH_AMUN_STDOUT_PATH", "/home/amun/script.stdout")
+_EXEC_STDERR_FILE = os.getenv("THOTH_AMUN_STDERR_PATH", "/home/amun/script.stderr")
 # Executable to be run.
-_EXEC_DIR = "/home/amun"
-_EXEC_FILE = os.path.join(_EXEC_DIR, "script")
+_EXEC_DIR = os.getenv("THOTH_AMUN_EXEC_DIR", "/home/amun")
+_EXEC_FILE = os.getenv("THOTH_AMUN_EXEC_FILE", os.path.join(_EXEC_DIR, "script"))
 _ETC_OS_RELEASE = "/etc/os-release"
 # Names of items on certain position in return value of resource.getrusage()
 #   https://docs.python.org/3.6/library/resource.html#resource.getrusage
