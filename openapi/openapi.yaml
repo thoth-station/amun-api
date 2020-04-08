@@ -300,10 +300,6 @@ components:
             - micropipenv
             - pipenv
           default: micropipenv
-        allowed_failures:
-          type: integer
-          default: 0
-          example: 0
         batch_size:
           type: integer
           default: 1
@@ -469,11 +465,6 @@ components:
               value:
                 type: string
                 description: Value for the environment variable.
-        parallelism:
-          type: integer
-          default: 1
-          example: 1
-          description: Number of inspections that can run in parallel
         script:
           type: string
           description: A script that should be executed in inspection run.

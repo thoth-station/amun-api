@@ -10,7 +10,7 @@ kind: WorkflowTemplate
 metadata:
   name: inspection-run-template
   annotations:
-    thoth-station.ninja/template-version: 0.5.2
+    thoth-station.ninja/template-version: 0.5.3
 spec:
   entrypoint: main
 
@@ -23,10 +23,6 @@ spec:
       - name: batch-size
       - name: inspection-id
       # Defaults
-      - name: allowed-failures
-        value: '1'  # i.e., 99% success rate out of 100
-      - name: parallelism
-        value: '1'
       - name: cpu
         value: "750m"
       - name: memory
@@ -49,8 +45,6 @@ spec:
             value: "{{inputs.parameters.cpu}}"
           - name: memory
             value: "{{inputs.parameters.memory}}"
-          - name: parallelism
-            value: "{{inputs.parameters.parallelism}}"
           - name: registry
             value: "{{inputs.parameters.registry}}"
           - name: thoth-infra-namespace
@@ -60,8 +54,6 @@ spec:
     - - name: inspection
         arguments:
           parameters:
-          - name: allowed-failures
-            value: "{{inputs.parameters.allowed-failures}}"
           - name: batch-name
             value: "{{inputs.parameters.batch-name}}"
           - name: batch-size
@@ -90,7 +82,6 @@ spec:
       - name: batch-size
       - name: cpu
       - name: memory
-      - name: parallelism
       - name: registry
       - name: thoth-infra-namespace
     resource:
@@ -115,7 +106,7 @@ spec:
         spec:
           backoffLimit: 0
           completions: {{inputs.parameters.batch-size}}
-          parallelism: {{inputs.parameters.parallelism}}
+          parallelism: 1
           template:
             metadata:
               name: "{{inputs.parameters.batch-name}}-job"
@@ -164,13 +155,12 @@ spec:
   - name: await-inspection
     inputs:
       parameters:
-      - name: allowed-failures
       - name: batch-name
       - name: batch-size
     resource:
       action: get
       successCondition: status.succeeded == {{inputs.parameters.batch-size}}
-      failureCondition: status.failed > {{inputs.parameters.allowed-failures}}
+      failureCondition: status.failed > 0
       manifest: |
         apiVersion: batch/v1
         kind: Job

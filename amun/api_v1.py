@@ -117,12 +117,8 @@ def _parse_specification(specification: dict) -> dict:
 
     parsed_specification = _escape_single_quotes(parsed_specification)
 
-    int_to_str = ["allowed_failures", "batch_size", "parallelism"]
-    for key in int_to_str:
-        if key not in specification:
-            continue
-
-        parsed_specification[key] = str(specification[key])
+    if "batch_size" in parsed_specification:
+        parsed_specification["batch_size"] = str(specification["batch_size"])
 
     if "build" not in parsed_specification:
         parsed_specification["build"] = {}
@@ -154,12 +150,8 @@ def _unparse_specification(parsed_specification: dict) -> dict:
 
     specification = _unescape_single_quotes(specification)
 
-    str_to_int = ["allowed_failures", "batch_size", "parallelism"]
-    for key in str_to_int:
-        if key not in specification:
-            continue
-
-        specification[key] = int(parsed_specification[key])
+    if "batch_size" in parsed_specification:
+        parsed_specification["batch_size"] = int(parsed_specification["batch_size"])
 
     return specification
 
