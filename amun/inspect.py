@@ -173,12 +173,14 @@ def main():
 
     output = json.dumps(report, sort_keys=True, indent=2)
 
-    output_fp = os.environ.get("THOTH_OUTPUT_ARTIFACT")
+    output_fp = os.environ.get("THOTH_OUTPUT_PATH")
     if output_fp:
-        output_file = Path(output_fp)
+        dir_name = os.path.dirname(output_fp)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
 
-        output_file.touch(exist_ok=True)
-        output_file.write_text(output)
+        with open(output_fp, "w") as output_file:
+            output_file.write(output)
 
     sys.stdout.write(output)
     sys.exit(report["exit_code"])
