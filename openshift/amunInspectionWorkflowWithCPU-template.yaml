@@ -136,6 +136,10 @@ objects:
               value: ${THOTH_REGISTRY}
             - name: thoth-infra-namespace
               value: ${THOTH_INFRA_NAMESPACE}
+            - name: dockerfile
+              value: "{{workflow.parameters.dockerfile}}"
+            - name: specification
+              value: "{{workflow.parameters.specification}}"
           templateRef:
             name: inspection-results-template
             template: main
