@@ -185,16 +185,6 @@ objects:
             name: inspection-results-template
             template: main
 
-        - name: inspection-sync
-          dependencies: [inspection-run, inspection-run-result]
-          arguments:
-            parameters:
-            - name: inspection-id
-              value: "{{workflow.parameters.inspection-id}}"
-          templateRef:
-            name: inspection-sync-template
-            template: main
-
 parameters:
 - name: AMUN_INSPECTION_ID
   description: Id of inspection that is run.
