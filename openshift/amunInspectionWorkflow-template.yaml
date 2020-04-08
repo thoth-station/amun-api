@@ -62,9 +62,6 @@ objects:
         value: "${THOTH_REGISTRY}"
       - name: thoth-infra-namespace
         value: "${THOTH_INFRA_NAMESPACE}"
-      # Other parameters
-      - name: "target"
-        value: "inspection-run-result"
       # Used in artifact repository to store results
       - name: ceph_bucket_prefix
       - name: ceph_bucket_name
@@ -74,7 +71,6 @@ objects:
     templates:
     - name: main
       dag:
-        target: "{{workflow.parameters.target}}"
         tasks:
         - name: inspection-build
           arguments:
@@ -101,34 +97,6 @@ objects:
           continueOn:
             failed: true
 
-        - name: inspection-build-result
-          dependencies: [inspection-build]
-          arguments:
-            parameters:
-            - name: inspection-id
-              value: "{{workflow.parameters.inspection-id}}"
-            - name: exit
-              value: "{{tasks.inspection-build.status}} != Succeeded"
-            - name: volume
-              value: output-volume
-            - name: namespace
-              value: "{{workflow.namespace}}"
-            - name: kind
-              value: pods
-            - name: selector
-              value: "openshift.io/build.name={{workflow.parameters.inspection-id}}-1"
-            - name: registry
-              value: ${THOTH_REGISTRY}
-            - name: thoth-infra-namespace
-              value: ${THOTH_INFRA_NAMESPACE}
-            - name: dockerfile
-              value: "{{workflow.parameters.dockerfile}}"
-            - name: specification
-              value: "{{workflow.parameters.specification}}"
-          templateRef:
-            name: inspection-results-template
-            template: main
-
         - name: inspection-run
           dependencies: [inspection-build]
           arguments:
@@ -153,34 +121,6 @@ objects:
           continueOn:
             failed: true
 
-        - name: inspection-run-result
-          dependencies: [inspection-run]
-          arguments:
-            parameters:
-            - name: inspection-id
-              value: "{{workflow.parameters.inspection-id}}"
-            - name: exit
-              value: "{{tasks.inspection-run.status}} != Succeeded"
-            - name: volume
-              value: output-volume
-            - name: namespace
-              value: "{{workflow.namespace}}"
-            - name: kind
-              value: pods
-            - name: selector
-              value: "job-name={{workflow.parameters.batch-name}}"
-            - name: registry
-              value: ${THOTH_REGISTRY}
-            - name: thoth-infra-namespace
-              value: ${THOTH_INFRA_NAMESPACE}
-            - name: dockerfile
-              value: "{{workflow.parameters.dockerfile}}"
-            - name: specification
-              value: "{{workflow.parameters.specification}}"
-          templateRef:
-            name: inspection-results-template
-            template: main
-
 parameters:
 - name: AMUN_INSPECTION_ID
   description: Id of inspection that is run.
@@ -198,12 +138,22 @@ parameters:
   required: true
   value: docker-registry.default.svc:5000
 
-- name: AMUN_CPU
+- name: AMUN_RUN_CPU
+  description: CPU cores requested for inspection run
+  displayName: Run CPU
+  value: 750m
+
+- name: AMUN_RUN_MEMORY
+  description: Memory requested for inspection run
+  displayName: Run Memory
+  value: 1Gi
+
+- name: AMUN_BUILD_CPU
   description: CPU cores requested for build
   displayName: Build CPU
   value: 750m
 
-- name: AMUN_MEMORY
+- name: AMUN_BUILD_MEMORY
   description: Memory requested for build
   displayName: Build Memory
   value: 1Gi
