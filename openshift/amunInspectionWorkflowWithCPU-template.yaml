@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: This is Amun configuration template
     openshift.io/display-name: "Amun core components"
-    version: 0.6.2
+    version: 0.6.3
     tags: amun,argo,thoth,ai-stacks,aistacks,machinelearning,workflows
     template.openshift.io/documentation-url: https://github.com/thoth-station/
     template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
@@ -24,7 +24,7 @@ objects:
       component: amun-inspection-workflow
       inspection_id: "${AMUN_INSPECTION_ID}"
     annotations:
-      thoth-station.ninja/template-version: 0.6.2
+      thoth-station.ninja/template-version: 0.6.3
   spec:
     serviceAccountName: "${ARGO_SERVICE_ACCOUNT}"
 
@@ -50,14 +50,18 @@ objects:
         value: '1'
       - name: batch-name
         value: "${AMUN_INSPECTION_ID}"
-      - name: cpu
-        value: "${AMUN_CPU}"
+      - name: run-cpu
+        value: "${AMUN_RUN_CPU}"
+      - name: run-memory
+        value: "${AMUN_RUN_MEMORY}"
+      - name: build-cpu
+        value: "${AMUN_BUILD_CPU}"
+      - name: build-memory
+        value: "${AMUN_BUILD_MEMORY}"
       - name: cpu-family
         value: "${CPU_FAMILY}"
       - name: cpu-model
         value: "${CPU_MODEL}"
-      - name: memory
-        value: "${AMUN_MEMORY}"
       - name: physical-cpus
         value: "${PHYSICAL_CPUS}"
       - name: processor
@@ -87,13 +91,13 @@ objects:
             - name: batch-name
               value: "{{workflow.parameters.batch-name}}"
             - name: cpu
-              value: "{{workflow.parameters.cpu}}"
+              value: "{{workflow.parameters.build-cpu}}"
+            - name: memory
+              value: "{{workflow.parameters.build-memory}}"
             - name: cpu-family
               value: "{{workflow.parameters.cpu-family}}"
             - name: cpu-model
               value: "{{workflow.parameters.cpu-model}}"
-            - name: memory
-              value: "{{workflow.parameters.memory}}"
             - name: physical-cpus
               value: "{{workflow.parameters.physical-cpus}}"
             - name: processor
@@ -147,13 +151,13 @@ objects:
             - name: inspection-id
               value: "{{workflow.parameters.inspection-id}}"
             - name: cpu
-              value: "{{workflow.parameters.cpu}}"
+              value: "{{workflow.parameters.run-cpu}}"
+            - name: memory
+              value: "{{workflow.parameters.run-memory}}"
             - name: cpu-family
               value: "{{workflow.parameters.cpu-family}}"
             - name: cpu-model
               value: "{{workflow.parameters.cpu-model}}"
-            - name: memory
-              value: "{{workflow.parameters.memory}}"
             - name: physical-cpus
               value: "{{workflow.parameters.physical-cpus}}"
             - name: processor
