@@ -173,7 +173,7 @@ def main():
 
     output = json.dumps(report, sort_keys=True, indent=2)
 
-    output_fp = os.environ.get("THOTH_OUTPUT_ARTIFACT")
+    output_fp = os.environ.get("THOTH_OUTPUT_PATH")
     if output_fp:
         dir_name = os.path.dirname(output_fp)
         if dir_name:
