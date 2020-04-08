@@ -24,7 +24,7 @@ objects:
       component: amun-inspection-workflow
       inspection_id: "${AMUN_INSPECTION_ID}"
     annotations:
-      thoth-station.ninja/template-version: 0.6.1
+      thoth-station.ninja/template-version: 0.6.2
   spec:
     serviceAccountName: "${ARGO_SERVICE_ACCOUNT}"
 
@@ -202,16 +202,6 @@ objects:
               value: "{{workflow.parameters.specification}}"
           templateRef:
             name: inspection-results-template
-            template: main
-
-        - name: inspection-sync
-          dependencies: [inspection-run, inspection-run-result]
-          arguments:
-            parameters:
-            - name: inspection-id
-              value: "{{workflow.parameters.inspection-id}}"
-          templateRef:
-            name: inspection-sync-template
             template: main
 
 parameters:
