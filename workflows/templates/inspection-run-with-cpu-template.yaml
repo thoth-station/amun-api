@@ -10,7 +10,7 @@ kind: WorkflowTemplate
 metadata:
   name: inspection-run-with-cpu-template
   annotations:
-    thoth-station.ninja/template-version: 0.5.2
+    thoth-station.ninja/template-version: 0.5.3
 spec:
   entrypoint: main
 
@@ -30,10 +30,6 @@ spec:
       # Defaults
       - name: affinity
         value: "false"
-      - name: allowed-failures
-        value: '1'  # i.e., 99% success rate out of 100
-      - name: parallelism
-        value: '1'
       - name: cpu
         value: "750m"
       - name: memory
@@ -52,8 +48,6 @@ spec:
             value: "{{inputs.parameters.batch-name}}"
           - name: batch-size
             value: "{{inputs.parameters.batch-size}}"
-          - name: parallelism
-            value: "{{inputs.parameters.parallelism}}"
           - name: cpu
             value: "{{inputs.parameters.cpu}}"
           - name: cpu-family
@@ -81,8 +75,6 @@ spec:
     - - name: inspection
         arguments:
           parameters:
-          - name: allowed-failures
-            value: "{{inputs.parameters.allowed-failures}}"
           - name: batch-name
             value: "{{inputs.parameters.batch-name}}"
           - name: batch-size
@@ -109,7 +101,6 @@ spec:
       - name: inspection-id
       - name: batch-name
       - name: batch-size
-      - name: parallelism
       - name: cpu
       - name: memory
       - name: registry
@@ -136,7 +127,7 @@ spec:
         spec:
           backoffLimit: 0
           completions: {{inputs.parameters.batch-size}}
-          parallelism: {{inputs.parameters.parallelism}}
+          parallelism: 1
           template:
             metadata:
               name: "{{inputs.parameters.batch-name}}-job"
@@ -187,7 +178,6 @@ spec:
       - name: inspection-id
       - name: batch-name
       - name: batch-size
-      - name: parallelism
       - name: cpu
       - name: cpu-family
       - name: cpu-model
@@ -217,7 +207,7 @@ spec:
             uid: "{{workflow.uid}}"
         spec:
           completions: {{inputs.parameters.batch-size}}
-          parallelism: {{inputs.parameters.parallelism}}
+          parallelism: 1
           template:
             metadata:
               name: "{{inputs.parameters.batch-name}}-job"
@@ -286,13 +276,12 @@ spec:
   - name: await-inspection
     inputs:
       parameters:
-      - name: allowed-failures
       - name: batch-name
       - name: batch-size
     resource:
       action: get
       successCondition: status.succeeded == {{inputs.parameters.batch-size}}
-      failureCondition: status.failed > {{inputs.parameters.allowed-failures}}
+      failureCondition: status.failed > 0
       manifest: |
         apiVersion: batch/v1
         kind: Job

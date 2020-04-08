@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: This is Amun configuration template
     openshift.io/display-name: "Amun core components"
-    version: 0.6.1
+    version: 0.6.2
     tags: amun,argo,thoth,ai-stacks,aistacks,machinelearning,workflows
     template.openshift.io/documentation-url: https://github.com/thoth-station/
     template.openshift.io/long-description: This template defines resources needed to deploy Amun to OpenShift.
@@ -24,7 +24,7 @@ objects:
       component: amun-inspection-workflow
       inspection_id: "${AMUN_INSPECTION_ID}"
     annotations:
-      thoth-station.ninja/template-version: 0.6.1
+      thoth-station.ninja/template-version: 0.6.2
   spec:
     serviceAccountName: "${ARGO_SERVICE_ACCOUNT}"
 
@@ -50,10 +50,6 @@ objects:
         value: '1'
       - name: batch-name
         value: "${AMUN_INSPECTION_ID}"
-      - name: allowed-failures
-        value: '1'  # i.e., 99% success rate out of 100
-      - name: parallelism
-        value: '1'
       - name: cpu
         value: "${AMUN_CPU}"
       - name: memory
@@ -85,12 +81,8 @@ objects:
               value: '{{workflow.parameters.specification}}'
             - name: inspection-id
               value: "{{workflow.parameters.inspection-id}}"
-            - name: allowed-failures
-              value: "{{workflow.parameters.allowed-failures}}"
             - name: batch-name
               value: "{{workflow.parameters.batch-name}}"
-            - name: parallelism
-              value: "{{workflow.parameters.parallelism}}"
             - name: cpu
               value: "{{workflow.parameters.cpu}}"
             - name: memory
@@ -143,10 +135,6 @@ objects:
               value: "{{workflow.parameters.batch-size}}"
             - name: inspection-id
               value: "{{workflow.parameters.inspection-id}}"
-            - name: allowed-failures
-              value: "{{workflow.parameters.allowed-failures}}"
-            - name: parallelism
-              value: "{{workflow.parameters.parallelism}}"
             - name: cpu
               value: "{{workflow.parameters.cpu}}"
             - name: memory
