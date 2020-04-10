@@ -105,11 +105,11 @@
         },
         "deprecated": {
             "hashes": [
-                "sha256:9caec5374c4b63e12d2ef8c9e01df1c55859db707b384d63f800aac7cbc93509",
-                "sha256:cd98397157a1046784c9ff155730b745f46bb4dfd0175522c5bf348ab10037a5"
+                "sha256:0cf37d293a96805c6afd8b5fc525cb40f23a2cac9b2d066ac3bd4b04e72ceccc",
+                "sha256:55b41a15bda04c6a2c0d27dd4c2b7b81ffa6348c9cad8f077ac1978c59927ab9"
             ],
             "index": "pypi",
-            "version": "==1.2.8"
+            "version": "==1.2.9"
         },
         "dictdiffer": {
             "hashes": [
