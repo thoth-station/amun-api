@@ -149,10 +149,10 @@
         },
         "google-auth": {
             "hashes": [
-                "sha256:a5ee4c40fef77ea756cf2f1c0adcf475ecb53af6700cf9c133354cdc9b267148",
-                "sha256:cab6c707e6ee20e567e348168a5c69dc6480384f777a9e5159f4299ad177dcc0"
+                "sha256:0c41a453b9a8e77975bfa436b8daedac00aed1c545d84410daff8272fff40fbb",
+                "sha256:e63b2210e03c4ed829063b72c4af0c4b867c2788efb3210b6b9439b488bd3afd"
             ],
-            "version": "==1.13.1"
+            "version": "==1.14.1"
         },
         "grpcio": {
             "hashes": [
@@ -306,10 +306,10 @@
         },
         "jinja2": {
             "hashes": [
-                "sha256:93187ffbc7808079673ef52771baa950426fd664d3aad1d0fa3e95644360e250",
-                "sha256:b0eaf100007721b5c16c1fc1eecb87409464edc10469ddc9a22a27a99123be49"
+                "sha256:89aab215427ef59c34ad58735269eb58b1a5808103067f7bb9d5836c651b3bb0",
+                "sha256:f0a4641d3cf955324a89c04f3d94663aa4d638abe8f733ecd3582848e1c37035"
             ],
-            "version": "==2.11.1"
+            "version": "==2.11.2"
         },
         "jsonformatter": {
             "hashes": [
@@ -608,11 +608,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:b793ad6c581aecb4ce804732bffd0a46551e9897f42dc68abd750d8ee7c113c7",
-                "sha256:eaa699a2e213a2ee9e818761222a33c7a81205f477bcb81bde0a87ddd9a2f283"
+                "sha256:00ba872427158ce7ead4e9ea11285857d019435d4f718d8d2115f2d8639a3698",
+                "sha256:7d1222e70ec961d29633b31c65794f5f7311754487bbc6dba25a87407c80d169"
             ],
             "index": "pypi",
-            "version": "==0.12.9"
+            "version": "==0.12.10"
         },
         "threadloop": {
             "hashes": [
@@ -657,10 +657,10 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:2f3db8b19923a873b3e5256dc9c2dedfa883e33d87c690d9c7913e1f40673cdc",
-                "sha256:87716c2d2a7121198ebcb7ce7cccf6ce5e9ba539041cfbaeecfb641dc0bf6acc"
+                "sha256:3018294ebefce6572a474f0604c2021e33b3fd8006ecd11d62107a5d2a963527",
+                "sha256:88206b0eb87e6d677d424843ac5209e3fb9d0190d0ee169599165ec25e9d9115"
             ],
-            "version": "==1.25.8"
+            "version": "==1.25.9"
         },
         "websocket-client": {
             "hashes": [
