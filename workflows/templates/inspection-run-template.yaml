@@ -1,9 +1,4 @@
 # Inspection Run Workflow Template
-#
-# This workflow submits an inspection Job which creates `n` pod replicas and runs them in a sequence.
-#
-# successCondition: `n` pods have finished successfully and are present in the cluster
-# failureCondition: there are more failures than is allowed (a constant to account for potential flakes)
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
@@ -72,6 +67,23 @@ spec:
         env:
           - name: "THOTH_OUTPUT_PATH"
             value: "/home/amun/results/{{inputs.parameters.item}}/hwinfo"
+    podSpecPatch: '{
+         "containers": [
+           {
+             "name": "main",
+             "resources": {
+               "limits": {
+                 "cpu": "{{inputs.parameters.cpu}}",
+                 "memory": "{{inputs.parameters.memory}}"
+               },
+               "requests": {
+                 "cpu": "{{inputs.parameters.cpu}}",
+                 "memory": "{{inputs.parameters.memory}}"
+               }
+             }
+           }
+        ]
+      }'
     container:
       image: "{{inputs.parameters.inspection-id}}:latest"
       env:
@@ -82,20 +94,6 @@ spec:
       volumeMounts:
       - mountPath: "/home/amun/results/"
         name: hw-info-volume
-      resources:
-        # TODO: cannot use parameters until https://github.com/argoproj/argo/issues/2412
-        limits:
-          cpu: 1
-          memory: 1Gi
-        requests:
-          cpu: 1
-          memory: 1Gi
-        # limits:
-        #   cpu: '{{inputs.parameters.cpu}}'
-        #   memory: '{{inputs.parameters.memory}}'
-        # requests:
-        #   cpu: '{{inputs.parameters.cpu}}'
-        #   memory: '{{inputs.parameters.memory}}'
     outputs:
       artifacts:
       - name: output

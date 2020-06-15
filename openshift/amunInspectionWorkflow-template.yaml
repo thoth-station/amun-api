@@ -91,11 +91,11 @@ objects:
               value: "{{workflow.parameters.registry}}"
             - name: thoth-infra-namespace
               value: "{{workflow.parameters.thoth-infra-namespace}}"
+            - name: volume
+              value: output-volume
           templateRef:
             name: inspection-build-template
             template: main
-          continueOn:
-            failed: true
 
         - name: inspection-run
           dependencies: [inspection-build]
@@ -115,6 +115,8 @@ objects:
               value: "{{workflow.parameters.registry}}"
             - name: thoth-infra-namespace
               value: "{{workflow.parameters.thoth-infra-namespace}}"
+            - name: volume
+              value: output-volume
           templateRef:
             name: inspection-run-template
             template: main
