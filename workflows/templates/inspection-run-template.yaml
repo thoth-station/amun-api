@@ -51,6 +51,7 @@ spec:
         withSequence:
           count: "{{inputs.parameters.batch-size}}"
         continueOn:
+          error: true
           failed: true
 
     - - name: joblog-aggregation

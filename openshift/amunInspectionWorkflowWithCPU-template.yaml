@@ -70,14 +70,15 @@ objects:
         value: "${THOTH_REGISTRY}"
       - name: thoth-infra-namespace
         value: "${THOTH_INFRA_NAMESPACE}"
-      # Other parameters
-      - name: "target"
-        value: "inspection-run-result"
+      # Used in artifact repository to store results
+      - name: ceph_bucket_prefix
+      - name: ceph_bucket_name
+      - name: ceph_host
+      - name: deployment_name
 
     templates:
     - name: main
       dag:
-        target: "{{workflow.parameters.target}}"
         tasks:
         - name: inspection-build
           arguments:
@@ -106,38 +107,10 @@ objects:
               value: "{{workflow.parameters.registry}}"
             - name: thoth-infra-namespace
               value: "{{workflow.parameters.thoth-infra-namespace}}"
-          templateRef:
-            name: inspection-build-with-cpu-template
-            template: main
-          continueOn:
-            failed: true
-
-        - name: inspection-build-result
-          dependencies: [inspection-build]
-          arguments:
-            parameters:
-            - name: inspection-id
-              value: "{{workflow.parameters.inspection-id}}"
-            - name: exit
-              value: "{{tasks.inspection-build.status}} != Succeeded"
             - name: volume
               value: output-volume
-            - name: namespace
-              value: "{{workflow.namespace}}"
-            - name: kind
-              value: pods
-            - name: selector
-              value: "openshift.io/build.name={{workflow.parameters.inspection-id}}-1"
-            - name: registry
-              value: ${THOTH_REGISTRY}
-            - name: thoth-infra-namespace
-              value: ${THOTH_INFRA_NAMESPACE}
-            - name: dockerfile
-              value: "{{workflow.parameters.dockerfile}}"
-            - name: specification
-              value: "{{workflow.parameters.specification}}"
           templateRef:
-            name: inspection-results-template
+            name: inspection-build-with-cpu-template
             template: main
 
         - name: inspection-run
@@ -166,39 +139,13 @@ objects:
               value: "{{workflow.parameters.registry}}"
             - name: thoth-infra-namespace
               value: "{{workflow.parameters.thoth-infra-namespace}}"
+            - name: volume
+              value: output-volume
           templateRef:
             name: inspection-run-with-cpu-template
             template: main
           continueOn:
             failed: true
-
-        - name: inspection-run-result
-          dependencies: [inspection-run]
-          arguments:
-            parameters:
-            - name: inspection-id
-              value: "{{workflow.parameters.inspection-id}}"
-            - name: exit
-              value: "{{tasks.inspection-run.status}} != Succeeded"
-            - name: volume
-              value: output-volume
-            - name: namespace
-              value: "{{workflow.namespace}}"
-            - name: kind
-              value: pods
-            - name: selector
-              value: "job-name={{workflow.parameters.batch-name}}"
-            - name: registry
-              value: ${THOTH_REGISTRY}
-            - name: thoth-infra-namespace
-              value: ${THOTH_INFRA_NAMESPACE}
-            - name: dockerfile
-              value: "{{workflow.parameters.dockerfile}}"
-            - name: specification
-              value: "{{workflow.parameters.specification}}"
-          templateRef:
-            name: inspection-results-template
-            template: main
 
 parameters:
 - name: AMUN_INSPECTION_ID
@@ -217,15 +164,25 @@ parameters:
   required: true
   value: docker-registry.default.svc:5000
 
-- name: AMUN_CPU
+- name: AMUN_RUN_CPU
+  description: CPU cores requested for inspection run
+  displayName: Run CPU
+  value: 750m
+
+- name: AMUN_RUN_MEMORY
+  description: Memory requested for inspection run
+  displayName: Run Memory
+  value: 1Gi
+
+- name: AMUN_BUILD_CPU
   description: CPU cores requested for build
   displayName: Build CPU
-  value: 500m
+  value: 1
 
-- name: AMUN_MEMORY
+- name: AMUN_BUILD_MEMORY
   description: Memory requested for build
   displayName: Build Memory
-  value: 512Mi
+  value: 1Gi
 
 - name: ARGO_SERVICE_ACCOUNT
   description: Service account used by workflow steps
