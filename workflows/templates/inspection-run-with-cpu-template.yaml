@@ -69,16 +69,16 @@ spec:
     - - name: joblog-aggregation
         arguments:
           parameters:
-            - name: inspection-id
-              value: "{{inputs.parameters.inspection-id}}"
-            - name: volume
-              value: "{{inputs.parameters.volume}}"
-            - name: registry
-              value: "{{inputs.parameters.registry}}"
-            - name: thoth-infra-namespace
-              value: "{{inputs.parameters.thoth-infra-namespace}}"
-            - name: batch-size
-              value: "{{inputs.parameters.batch-size}}"
+          - name: inspection-id
+            value: "{{inputs.parameters.inspection-id}}"
+          - name: volume
+            value: "{{inputs.parameters.volume}}"
+          - name: registry
+            value: "{{inputs.parameters.registry}}"
+          - name: thoth-infra-namespace
+            value: "{{inputs.parameters.thoth-infra-namespace}}"
+          - name: batch-size
+            value: "{{inputs.parameters.batch-size}}"
         template: aggregate-joblog
 
   - name: create-job
@@ -98,13 +98,16 @@ spec:
       - name: volume
     initContainers:
       - name: inspect-hwinfo
-        image: "{{inputs.parameters.registry}}/{{inputs.parameters.thoth-infra-namespace}}/inspect-hwinfo:latest"
+        image: >-
+          {{inputs.parameters.registry}}/
+          {{inputs.parameters.thoth-infra-namespace}}/
+          inspect-hwinfo:latest
         volumeMounts:
-          - mountPath: "/home/amun/results/"
-            name: "{{inputs.parameters.volume}}"
+        - mountPath: "/home/amun/results/"
+          name: "{{inputs.parameters.volume}}"
         env:
-          - name: "THOTH_OUTPUT_PATH"
-            value: "/home/amun/results/{{inputs.parameters.item}}/hwinfo"
+        - name: "THOTH_OUTPUT_PATH"
+          value: "/home/amun/results/{{inputs.parameters.item}}/hwinfo"
     metadata:
       # Add labels to easily identify job pods in the namespace during log aggregation.
       labels:
@@ -113,23 +116,23 @@ spec:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
-            - matchExpressions:
-                - key: CPU_FAMILY
-                  operator: In
-                  values:
-                    - "{{inputs.parameters.cpu-family}}"
-                - key: CPU_MODEL
-                  operator: In
-                  values:
-                    - "{{inputs.parameters.cpu-model}}"
-                - key: PHYSICAL_CPUS
-                  operator: In
-                  values:
-                    - "{{inputs.parameters.physical-cpus}}"
-                - key: processor
-                  operator: In
-                  values:
-                    - "{{inputs.parameters.processor}}"
+          - matchExpressions:
+            - key: CPU_FAMILY
+              operator: In
+              values:
+              - "{{inputs.parameters.cpu-family}}"
+            - key: CPU_MODEL
+              operator: In
+              values:
+              - "{{inputs.parameters.cpu-model}}"
+            - key: PHYSICAL_CPUS
+              operator: In
+              values:
+              - "{{inputs.parameters.physical-cpus}}"
+            - key: processor
+              operator: In
+              values:
+              - "{{inputs.parameters.processor}}"
     podSpecPatch: '{
          "containers": [
            {
@@ -150,10 +153,10 @@ spec:
     container:
       image: "{{inputs.parameters.inspection-id}}:latest"
       env:
-        - name: "THOTH_OUTPUT_PATH"
-          value: "/home/amun/results/{{inputs.parameters.item}}/result"
-        - name: "THOTH_AMUN_HWINFO_PATH"
-          value: "/home/amun/results/{{inputs.parameters.item}}/hwinfo"
+      - name: "THOTH_OUTPUT_PATH"
+        value: "/home/amun/results/{{inputs.parameters.item}}/result"
+      - name: "THOTH_AMUN_HWINFO_PATH"
+        value: "/home/amun/results/{{inputs.parameters.item}}/hwinfo"
       volumeMounts:
       - mountPath: "/home/amun/results/"
         name: "{{inputs.parameters.volume}}"
@@ -172,7 +175,6 @@ spec:
       - name: registry
       - name: thoth-infra-namespace
       - name: batch-size
-        # TODO: add namespace
     outputs:
       artifacts:
       - name: output
@@ -204,11 +206,15 @@ spec:
             mkdir -p "${results}/${cnt}"
             kubectl get pod $name -o json > $pod_json
 
-            container_exit_code=`cat $pod_json | jq '.status.containerStatuses[] | select(.name == "main") | .state.terminated.exitCode'`
+            container_exit_code=`cat $pod_json | \
+              jq '.status.containerStatuses[] | \
+              select(.name == "main") | .state.terminated.exitCode'`
             let "exit_code+=${container_exit_code}" || :
 
             # Parse inspection identifier (number of inspection job).
-            item=`cat $pod_json | jq '.metadata.annotations."workflows.argoproj.io/node-name"' | sed 's/".*inspection-run.*\.job(\([0-9]*\):.*)"/\1/'`
+            item=`cat $pod_json | \
+              jq '.metadata.annotations."workflows.argoproj.io/node-name"' | \
+              sed 's/".*inspection-run.*\.job(\([0-9]*\):.*)"/\1/'`
             mkdir -p "${results}/${item}"
             kubectl logs $name -c main > "${results}/${item}/log"
           done
