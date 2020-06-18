@@ -82,7 +82,7 @@ An example scenario
 
 I, as an Amun user, would like to test performance of optimized TensorFlow
 builds available on the
-`AICoE Python package index https://index-aicoe.a3c1.starter-us-west-1.openshiftapps.com>`_.
+`AICoE Python package index <https://tensorflow.pypi.thoth-station.ninja>`_.
 I would like to use:
 
 * TensorFlow provided on AICoE index (provide a  Pipfile and Pipfile.lock respecting Pipenv configuration to use different package indexes)
