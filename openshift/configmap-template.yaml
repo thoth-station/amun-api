@@ -39,7 +39,11 @@ objects:
           secretKeySecret:                #omit if accessing via AWS IAM
             name: argo-artifact-repository-secrets
             key: secretKey
-          keyFormat: "{{workflow.parameters.ceph_bucket_prefix}}/{{workflow.parameters.deployment_name}}/inspection"
+          keyFormat: >-
+            {{workflow.parameters.ceph_bucket_prefix}}/
+            {{workflow.parameters.deployment_name}}/
+            inspection/
+            {{workflow.name}}
 
       amun-inspection-namespace: ${AMUN_INSPECTION_NAMESPACE}
       amun-infra-namespace: ${AMUN_INFRA_NAMESPACE}

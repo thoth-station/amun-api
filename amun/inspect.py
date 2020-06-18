@@ -29,9 +29,8 @@ import json
 import subprocess
 import hashlib
 import sys
-
 from datetime import datetime
-from pathlib import Path
+import platform
 
 
 # A path to file containing hardware information as gathered by init-container
@@ -168,7 +167,8 @@ def main():
         "usage": usage,
         "datetime": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f"),
         "os_release": os_release,
-        "runtime_environment": runtime_environment
+        "runtime_environment": runtime_environment,
+        "hostname": platform.node(),
     }
 
     output = json.dumps(report, sort_keys=True, indent=2)
