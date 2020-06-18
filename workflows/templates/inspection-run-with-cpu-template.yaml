@@ -97,17 +97,17 @@ spec:
       - name: item
       - name: volume
     initContainers:
-      - name: inspect-hwinfo
-        image: >-
-          {{inputs.parameters.registry}}/
-          {{inputs.parameters.thoth-infra-namespace}}/
-          inspect-hwinfo:latest
-        volumeMounts:
-        - mountPath: "/home/amun/results/"
-          name: "{{inputs.parameters.volume}}"
-        env:
-        - name: "THOTH_OUTPUT_PATH"
-          value: "/home/amun/results/{{inputs.parameters.item}}/hwinfo"
+    - name: inspect-hwinfo
+      image: >-
+        {{inputs.parameters.registry}}/
+        {{inputs.parameters.thoth-infra-namespace}}/
+        inspect-hwinfo:latest
+      volumeMounts:
+      - mountPath: "/home/amun/results/"
+        name: "{{inputs.parameters.volume}}"
+      env:
+      - name: "THOTH_OUTPUT_PATH"
+        value: "/home/amun/results/{{inputs.parameters.item}}/hwinfo"
     metadata:
       # Add labels to easily identify job pods in the namespace during log aggregation.
       labels:
