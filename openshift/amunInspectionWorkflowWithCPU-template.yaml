@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   name: amun-inspection-workflow-with-cpu
@@ -177,7 +177,7 @@ parameters:
 - name: AMUN_BUILD_CPU
   description: CPU cores requested for build
   displayName: Build CPU
-  value: 1
+  value: "1"
 
 - name: AMUN_BUILD_MEMORY
   description: Memory requested for build

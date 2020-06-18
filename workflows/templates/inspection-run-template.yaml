@@ -5,7 +5,7 @@ kind: WorkflowTemplate
 metadata:
   name: inspection-run-template
   annotations:
-    thoth-station.ninja/template-version: 0.6.0
+    thoth-station.ninja/template-version: 0.7.0
 spec:
   entrypoint: main
 
