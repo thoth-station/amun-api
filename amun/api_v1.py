@@ -18,17 +18,16 @@
 """Implementation of API v1."""
 
 import logging
-import json
 import re
 from typing import Any
 from typing import Dict
-from typing import List
-
-from deprecated.sphinx import deprecated
+from typing import Tuple
 
 from thoth.common import OpenShift
 from thoth.common import datetime2datetime_str
 from thoth.common.exceptions import NotFoundException
+from thoth.storages import InspectionResult
+from thoth.storages.exceptions import NotFoundError as StorageNotFoundError
 
 from .configuration import Configuration
 from .dockerfile import create_dockerfile
@@ -207,130 +206,86 @@ def post_inspection(specification: dict) -> tuple:
     )
 
 
-@deprecated(
-    version="0.6.0",
-    reason=(
-        "The function will be removed soon."
-        "The functionality is limited to a single inspection, i.e. `batch_size = 1`."
-    ),
-)
-def get_inspection_job_log(inspection_id: str) -> tuple:
+def get_inspection_job_log(inspection_id: str, item: int) -> Tuple[Dict[str, Any], int]:
     """Get logs of the given inspection."""
     parameters = {"inspection_id": inspection_id}
-    try:
-        log = _OPENSHIFT.get_job_log(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
-    except NotFoundException as exc:
-        try:
-            return (
-                {"error": "No logs available yet for the given inspection id", "parameters": parameters},
-                202,
-            )
-        except NotFoundException:
-            pass
 
-        return (
-            {"error": "Job log for the given inspection id was not found", "parameters": parameters},
-            404,
-        )
-
-    if not log:
-        return (
-            {
-                "error": "Inspection run did not produce any log or it was deleted by OpenShift",
-                "parameters": parameters,
-            },
-            404,
-        )
+    inspection_store = InspectionResult(inspection_id)
+    inspection_store.connect()
 
     try:
-        log = json.loads(log)
-    except Exception as exc:
-        _LOGGER.exception("Failed to load inspection job log for %r", inspection_id)
-        return (
-            {"error": "Job failed, please contact administrator for more details", "parameters": parameters},
-            500,
-        )
+        log = inspection_store.results.retrieve_log(item)
+    except StorageNotFoundError:
+        return {
+            "error": f"No log for item {item!r} for inspection {inspection_id!r} or no "
+                     f"inspection {inspection_id!r} with item {item} found",
+            "parameters": parameters,
+        }, 404
 
     return {"log": log, "parameters": parameters}, 200
 
 
-def get_inspection_job_logs(inspection_id: str) -> tuple:
+def get_inspection_job_result(inspection_id: str, item: int) -> Tuple[Dict[str, Any], int]:
     """Get logs of the given inspection."""
     parameters = {"inspection_id": inspection_id}
 
-    response, _ = get_inspection_status(inspection_id)
-    inspection_status: Dict[str, Any] = response["status"]
+    inspection_store = InspectionResult(inspection_id)
+    inspection_store.connect()
 
-    _LOGGER.debug("Inspection Workflow '%s' status: %r", inspection_id, inspection_status)
-    if not inspection_status["build"].get("state") == "terminated":
-        return (
-            {
-                "error": "No logs available yet for the given inspection id",
-                "status": inspection_status,
-                "parameters": parameters,
-            },
-            202,
-        )
-
-    pod_logs: List[str] = []
     try:
-        pod_ids: List[str] = _OPENSHIFT._get_pod_ids_from_job(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
+        result = inspection_store.results.retrieve_result(item)
+    except StorageNotFoundError:
+        return {
+            "error": f"No result for item {item!r} for inspection {inspection_id!r} or no "
+                     f"inspection {inspection_id!r} with item {item} found",
+            "parameters": parameters,
+        }, 404
 
-        for pod_id in pod_ids:
-            log: str = _OPENSHIFT.get_pod_log(pod_id, namespace=Configuration.AMUN_INSPECTION_NAMESPACE)
-            pod_logs.append(log)
-    except NotFoundException as exc:
-        return (
-            {
-                "error": "No pods for the given inspection id was not found",
-                "status": inspection_status,
-                "parameters": parameters,
-            },
-            404,
-        )
-
-    inspection_logs: List[Dict[str, Any]] = []
-    for pod, pod_log in zip(pod_ids, pod_logs):
-        log: Dict[str, Any]
-        try:
-            log = json.loads(pod_log)
-        except json.JSONDecodeError:
-            _LOGGER.exception("Failed to parse log from pod %s: %r", pod, pod_log)
-            continue
-
-        inspection_logs.append(log)
-
-    if not any(inspection_logs):
-        _LOGGER.error("Inspection run did not produce any logs or it was deleted by OpenShift")
-        return (
-            {
-                "error": "Inspection run did not produce any logs or it was deleted by OpenShift",
-                "status": inspection_status,
-                "parameters": parameters,
-            },
-            404,
-        )
-
-    return {"logs": inspection_logs, "parameters": parameters}, 200
+    return {"result": result, "parameters": parameters}, 200
 
 
-def get_inspection_build_log(inspection_id: str) -> tuple:
+def get_inspection_build_log(inspection_id: str) -> Tuple[Dict[str, Any], int]:
     """Get build log of an inspection."""
     parameters = {"inspection_id": inspection_id}
 
-    try:
-        status = _OPENSHIFT.get_pod_log(inspection_id + "-1-build", Configuration.AMUN_INSPECTION_NAMESPACE)
-    except NotFoundException:
-        return (
-            {"error": "Build log with for the given inspection id was not found", "parameters": parameters},
-            404,
-        )
+    inspection_store = InspectionResult(inspection_id)
+    inspection_store.connect()
 
-    return {"log": status, "parameters": parameters}, 200
+    try:
+        log = inspection_store.builds.retrieve_log()
+    except StorageNotFoundError:
+        return {
+            "error": "Build log for the given inspection id was not found",
+            "parameters": parameters
+        }, 404
+
+    return {"log": log, "parameters": parameters}, 200
+
+
+def get_inspection_specification(inspection_id: str) -> Tuple[Dict[str, Any], int]:
+    """Get specification for the given build."""
+    parameters = {"inspection_id": inspection_id}
+
+    inspection_store = InspectionResult(inspection_id)
+    inspection_store.connect()
+
+    try:
+        specification = inspection_store.retrieve_specification()
+    except StorageNotFoundError:
+        return {
+            "error": f"No specification for inspection {inspection_id!r} found",
+            "parameters": parameters,
+        }, 404
+
+    return {
+        "parameters": parameters,
+        "specification": specification,
+    }, 200
 
 
 def get_inspection_status(inspection_id: str) -> tuple:
     """Get status of an inspection."""
+    # TODO: implement
     parameters = {"inspection_id": inspection_id}
 
     workflow_status = None
@@ -371,33 +326,3 @@ def get_inspection_status(inspection_id: str) -> tuple:
         {"status": {"build": build_status, "job": job_status, "workflow": workflow_status}, "parameters": parameters},
         200,
     )
-
-
-def get_inspection_specification(inspection_id: str):
-    """Get specification for the given build."""
-    parameters = {"inspection_id": inspection_id}
-
-    try:
-        wf: Dict[str, Any] = _OPENSHIFT.get_workflow(
-            label_selector=f"inspection_id={inspection_id}", namespace=_OPENSHIFT.amun_inspection_namespace,
-        )
-    except NotFoundException as exc:
-        return {
-            "error": "A Workflow for the given inspection id as not found",
-            "parameters": parameters,
-        }
-
-    parameters: List[Dict[str, Any]] = wf["spec"]["arguments"]["parameters"]
-
-    (specification_parameter,) = filter(lambda p: p["name"] == "specification", parameters)
-    specification = specification_parameter["value"]
-    specification = json.loads(specification)
-    specification = _unparse_specification(specification)
-
-    # We inserted created information on our own, pop it not to taint the original specification request.
-    created = specification.pop("@created")
-    return {
-        "parameters": parameters,
-        "specification": specification,
-        "created": created,
-    }

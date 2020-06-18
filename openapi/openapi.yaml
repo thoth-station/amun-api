@@ -101,7 +101,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InspectionResponseError'
-  '/inspect/{inspection_id}/job/logs':
+  '/inspect/{inspection_id}/job/{item}/result':
     get:
       tags:
         - Inspection
@@ -115,6 +115,12 @@ paths:
           description: Id of inspection run.
           schema:
             type: string
+        - name: item
+          in: path
+          required: true
+          description: Inspection job (item from the batch) to retrieve logs for.
+          schema:
+            type: integer
       responses:
         '200':
           description: Successful response with inspection run log.
@@ -140,7 +146,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InspectionResponseError'
-  '/inspect/{inspection_id}/job/log':
+  '/inspect/{inspection_id}/job/{item}/log':
     get:
       deprecated: true
       tags:
@@ -155,6 +161,12 @@ paths:
           description: Id of inspection run.
           schema:
             type: string
+        - name: item
+          in: path
+          required: true
+          description: Inspection job (item from the batch) to retrieve logs for.
+          schema:
+            type: integer
       responses:
         '200':
           description: Successful response with inspection run log.
@@ -662,156 +674,154 @@ components:
         parameters:
           type: object
           description: Parameters echoed back to user for debugging.
-    InspectionJobLogsResponse:
+    InspectionJobResultResponse:
       type: object
-      description: Job logs for the given inspection.
+      description: Job result for the given inspection.
       required:
-        - logs
+        - result
         - parameters
       properties:
-        logs:
-          type: array
-          items:
-            type: object
-            description: Inspection job logs printed to stdout/stderr as a plain text.
-            nullable: true
-            additionalProperties: false
-            required:
-              - exit_code
-              - hwinfo
-              - script_sha256
-              - stderr
-              - stdout
-              - usage
-              - os_release
-              - runtime_environment
-            properties:
-              exit_code:
-                type: integer
-                description: >-
-                  Exit code of user provided script (matches exit code of the
-                  inspect job)
-                example: 0
-              hwinfo:
-                type: object
-                additionalProperties: true
-                description: Hardware information as provided by Amun's hwinfo.
-              script_sha256:
-                type: string
-                description: SHA 256 digest of user provided script
-              stderr:
-                type: string
-                description: Standard error output produced by user provided script.
-              stdout:
-                type: object
-                description: Standard output prodiced by user provided script.
-                additionalProperties: true
-              usage:
-                type: object
-                description: >
-                  Utilization of resources such as user-space or kernel-space CPU
-                  time, context switches, shared memory size or page faults (and
-                  others).
-                additionalProperties: true
-              os_release:
-                type: object
-                description: >-
-                  Information about operating system as gathered from
-                  /etc/os-release
-                additionalProperties: true
-                nullable: true
-                properties:
-                  ansi_color:
-                    type: string
-                    example: 0;34
-                  bug_report_url:
-                    type: string
-                    example: 'https://bugzilla.redhat.com/'
-                  cpe_name:
-                    type: string
-                    example: 'cpe:/o:fedoraproject:fedora:29'
-                  documentation_url:
-                    type: string
-                    example: >-
-                      https://docs.fedoraproject.org/en-US/fedora/f29/system-administrators-guide/
-                  home_url:
-                    type: string
-                    example: 'https://fedoraproject.org/'
-                  id:
-                    type: string
-                    example: fedora
-                  logo:
-                    type: string
-                  name:
-                    type: string
-                    example: Fedora
-                  platform_id:
-                    type: string
-                    example: 'platform:f29'
-                  pretty_name:
-                    type: string
-                    example: Fedora 29 (Workstation Edition)
-                  privacy_policy_url:
-                    type: string
-                    example: 'https://fedoraproject.org/wiki/Legal:PrivacyPolicy'
-                  redhat_bugzilla_product:
-                    type: string
-                    example: Fedora
-                  redhat_bugzilla_product_version:
-                    type: string
-                    example: '29'
-                  redhat_support_product:
-                    type: string
-                    example: Fedora
-                  redhat_support_product_version:
-                    type: string
-                    example: '29'
-                  support_url:
-                    type: string
-                    example: >-
-                      https://fedoraproject.org/wiki/Communicating_and_getting_help
-                  variant:
-                    type: string
-                    example: Workstation Edition
-                  variant_id:
-                    type: string
-                    example: workstation
-                  version:
-                    type: string
-                    example: 29 (Workstation Edition)
-                  version_codename:
-                    type: string
-                  version_id:
-                    type: string
-                    example: '29'
-              runtime_environment:
-                type: object
-                description: Runtime environment information.
-                additionalProperties: true
-                properties:
-                  cuda_version:
-                    type: string
-                    description: CUDA version installed.
-                    nullable: true
-                  hardware:
-                    type: object
-                    description: Hardware information.
-                    properties:
-                      cpu_family:
-                        type: integer
-                      cpu_model:
-                        type: integer
-                  operating_system:
-                    type: object
-                    description: OS information.
-                    properties:
-                      name:
-                        type: string
-                      version:
-                        type: string
-                  python_version:
-                    type: string
-                    description: Python interpreter version.
+        log:
+          type: object
+          description: Inspection job result.
+          nullable: true
+          additionalProperties: false
+          required:
+            - exit_code
+            - hwinfo
+            - script_sha256
+            - stderr
+            - stdout
+            - usage
+            - os_release
+            - runtime_environment
+          properties:
+            exit_code:
+              type: integer
+              description: >-
+                Exit code of user provided script (matches exit code of the
+                inspect job)
+              example: 0
+            hwinfo:
+              type: object
+              additionalProperties: true
+              description: Hardware information as provided by Amun's hwinfo.
+            script_sha256:
+              type: string
+              description: SHA 256 digest of user provided script
+            stderr:
+              type: string
+              description: Standard error output produced by user provided script.
+            stdout:
+              type: object
+              description: Standard output prodiced by user provided script.
+              additionalProperties: true
+            usage:
+              type: object
+              description: >
+                Utilization of resources such as user-space or kernel-space CPU
+                time, context switches, shared memory size or page faults (and
+                others).
+              additionalProperties: true
+            os_release:
+              type: object
+              description: >-
+                Information about operating system as gathered from
+                /etc/os-release
+              additionalProperties: true
+              nullable: true
+              properties:
+                ansi_color:
+                  type: string
+                  example: 0;34
+                bug_report_url:
+                  type: string
+                  example: 'https://bugzilla.redhat.com/'
+                cpe_name:
+                  type: string
+                  example: 'cpe:/o:fedoraproject:fedora:29'
+                documentation_url:
+                  type: string
+                  example: >-
+                    https://docs.fedoraproject.org/en-US/fedora/f29/system-administrators-guide/
+                home_url:
+                  type: string
+                  example: 'https://fedoraproject.org/'
+                id:
+                  type: string
+                  example: fedora
+                logo:
+                  type: string
+                name:
+                  type: string
+                  example: Fedora
+                platform_id:
+                  type: string
+                  example: 'platform:f29'
+                pretty_name:
+                  type: string
+                  example: Fedora 29 (Workstation Edition)
+                privacy_policy_url:
+                  type: string
+                  example: 'https://fedoraproject.org/wiki/Legal:PrivacyPolicy'
+                redhat_bugzilla_product:
+                  type: string
+                  example: Fedora
+                redhat_bugzilla_product_version:
+                  type: string
+                  example: '29'
+                redhat_support_product:
+                  type: string
+                  example: Fedora
+                redhat_support_product_version:
+                  type: string
+                  example: '29'
+                support_url:
+                  type: string
+                  example: >-
+                    https://fedoraproject.org/wiki/Communicating_and_getting_help
+                variant:
+                  type: string
+                  example: Workstation Edition
+                variant_id:
+                  type: string
+                  example: workstation
+                version:
+                  type: string
+                  example: 29 (Workstation Edition)
+                version_codename:
+                  type: string
+                version_id:
+                  type: string
+                  example: '29'
+            runtime_environment:
+              type: object
+              description: Runtime environment information.
+              additionalProperties: true
+              properties:
+                cuda_version:
+                  type: string
+                  description: CUDA version installed.
+                  nullable: true
+                hardware:
+                  type: object
+                  description: Hardware information.
+                  properties:
+                    cpu_family:
+                      type: integer
+                    cpu_model:
+                      type: integer
+                operating_system:
+                  type: object
+                  description: OS information.
+                  properties:
+                    name:
+                      type: string
+                    version:
+                      type: string
+                python_version:
+                  type: string
+                  description: Python interpreter version.
         status:
           $ref: '#/components/schemas/InspectionStatus'
         parameters:
