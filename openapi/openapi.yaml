@@ -101,13 +101,46 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InspectionResponseError'
+  '/inspect/{inspection_id}/job/batch-size':
+    get:
+      tags:
+        - Inspection
+      x-openapi-router-controller: amun.api_v1
+      operationId: get_inspection_job_batch_size
+      summary: Get batch size for the given inspection.
+      parameters:
+        - name: inspection_id
+          in: path
+          required: true
+          description: Id of inspection run.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response with inspection batch size reported.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionJobBatchSizeResponse'
+        '400':
+          description: On invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionResponseError'
+        '404':
+          description: The given inspection job referenced by inspection id was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionResponseError'
   '/inspect/{inspection_id}/job/{item}/result':
     get:
       tags:
         - Inspection
       x-openapi-router-controller: amun.api_v1
-      operationId: get_inspection_job_logs
-      summary: Get log for a specific inspection run.
+      operationId: get_inspection_job_result
+      summary: Get result of a specific inspection run.
       parameters:
         - name: inspection_id
           in: path
@@ -127,13 +160,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InspectionJobLogsResponse'
-        '202':
-          description: 'The inspection job was not scheduled yet, check back later.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InspectionResponseError'
+                $ref: '#/components/schemas/InspectionJobResultResponse'
         '400':
           description: On invalid request.
           content:
@@ -148,7 +175,6 @@ paths:
                 $ref: '#/components/schemas/InspectionResponseError'
   '/inspect/{inspection_id}/job/{item}/log':
     get:
-      deprecated: true
       tags:
         - Inspection
       x-openapi-router-controller: amun.api_v1
@@ -174,12 +200,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InspectionJobLogResponse'
-        '202':
-          description: 'The inspection job was not scheduled yet, check back later.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InspectionResponseError'
         '400':
           description: On invalid request.
           content:
@@ -269,8 +289,6 @@ components:
         error:
           type: string
           description: Error information for user.
-        status:
-          $ref: '#/components/schemas/InspectionStatus'
         parameters:
           type: object
           description: Parameters echoed back to user for debugging.
@@ -501,6 +519,20 @@ components:
       required:
         - dockerfile
         - parameters
+    InspectionJobBatchSizeResponse:
+      type: object
+      description: Response with job batch size requested.
+      additionalProperties: false
+      properties:
+        batch_size:
+          type: integer
+          description: Batch size of the given inspection.
+        parameters:
+          type: object
+          description: Parameters echoed back to user (with default parameters if omitted).
+      required:
+        - batch_size
+        - parameters
     InspectionResponse:
       type: object
       description: Response for a submitted inspection.
@@ -515,11 +547,6 @@ components:
         parameters:
           type: object
           description: Parameters echoed back to user (with default parameters if omitted).
-        workflow_target:
-          type: string
-          enum:
-            - inspection-build
-            - inspection-run-result
       required:
         - inspection_id
         - parameters
@@ -681,7 +708,7 @@ components:
         - result
         - parameters
       properties:
-        log:
+        result:
           type: object
           description: Inspection job result.
           nullable: true
@@ -822,8 +849,6 @@ components:
                 python_version:
                   type: string
                   description: Python interpreter version.
-        status:
-          $ref: '#/components/schemas/InspectionStatus'
         parameters:
           type: object
           description: Parameters echoed back to user for debugging.
@@ -834,7 +859,6 @@ components:
       required:
         - parameters
         - specification
-        - created
       properties:
         parameters:
           type: object
@@ -842,123 +866,6 @@ components:
             Parameters echoed back to user (with default parameters if omitted).
         specification:
           $ref: '#/components/schemas/InspectionSpecification'
-        created:
-          type: string
-          description: Creation time of an inspection run.
-          example: '2019-04-17T06:39:30.459116'
-    InspectionResultResponse:
-      type: object
-      additionalProperties: false
-      description: Result of an inspection
-      required:
-        - metadata
-        - result
-      properties:
-        metadata:
-          type: object
-          description: Metadata for inspection run.
-          additionalProperties: false
-          required:
-            - analyzer
-            - analyzer_version
-            - arguments
-            - datetime
-            - distribution
-            - hostname
-            - python
-          properties:
-            analyzer:
-              type: string
-              description: Analyzer name which handled inspection.
-            analyzer_version:
-              type: string
-              description: Version of analyzer handling inspection.
-            arguments:
-              type: object
-              additionalProperties: true
-              description: Arguments passed to analyzer.
-            datetime:
-              type: string
-              description: Date and time of inspection end in ISO format.
-            distribution:
-              type: object
-              description: >
-                Information about environment in which the inspection was
-                performed.
-              required:
-                - codename
-                - id
-                - like
-                - version
-                - version_parts
-              properties:
-                codename:
-                  type: string
-                  description: >
-                    Codename of environment in which the inspection was
-                    perfomed.
-                id:
-                  type: string
-                  description: >
-                    Identifier of environment in which the inspection was
-                    perfomed.
-                like:
-                  type: string
-                  description: >
-                    Similar environments in comparision to environment in which
-                    the inspection was perfomed.
-                version:
-                  type: string
-                  description: A string representation of environment version.
-                version_parts:
-                  type: object
-                  description: |
-                    Parts of version identifier of the analysing environment.
-                  properties:
-                    build_number:
-                      type: string
-                    major:
-                      type: string
-                    minor:
-                      type: string
-                  additionalProperties: false
-                  required:
-                    - build_number
-                    - major
-                    - minor
-            hostname:
-              type: string
-              description: Pod name where the inspection was done.
-            python:
-              required:
-                - api_version
-                - implementation_name
-                - major
-                - minor
-                - micro
-                - releaselevel
-                - serial
-              properties:
-                api_version:
-                  type: integer
-                implementation_name:
-                  type: string
-                  example: cpython
-                major:
-                  type: integer
-                micro:
-                  type: integer
-                minor:
-                  type: integer
-                releaselevel:
-                  type: string
-                  example: final
-                serial:
-                  type: integer
-        result:
-          type: object
-          additionalProperties: true
-          description: Actual result of an inspection run.
     InspectionStatusResponse:
       type: object
       description: Status report about the current inspection Workflow.
@@ -975,12 +882,12 @@ components:
           $ref: '#/components/schemas/InspectionStatus'
     InspectionStatus:
       type: object
-      description: Status of the current inspection Workflow.
+      description: Status of the current inspection workflow.
       additionalProperties: false
       required:
         - build
-        - job
         - workflow
+        - data_stored
       properties:
         build:
           type: object
@@ -1022,71 +929,10 @@ components:
             state:
               type: string
               example: terminated
-        job:
-          type: object
-          description: Status information for the inspection job.
-          additionalProperties: true
-          required:
-            - completions
-            - pods
-          properties:
-            completions:
-              type: integer
-              description: Number of times this Job should be successfully ran.
-            finished_at:
-              type: string
-              description: >
-                Datetime in ISO format informing about when the inspection has
-                finished.
-              nullable: true
-            started_at:
-              type: string
-              description: >
-                Datetime in ISO format informing about when the inspection has
-                started.
-            pods:
-              type: array
-              items:
-                type: object
-                description: Status information for the Pods created by the inspection job.
-                additionalProperties: false
-                required:
-                  - container
-                  - exit_code
-                  - finished_at
-                  - reason
-                  - started_at
-                  - state
-                properties:
-                  container:
-                    type: string
-                    description: SHA of container image in which the inspection is done.
-                    nullable: true
-                  exit_code:
-                    type: integer
-                    description: >
-                      Return code of the process performing inspection (user supplied
-                      script return value).
-                    nullable: true
-                  finished_at:
-                    type: string
-                    description: >
-                      Datetime in ISO format informing about when the inspection has
-                      finished.
-                    nullable: true
-                  reason:
-                    type: string
-                    description: Reasoning on finished inspection run.
-                    nullable: true
-                  started_at:
-                    type: string
-                    description: >
-                      Datetime in ISO format informing about when the inspection has
-                      started.
-                  state:
-                    type: string
-                    example: terminated
         workflow:
           type: object
           description: Status of the submitted inspection Workflow.
           additionalProperties: true
+        data_stored:
+          type: boolean
+          description: A flag checking if any data were stored.

@@ -26,7 +26,7 @@ from typing import Tuple
 from thoth.common import OpenShift
 from thoth.common import datetime2datetime_str
 from thoth.common.exceptions import NotFoundException
-from thoth.storages import InspectionResult
+from thoth.storages import InspectionStore
 from thoth.storages.exceptions import NotFoundError as StorageNotFoundError
 
 from .configuration import Configuration
@@ -200,17 +200,34 @@ def post_inspection(specification: dict) -> tuple:
         {
             "inspection_id": inspection_id,
             "parameters": specification,
-            "workflow_target": target,
         },
         202,
     )
+
+
+def get_inspection_job_batch_size(inspection_id: str) -> Tuple[Dict[str, Any], int]:
+    """Get batch size for the given inspection."""
+    parameters = {"inspection_id": inspection_id}
+
+    inspection_store = InspectionStore(inspection_id)
+    inspection_store.connect()
+
+    try:
+        batch_size = inspection_store.results.get_results_count()
+    except StorageNotFoundError:
+        return {
+            "error": f"No inspection {inspection_id!r} found",
+            "parameters": parameters,
+        }, 404
+
+    return {"batch_size": batch_size, "parameters": parameters}, 200
 
 
 def get_inspection_job_log(inspection_id: str, item: int) -> Tuple[Dict[str, Any], int]:
     """Get logs of the given inspection."""
     parameters = {"inspection_id": inspection_id}
 
-    inspection_store = InspectionResult(inspection_id)
+    inspection_store = InspectionStore(inspection_id)
     inspection_store.connect()
 
     try:
@@ -229,7 +246,7 @@ def get_inspection_job_result(inspection_id: str, item: int) -> Tuple[Dict[str, 
     """Get logs of the given inspection."""
     parameters = {"inspection_id": inspection_id}
 
-    inspection_store = InspectionResult(inspection_id)
+    inspection_store = InspectionStore(inspection_id)
     inspection_store.connect()
 
     try:
@@ -248,7 +265,7 @@ def get_inspection_build_log(inspection_id: str) -> Tuple[Dict[str, Any], int]:
     """Get build log of an inspection."""
     parameters = {"inspection_id": inspection_id}
 
-    inspection_store = InspectionResult(inspection_id)
+    inspection_store = InspectionStore(inspection_id)
     inspection_store.connect()
 
     try:
@@ -266,7 +283,7 @@ def get_inspection_specification(inspection_id: str) -> Tuple[Dict[str, Any], in
     """Get specification for the given build."""
     parameters = {"inspection_id": inspection_id}
 
-    inspection_store = InspectionResult(inspection_id)
+    inspection_store = InspectionStore(inspection_id)
     inspection_store.connect()
 
     try:
@@ -283,10 +300,13 @@ def get_inspection_specification(inspection_id: str) -> Tuple[Dict[str, Any], in
     }, 200
 
 
-def get_inspection_status(inspection_id: str) -> tuple:
+def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
     """Get status of an inspection."""
-    # TODO: implement
     parameters = {"inspection_id": inspection_id}
+
+    inspection_store = InspectionStore(inspection_id)
+    inspection_store.connect()
+    data_stored = inspection_store.exists()
 
     workflow_status = None
     try:
@@ -294,11 +314,8 @@ def get_inspection_status(inspection_id: str) -> tuple:
             label_selector=f"inspection_id={inspection_id}", namespace=_OPENSHIFT.amun_inspection_namespace,
         )
         workflow_status = wf["status"]
-    except NotFoundException as exc:
-        return {
-            "error": "A Workflow for the given inspection id was not found",
-            "parameters": parameters,
-        }, 404
+    except NotFoundException:
+        pass
 
     build_status = None
     try:
@@ -310,19 +327,13 @@ def get_inspection_status(inspection_id: str) -> tuple:
             inspection_id + "-1-build", Configuration.AMUN_INSPECTION_NAMESPACE
         )
     except NotFoundException:
-        return (
-            {"error": "The given inspection id was not found", "parameters": parameters},
-            404,
-        )
-
-    job_status = None
-    try:
-        job_status = _OPENSHIFT.get_job_status_report(inspection_id, Configuration.AMUN_INSPECTION_NAMESPACE)
-    except NotFoundException:
-        # There was no job scheduled - user did not submitted any script to run the job. Report None.
         pass
 
-    return (
-        {"status": {"build": build_status, "job": job_status, "workflow": workflow_status}, "parameters": parameters},
-        200,
-    )
+    return {
+        "status": {
+            "build": build_status,
+            "data_stored": data_stored,
+            "workflow": workflow_status
+        },
+        "parameters": parameters
+    }, 200
