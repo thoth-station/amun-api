@@ -182,7 +182,6 @@ def main():
         with open(output_fp, "w") as output_file:
             output_file.write(output)
 
-    sys.stdout.write(output)
     sys.exit(report["exit_code"])
 
 
