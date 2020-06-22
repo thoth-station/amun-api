@@ -5,6 +5,20 @@ info:
 servers:
   - url: /api/v1/
 paths:
+  /version:
+    get:
+      tags:
+        - Service
+      x-openapi-router-controller: amun.api_v1
+      operationId: get_version
+      summary: Get Amun API version.
+      responses:
+        '200':
+          description: Successful response with service version identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
   /_debug/generate-dockerfile:
     post:
       tags:
@@ -866,6 +880,20 @@ components:
             Parameters echoed back to user (with default parameters if omitted).
         specification:
           $ref: '#/components/schemas/InspectionSpecification'
+    VersionResponse:
+      type: object
+      description: A response with service version identifier.
+      additionalProperties: false
+      required:
+        - version
+        - service_version
+      properties:
+        version:
+          type: string
+          description: Version identifier.
+        service_version:
+          type: string
+          description: Service version identifier.
     InspectionStatusResponse:
       type: object
       description: Status report about the current inspection Workflow.

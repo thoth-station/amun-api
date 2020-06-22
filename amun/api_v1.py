@@ -155,6 +155,16 @@ def _unparse_specification(parsed_specification: dict) -> dict:
     return specification
 
 
+def get_version() -> Dict[str, Any]:
+    """Obtain service version identifier."""
+    from amun import __version__ as __amun_version__
+    from amun.entrypoint import __version__ as __service_version__
+    return {
+        "version": __amun_version__,
+        "service_version": __service_version__,
+    }
+
+
 def post_inspection(specification: dict) -> tuple:
     """Create new inspection for the given software stack."""
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
