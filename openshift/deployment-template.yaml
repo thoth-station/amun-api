@@ -5,12 +5,12 @@ metadata:
   annotations:
     description: This is Amun API
     openshift.io/display-name: "Amun API"
-    version: 0.6.0
+    version: 0.6.1
     tags: amun,thoth,api,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: This is Amun API
     template.openshift.io/provider-display-name: Red Hat, Inc.
-    thoth-station.ninja/template-version: 0.6.0
+    thoth-station.ninja/template-version: 0.6.1
   labels:
     template: amun-api-deployment
     app: amun
@@ -131,6 +131,16 @@ objects:
                     configMapKeyRef:
                       key: ceph-host
                       name: thoth
+                - name: THOTH_CEPH_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: thoth
+                      key: ceph-key-id
+                - name: THOTH_CEPH_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: thoth
+                      key: ceph-secret-key
                 - name: SENTRY_DSN
                   valueFrom:
                     secretKeyRef:
