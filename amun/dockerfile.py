@@ -20,12 +20,9 @@
 import json
 import logging
 import os
-import re
 
 import toml
 import requests
-
-from functools import reduce
 
 from .exceptions import ScriptObtainingError
 
@@ -64,9 +61,7 @@ def _obtain_script(script: str) -> str:
         try:
             response.raise_for_status()
         except requests.HTTPError:
-            raise ScriptObtainingError(
-                f"Failed to obtain script from {script} (HTTP status: {response.status_code})"
-            )
+            raise ScriptObtainingError(f"Failed to obtain script from {script} (HTTP status: {response.status_code})")
 
         return response.text
 
@@ -109,15 +104,11 @@ def create_dockerfile(specification: dict) -> tuple:
         dockerfile += _determine_update_string() + "\n\n"
 
     if specification.get("packages"):
-        dockerfile += (
-            _determine_installer_string() + " ".join(specification["packages"]) + "\n\n"
-        )
+        dockerfile += _determine_installer_string() + " ".join(specification["packages"]) + "\n\n"
 
     if specification.get("python_packages"):
         dockerfile += (
-            "RUN pip3 install --force-reinstall --upgrade "
-            + " ".join(specification["python_packages"])
-            + "\n\n"
+            "RUN pip3 install --force-reinstall --upgrade " + " ".join(specification["python_packages"]) + "\n\n"
         )
 
     for file_spec in specification.get("files", []):
@@ -137,27 +128,23 @@ def create_dockerfile(specification: dict) -> tuple:
         if not any([requirements, requirements_locked]):
             _LOGGER.debug("No requirements specified.")
         elif not all([requirements, requirements_locked]):
-            raise ValueError(
-                "Both `requirements` and `requirements_locked` must be provided."
-            )
+            raise ValueError("Both `requirements` and `requirements_locked` must be provided.")
         else:
             pipfile_content = toml.dumps(requirements)
             dockerfile += _write_file_script(pipfile_content, "/home/amun/Pipfile")
 
-            pipfile_lock_content = json.dumps(
-                requirements_locked, sort_keys=True, indent=4
-            )
-            dockerfile += _write_file_script(
-                pipfile_lock_content, "/home/amun/Pipfile.lock"
-            )
+            pipfile_lock_content = json.dumps(requirements_locked, sort_keys=True, indent=4)
+            dockerfile += _write_file_script(pipfile_lock_content, "/home/amun/Pipfile.lock")
 
             dockerfile += _write_file_string(_PIP_CONF, "/etc/pip.conf")
 
             if specification.get("package_manager", "micropipenv") == "micropipenv":
-                dockerfile += "RUN cd /home/amun && " \
-                              "python3 -m venv venv/ && " \
-                              ". venv/bin/activate && " \
-                              "micropipenv install --deploy\n\n"
+                dockerfile += (
+                    "RUN cd /home/amun && "
+                    "python3 -m venv venv/ && "
+                    ". venv/bin/activate && "
+                    "micropipenv install --deploy\n\n"
+                )
             elif specification.get("package_manager") == "pipenv":
                 dockerfile += "RUN cd /home/amun && pipenv install --deploy\n\n"
             else:
@@ -168,9 +155,7 @@ def create_dockerfile(specification: dict) -> tuple:
         content = _obtain_script(specification["script"])
         dockerfile += _write_file_script(content, "/home/amun/script")
         with open(_ENTRYPOINT_PY, "r") as entrypoint_file:
-            dockerfile += _write_file_string(
-                entrypoint_file.read(), "/home/amun/entrypoint"
-            )
+            dockerfile += _write_file_string(entrypoint_file.read(), "/home/amun/entrypoint")
 
         dockerfile += (
             "RUN chmod a+x /home/amun/script /home/amun/entrypoint && "
