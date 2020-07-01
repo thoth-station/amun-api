@@ -94,16 +94,10 @@ def _gather_runtime_environment(os_release: dict, hwinfo: dict):
     """Gather information about runtime environment."""
     return {
         "cuda_version": None,
-        "hardware": {
-            "cpu_family": hwinfo["cpu_info"].get("family"),
-            "cpu_model": hwinfo["cpu_info"].get("model")
-            },
-        "operating_system": {
-            "name": os_release["id"],
-            "version": os_release["version_id"]
-            },
-        "python_version": ".".join(map(str, sys.version_info[0:2]))
-        }
+        "hardware": {"cpu_family": hwinfo["cpu_info"].get("family"), "cpu_model": hwinfo["cpu_info"].get("model")},
+        "operating_system": {"name": os_release["id"], "version": os_release["version_id"]},
+        "python_version": ".".join(map(str, sys.version_info[0:2])),
+    }
 
 
 def main():

@@ -159,6 +159,7 @@ def get_version() -> Dict[str, Any]:
     """Obtain service version identifier."""
     from amun import __version__ as __amun_version__
     from amun.entrypoint import __version__ as __service_version__
+
     return {
         "version": __amun_version__,
         "service_version": __service_version__,
@@ -196,10 +197,7 @@ def post_inspection(specification: dict) -> tuple:
     dockerfile = dockerfile.replace("'", "''")
 
     inspection_id = _OPENSHIFT.schedule_inspection(
-        dockerfile=dockerfile,
-        specification=specification,
-        target=target,
-        parameters=parameters
+        dockerfile=dockerfile, specification=specification, target=target, parameters=parameters
     )
 
     # TODO: Check whether the workflow spec has been resolved successfully
@@ -207,10 +205,7 @@ def post_inspection(specification: dict) -> tuple:
     # is submitted successfully, it mail fail due to an invalid spec later on
 
     return (
-        {
-            "inspection_id": inspection_id,
-            "parameters": specification,
-        },
+        {"inspection_id": inspection_id, "parameters": specification,},
         202,
     )
 
@@ -225,10 +220,7 @@ def get_inspection_job_batch_size(inspection_id: str) -> Tuple[Dict[str, Any], i
     try:
         batch_size = inspection_store.results.get_results_count()
     except StorageNotFoundError:
-        return {
-            "error": f"No inspection {inspection_id!r} found",
-            "parameters": parameters,
-        }, 404
+        return {"error": f"No inspection {inspection_id!r} found", "parameters": parameters,}, 404
 
     return {"batch_size": batch_size, "parameters": parameters}, 200
 
@@ -243,11 +235,14 @@ def get_inspection_job_log(inspection_id: str, item: int) -> Tuple[Dict[str, Any
     try:
         log = inspection_store.results.retrieve_log(item)
     except StorageNotFoundError:
-        return {
-            "error": f"No log for item {item!r} for inspection {inspection_id!r} or no "
-                     f"inspection {inspection_id!r} with item {item} found",
-            "parameters": parameters,
-        }, 404
+        return (
+            {
+                "error": f"No log for item {item!r} for inspection {inspection_id!r} or no "
+                f"inspection {inspection_id!r} with item {item} found",
+                "parameters": parameters,
+            },
+            404,
+        )
 
     return {"log": log, "parameters": parameters}, 200
 
@@ -262,11 +257,14 @@ def get_inspection_job_result(inspection_id: str, item: int) -> Tuple[Dict[str, 
     try:
         result = inspection_store.results.retrieve_result(item)
     except StorageNotFoundError:
-        return {
-            "error": f"No result for item {item!r} for inspection {inspection_id!r} or no "
-                     f"inspection {inspection_id!r} with item {item} found",
-            "parameters": parameters,
-        }, 404
+        return (
+            {
+                "error": f"No result for item {item!r} for inspection {inspection_id!r} or no "
+                f"inspection {inspection_id!r} with item {item} found",
+                "parameters": parameters,
+            },
+            404,
+        )
 
     return {"result": result, "parameters": parameters}, 200
 
@@ -281,10 +279,7 @@ def get_inspection_build_log(inspection_id: str) -> Tuple[Dict[str, Any], int]:
     try:
         log = inspection_store.builds.retrieve_log()
     except StorageNotFoundError:
-        return {
-            "error": "Build log for the given inspection id was not found",
-            "parameters": parameters
-        }, 404
+        return {"error": "Build log for the given inspection id was not found", "parameters": parameters}, 404
 
     return {"log": log, "parameters": parameters}, 200
 
@@ -299,15 +294,9 @@ def get_inspection_specification(inspection_id: str) -> Tuple[Dict[str, Any], in
     try:
         specification = inspection_store.retrieve_specification()
     except StorageNotFoundError:
-        return {
-            "error": f"No specification for inspection {inspection_id!r} found",
-            "parameters": parameters,
-        }, 404
+        return {"error": f"No specification for inspection {inspection_id!r} found", "parameters": parameters,}, 404
 
-    return {
-        "parameters": parameters,
-        "specification": specification,
-    }, 200
+    return {"parameters": parameters, "specification": specification,}, 200
 
 
 def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
@@ -339,11 +328,10 @@ def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
     except NotFoundException:
         pass
 
-    return {
-        "status": {
-            "build": build_status,
-            "data_stored": data_stored,
-            "workflow": workflow_status
+    return (
+        {
+            "status": {"build": build_status, "data_stored": data_stored, "workflow": workflow_status},
+            "parameters": parameters,
         },
-        "parameters": parameters
-    }, 200
+        200,
+    )

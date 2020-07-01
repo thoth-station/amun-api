@@ -127,4 +127,3 @@ An example of an inspection job output can `be found here
 reflect the current implementation, but should be good-enough for a
 demonstration example. Please reach out to Thoth team for the recent job
 results.
-
