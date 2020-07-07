@@ -42,7 +42,7 @@ objects:
           keyFormat: >-
             {{workflow.parameters.ceph_bucket_prefix}}/
             {{workflow.parameters.deployment_name}}/
-            inspection/
+            inspections/
             {{workflow.name}}
 
       amun-inspection-namespace: ${AMUN_INSPECTION_NAMESPACE}
