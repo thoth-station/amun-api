@@ -259,3 +259,6 @@
 * :pushpin: Automatic update of dependency prometheus-flask-exporter from 0.10.0 to 0.11.0
 * :pushpin: Automatic update of dependency opentracing-instrumentation from 3.2.0 to 3.2.1
 * :pushpin: Automatic update of dependency thoth-common from 0.9.10 to 0.9.11
+
+## Release 0.7.0 (2020-07-07T10:58:55)
+* Match results key with adapters
