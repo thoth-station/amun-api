@@ -920,6 +920,7 @@ components:
         build:
           type: object
           description: Status information for the inspection build.
+          nullable: true
           additionalProperties: false
           required:
             - container
