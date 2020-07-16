@@ -30,7 +30,8 @@ from prometheus_flask_exporter import PrometheusMetrics
 
 from thoth.common import datetime2datetime_str
 from thoth.common import init_logging
-from thoth.common import __version__ as thoth_common_version
+from thoth.storages import __version__ as __storages__version__
+from thoth.common import __version__ as __common__version__
 
 from datetime import datetime
 
@@ -38,14 +39,15 @@ from . import __version__ as __amun_version__
 from .configuration import Configuration
 
 
-__version__ = f"{__amun_version__}+thoth_common.{thoth_common_version}"
-
-
 # Configure global application logging using Thoth's init_logging.
 init_logging(logging_env_var_start="AMUN_LOG_")
 
 _LOGGER = logging.getLogger("amun")
 _LOGGER.setLevel(logging.DEBUG if bool(int(os.getenv("AMUN_DEBUG", 0))) else logging.INFO)
+
+__service_version__ = f"{__amun_version__}+storage.{__storages__version__}.common.{__common__version__}"
+
+_LOGGER.info(f"This is Amun API v%s", __service_version__)
 
 # Expose for uWSGI.
 app = connexion.App(__name__)
@@ -59,7 +61,7 @@ manager = Manager(application)
 application.secret_key = Configuration.APP_SECRET_KEY
 
 # static information as metric
-metrics.info("amun_api_info", "Amun API info", version=__amun_version__)
+metrics.info("amun_api_info", "Amun API info", version=__service_version__)
 
 # Add Cross Origin Request Policy to all
 CORS(app.app)
