@@ -262,3 +262,15 @@
 
 ## Release 0.7.0 (2020-07-07T10:58:55)
 * Match results key with adapters
+
+## Release 0.7.1 (2020-07-17T15:32:16)
+* :pushpin: Automatic update of dependency thoth-storages from 0.24.3 to 0.24.4 (#469)
+* Create & expose service version (#468)
+* Let build to accept null (#465)
+* :pushpin: Automatic update of dependency thoth-common from 0.14.1 to 0.14.2 (#467)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.16.0 to 0.16.1 (#463)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.16.0 to 0.16.1 (#462)
+* :pushpin: Automatic update of dependency prometheus-flask-exporter from 0.14.1 to 0.15.0 (#461)
+* :pushpin: Automatic update of dependency thoth-storages from 0.24.0 to 0.24.3 (#460)
+* adding support for amun deployment to thoth-app (#447)
+* include aicoe-ci configuration file
