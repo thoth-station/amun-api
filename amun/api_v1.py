@@ -277,7 +277,7 @@ def get_inspection_build_log(inspection_id: str) -> Tuple[Dict[str, Any], int]:
     inspection_store.connect()
 
     try:
-        log = inspection_store.builds.retrieve_log()
+        log = inspection_store.build.retrieve_log()
     except StorageNotFoundError:
         return {"error": "Build log for the given inspection id was not found", "parameters": parameters}, 404
 
