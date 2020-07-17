@@ -89,7 +89,7 @@ def api_v1():
 
 
 def _healthiness():
-    return jsonify({"status": "ready", "version": __version__}), 200, {"ContentType": "application/json"}
+    return jsonify({"status": "ready", "version": __service_version__}), 200, {"ContentType": "application/json"}
 
 
 @app.route("/readiness")
@@ -134,7 +134,7 @@ def internal_server_error(exc):
 @application.after_request
 def apply_headers(response):
     """Add headers to each response."""
-    response.headers["X-Amun-Version"] = __version__
+    response.headers["X-Amun-Version"] = __service_version__
     return response
 
 
