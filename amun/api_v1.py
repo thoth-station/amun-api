@@ -158,7 +158,7 @@ def _unparse_specification(parsed_specification: dict) -> dict:
 def get_version() -> Dict[str, Any]:
     """Obtain service version identifier."""
     from amun import __version__ as __amun_version__
-    from amun.entrypoint import __version__ as __service_version__
+    from amun.entrypoint import __service_version__ as __service_version__
 
     return {
         "version": __amun_version__,
