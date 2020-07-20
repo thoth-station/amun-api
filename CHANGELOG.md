@@ -274,3 +274,6 @@
 * :pushpin: Automatic update of dependency thoth-storages from 0.24.0 to 0.24.3 (#460)
 * adding support for amun deployment to thoth-app (#447)
 * include aicoe-ci configuration file
+
+## Release 0.7.2 (2020-07-20T16:24:14)
+* inspectionstore has attribute build (#472)
