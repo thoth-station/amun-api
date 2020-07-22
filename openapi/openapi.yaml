@@ -955,6 +955,7 @@ components:
               description: >
                 Datetime in ISO format informing about when the inspection has
                 started.
+              nullable: true
             state:
               type: string
               example: terminated
