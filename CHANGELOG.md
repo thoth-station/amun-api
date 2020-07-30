@@ -277,3 +277,11 @@
 
 ## Release 0.7.2 (2020-07-20T16:24:14)
 * inspectionstore has attribute build (#472)
+
+## Release 0.7.3 (2020-07-30T15:58:04)
+* :pushpin: Automatic update of dependency prometheus-flask-exporter from 0.15.0 to 0.15.4 (#481)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.16.1 to 0.16.2
+* :pushpin: Automatic update of dependency prometheus-flask-exporter from 0.15.0 to 0.15.4
+* :pushpin: Automatic update of dependency thoth-common from 0.14.2 to 0.16.0 (#479)
+* :pushpin: Automatic update of dependency thoth-storages from 0.24.4 to 0.25.0 (#480)
+* Make started_at nullable (#475)
