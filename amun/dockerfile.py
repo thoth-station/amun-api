@@ -75,14 +75,14 @@ def _write_file_string(content: str, path: str) -> str:
     # TODO: handle it in nice way so we can see it nicely in OpenShift's configuration
     content = content.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n\\\\n")
     path = path.replace('"', '"')
-    return f'RUN echo -e "{content}" > "{path}"\n\n'
+    return f'RUN printf "{content}" > "{path}"\n\n'
 
 
 def _write_file_script(content: str, path: str) -> str:
     """Generate Dockerfile instruction that writes down the file content on the given path."""
     content = content.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\\\n")
     path = path.replace('"', '"')
-    return f'RUN echo -e "{content}" > "{path}"\n\n'
+    return f'RUN printf "{content}" > "{path}"\n\n'
 
 
 def create_dockerfile(specification: dict) -> tuple:
