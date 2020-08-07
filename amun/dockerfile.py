@@ -48,7 +48,7 @@ def _determine_installer_string() -> str:
         "RUN { \\\n\n"
         "  { [ -f '/usr/bin/dnf' ] && INSTALL_CMD='dnf install -y'; } || \\\n\n"
         "  { [ -f '/usr/bin/yum' ] && INSTALL_CMD='yum install -y'; } || \\\n\n"
-        "  { INSTALL_CMD='apt-get install'; } \\\n\n"
+        "  { INSTALL_CMD='apt-get -y install'; } \\\n\n"
         "}; eval $INSTALL_CMD "
     )
 
