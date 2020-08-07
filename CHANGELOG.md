@@ -285,3 +285,9 @@
 * :pushpin: Automatic update of dependency thoth-common from 0.14.2 to 0.16.0 (#479)
 * :pushpin: Automatic update of dependency thoth-storages from 0.24.4 to 0.25.0 (#480)
 * Make started_at nullable (#475)
+
+## Release 0.7.4 (2020-08-07T19:25:13)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.16.2 to 0.16.3 (#493)
+* Avoid using echo (bashism) (#491)
+* Make default requests configurable via env vars (#490)
+* Pass -y on apt-get install (#488)
