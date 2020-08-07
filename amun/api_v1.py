@@ -17,6 +17,7 @@
 
 """Implementation of API v1."""
 
+import os
 import logging
 import re
 from typing import Any
@@ -40,7 +41,10 @@ _OPENSHIFT = OpenShift()
 # These are default requests for inspection builds and runs if not stated
 # otherwise. We explicitly assign defaults to requests coming to API so that
 # the specification always carries these values in inspection documents.
-_DEFAULT_REQUESTS = {"cpu": "500m", "memory": "256Mi"}
+_DEFAULT_REQUESTS = {
+    "cpu": os.getenv("THOTH_DEFAULT_CPU_REQUESTS", "500m"),
+    "memory": os.getenv("THOTH_DEFAULT_MEM_REQUESTS", "256Mi"),
+}
 
 
 def _construct_parameters_dict(specification: dict) -> tuple:
