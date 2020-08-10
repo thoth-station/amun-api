@@ -142,11 +142,7 @@ def create_dockerfile(specification: dict) -> tuple:
             dockerfile += _write_file_string(_PIP_CONF, "/etc/pip.conf")
 
             if specification.get("package_manager", "micropipenv") == "micropipenv":
-                dockerfile += (
-                    "RUN cd /home/amun && "
-                    "python3 -m venv venv/ && "
-                    ". venv/bin/activate && "
-                )
+                dockerfile += "RUN cd /home/amun && " "python3 -m venv venv/ && " ". venv/bin/activate && "
 
                 if specification.get("upgrade_pip"):
                     dockerfile += "pip install --upgrade pip && "
