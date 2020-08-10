@@ -518,6 +518,10 @@ components:
         update:
           type: boolean
           description: Perform native packages update.
+        upgrade_pip:
+          type: boolean
+          description: Update pip before installing packages.
+          default: False
     InspectionGenerateDockerfileResponse:
       type: object
       description: Response for a generated Dockerfile.

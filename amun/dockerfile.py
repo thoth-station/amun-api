@@ -106,6 +106,9 @@ def create_dockerfile(specification: dict) -> tuple:
     if specification.get("packages"):
         dockerfile += _determine_installer_string() + " ".join(specification["packages"]) + "\n\n"
 
+    if specification.get("upgrade_pip"):
+        dockerfile += "RUN pip install --upgrade pip\n"
+
     if specification.get("python_packages"):
         dockerfile += (
             "RUN pip3 install --force-reinstall --upgrade " + " ".join(specification["python_packages"]) + "\n\n"
@@ -143,8 +146,12 @@ def create_dockerfile(specification: dict) -> tuple:
                     "RUN cd /home/amun && "
                     "python3 -m venv venv/ && "
                     ". venv/bin/activate && "
-                    "micropipenv install --deploy\n\n"
                 )
+
+                if specification.get("upgrade_pip"):
+                    dockerfile += "pip install --upgrade pip && "
+
+                dockerfile += "micropipenv install --deploy\n\n"
             elif specification.get("package_manager") == "pipenv":
                 dockerfile += "RUN cd /home/amun && pipenv install --deploy\n\n"
             else:
