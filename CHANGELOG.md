@@ -291,3 +291,7 @@
 * Avoid using echo (bashism) (#491)
 * Make default requests configurable via env vars (#490)
 * Pass -y on apt-get install (#488)
+
+## Release 0.7.5 (2020-08-10T20:59:33)
+* Make black happy
+* Introduce upgrade pip option
