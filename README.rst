@@ -1,6 +1,9 @@
 Amun Service
 ------------
 
+See `this blog post for a detailed walkthrough together with a video
+demonstrating usage <https://towardsdatascience.com/how-to-beat-pythons-pip-inspecting-the-quality-of-machine-learning-software-f1a028f0c42a>`_.
+
 Amun is a service that executes the given application stack in the requested
 environment - given the list of package that should be installed as well as
 given the hardware that is requested to run the application. Its primary
