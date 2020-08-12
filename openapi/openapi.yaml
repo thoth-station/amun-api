@@ -80,6 +80,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InspectionResponseError'
+    get:
+      tags:
+        - Inspection
+      x-openapi-router-controller: amun.api_v1
+      operationId: get_inspection
+      summary: Get listing of inspections available.
+      parameters:
+        - name: page
+          required: false
+          description: Page number for the paginated response.
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response with inspection id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectionListingResponse'
+
   '/inspect/{inspection_id}/build/log':
     get:
       tags:
@@ -550,6 +571,25 @@ components:
           description: Parameters echoed back to user (with default parameters if omitted).
       required:
         - batch_size
+        - parameters
+    InspectionListingResponse:
+      type: object
+      description: Get listing of available inspections.
+      additionalProperties: false
+      properties:
+        inspections:
+          type: array
+          description: >-
+            A listing of inspections available.
+          items:
+            type: string
+            description: An inspection identifier (inspection id).
+            example: inspect-ABCXYZ
+        parameters:
+          type: object
+          description: Parameters echoed back to user (with default parameters if omitted).
+      required:
+        - inspections
         - parameters
     InspectionResponse:
       type: object

@@ -17,11 +17,13 @@
 
 """Implementation of API v1."""
 
-import os
+import itertools
 import logging
+import os
 import re
 from typing import Any
 from typing import Dict
+from typing import Optional
 from typing import Tuple
 
 from thoth.common import OpenShift
@@ -37,6 +39,7 @@ from .exceptions import ScriptObtainingError
 _LOGGER = logging.getLogger(__name__)
 
 _OPENSHIFT = OpenShift()
+_PAGE_COUNT = 100
 
 # These are default requests for inspection builds and runs if not stated
 # otherwise. We explicitly assign defaults to requests coming to API so that
@@ -339,3 +342,12 @@ def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
         },
         200,
     )
+
+
+def get_inspection(page: Optional[int]) -> Dict[str, Any]:
+    """Get listing of inspections available on Ceph."""
+    page = 1 if page is None or page <= 0 else page
+    return {
+        "inspections":  itertools.islice(InspectionStore.iter_inspections(), page, _PAGE_COUNT),
+        "parameters": {"page": page}
+    }
