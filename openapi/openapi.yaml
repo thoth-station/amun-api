@@ -590,7 +590,7 @@ components:
           items:
             type: string
             description: An inspection identifier (inspection id).
-            example: inspect-ABCXYZ
+            example: inspection-ABCXYZ
         parameters:
           type: object
           description: Parameters echoed back to user (with default parameters if omitted).
@@ -607,7 +607,7 @@ components:
           description: >-
             An id of the submitted inspection for checking its status and its
             results.
-          example: inspect-ABCXYZ
+          example: inspection-ABCXYZ
         parameters:
           type: object
           description: Parameters echoed back to user (with default parameters if omitted).
