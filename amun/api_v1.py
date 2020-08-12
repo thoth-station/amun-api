@@ -39,7 +39,7 @@ from .exceptions import ScriptObtainingError
 _LOGGER = logging.getLogger(__name__)
 
 _OPENSHIFT = OpenShift()
-_PAGE_COUNT = 100
+_PAGE_LIMIT = 100
 
 # These are default requests for inspection builds and runs if not stated
 # otherwise. We explicitly assign defaults to requests coming to API so that
@@ -344,10 +344,11 @@ def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
     )
 
 
-def get_inspection(page: Optional[int]) -> Dict[str, Any]:
+def get_inspection(page: Optional[int], limit: Optional[int]) -> Dict[str, Any]:
     """Get listing of inspections available on Ceph."""
     page = 1 if page is None or page <= 0 else page
+    limit = _PAGE_LIMIT if limit is None or limit <= 0 or limit > _PAGE_LIMIT else limit
     return {
-        "inspections":  itertools.islice(InspectionStore.iter_inspections(), page, _PAGE_COUNT),
-        "parameters": {"page": page}
+        "inspections":  itertools.islice(InspectionStore.iter_inspections(), page, limit),
+        "parameters": {"page": page, "limit": limit}
     }
