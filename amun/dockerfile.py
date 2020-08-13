@@ -80,7 +80,7 @@ def _write_file_string(content: str, path: str) -> str:
 
 def _write_file_script(content: str, path: str) -> str:
     """Generate Dockerfile instruction that writes down the file content on the given path."""
-    content = content.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\\\n")
+    content = content.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\\\n").replace("%", "%%")
     path = path.replace('"', '"')
     return f'RUN printf "{content}" > "{path}"\n\n'
 
