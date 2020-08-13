@@ -344,7 +344,7 @@ def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
     )
 
 
-def get_inspection(page: Optional[int], limit: Optional[int]) -> Dict[str, Any]:
+def get_inspection(page: Optional[int] = None, limit: Optional[int] = None) -> Dict[str, Any]:
     """Get listing of inspections available on Ceph."""
     page = 1 if page is None or page <= 0 else page
     limit = _PAGE_LIMIT if limit is None or limit <= 0 or limit > _PAGE_LIMIT else limit
