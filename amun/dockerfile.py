@@ -73,7 +73,7 @@ def _write_file_string(content: str, path: str) -> str:
     # TODO: accept a list of files so we generate only one layer for all files
     # TODO: escape content
     # TODO: handle it in nice way so we can see it nicely in OpenShift's configuration
-    content = content.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n\\\\n")
+    content = content.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n\\\\n").replace("%", "%%")
     path = path.replace('"', '"')
     return f'RUN printf "{content}" > "{path}"\n\n'
 
