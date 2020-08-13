@@ -295,3 +295,13 @@
 ## Release 0.7.5 (2020-08-10T20:59:33)
 * Make black happy
 * Introduce upgrade pip option
+
+## Release 0.7.6 (2020-08-13T14:26:33)
+* add delimiter to the write_to_string function
+* Page and limit are optional (#507)
+* allow amun-api to use printf with valid delimiters (#505)
+* Fix pagination issue
+* We have inspection-XYZ not inspect-XYZ
+* Provide pagination limit as a parameter to user
+* Provide an endpoint for listing available inspections
+* Add a link to TDS blog post
