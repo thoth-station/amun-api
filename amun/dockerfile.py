@@ -107,7 +107,7 @@ def create_dockerfile(specification: dict) -> tuple:
         dockerfile += _determine_installer_string() + " ".join(specification["packages"]) + "\n\n"
 
     if specification.get("upgrade_pip"):
-        dockerfile += "RUN pip install --upgrade pip\n"
+        dockerfile += "RUN pip install --upgrade pip\n\n"
 
     if specification.get("python_packages"):
         dockerfile += (
