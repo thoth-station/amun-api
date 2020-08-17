@@ -306,3 +306,7 @@
 * Provide pagination limit as a parameter to user
 * Provide an endpoint for listing available inspections
 * Add a link to TDS blog post
+
+## Release 0.7.7 (2020-08-17T13:05:55)
+* Fix generation of Dockerfile with pip upgrade
+* :pushpin: Automatic update of dependency sentry-sdk from 0.16.4 to 0.16.5 (#517)
