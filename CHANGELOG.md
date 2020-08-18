@@ -315,3 +315,6 @@
 * :pushpin: Automatic update of dependency thoth-common from 0.16.0 to 0.16.1 (#524)
 * :pushpin: Automatic update of dependency thoth-storages from 0.25.0 to 0.25.1 (#521)
 * Add support for raw specification
+
+## Release 0.8.1 (2020-08-18T20:04:05)
+* Make sure the batch_size is always int in raw specification (#529)
