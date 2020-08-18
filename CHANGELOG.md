@@ -310,3 +310,8 @@
 ## Release 0.7.7 (2020-08-17T13:05:55)
 * Fix generation of Dockerfile with pip upgrade
 * :pushpin: Automatic update of dependency sentry-sdk from 0.16.4 to 0.16.5 (#517)
+
+## Release 0.8.0 (2020-08-18T18:21:37)
+* :pushpin: Automatic update of dependency thoth-common from 0.16.0 to 0.16.1 (#524)
+* :pushpin: Automatic update of dependency thoth-storages from 0.25.0 to 0.25.1 (#521)
+* Add support for raw specification
