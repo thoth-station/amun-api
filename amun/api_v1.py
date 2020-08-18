@@ -183,12 +183,6 @@ def post_inspection(specification: dict) -> tuple:
     if "build" not in specification:
         specification["build"] = {}
 
-    if "batch_size" in specification:
-        # Convert to a string due to serialization when submitting to Argo Workflows.
-        specification["batch_size"] = str(specification["batch_size"])
-    else:
-        specification["batch_size"] = "1"
-
     if "run" not in specification:
         specification["run"] = {}
 
@@ -199,8 +193,15 @@ def post_inspection(specification: dict) -> tuple:
     specification["@created"] = datetime2datetime_str()
 
     raw_specification = specification.copy()  # Without escaped characters, as retrieved on endpoint with defaults.
-    specification = _parse_specification(specification)
 
+    if "batch_size" in specification:
+        # Convert to a string due to serialization when submitting to Argo Workflows.
+        specification["batch_size"] = str(specification["batch_size"])
+    else:
+        specification["batch_size"] = "1"
+        raw_specification["batch_size"] = 1
+
+    specification = _parse_specification(specification)
     parameters, use_hw_template = _construct_parameters_dict(specification.get("build", {}))
 
     target = "inspection-run-result" if run_job else "inspection-build"
