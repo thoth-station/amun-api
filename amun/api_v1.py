@@ -123,15 +123,6 @@ def _parse_specification(specification: dict) -> dict:
 
     parsed_specification = _escape_single_quotes(parsed_specification)
 
-    if "batch_size" in parsed_specification:
-        parsed_specification["batch_size"] = str(specification["batch_size"])
-
-    if "build" not in parsed_specification:
-        parsed_specification["build"] = {}
-
-    if "run" not in parsed_specification:
-        parsed_specification["run"] = {}
-
     return parsed_specification
 
 
@@ -189,22 +180,39 @@ def post_inspection(specification: dict) -> tuple:
 
     run_job = run_job_or_error
 
-    specification = _parse_specification(specification)
+    if "build" not in specification:
+        specification["build"] = {}
+
+    if "batch_size" in specification:
+        # Convert to a string due to serialization when submitting to Argo Workflows.
+        specification["batch_size"] = str(specification["batch_size"])
+    else:
+        specification["batch_size"] = "1"
+
+    if "run" not in specification:
+        specification["run"] = {}
 
     _adjust_default_requests(specification["run"])
     _adjust_default_requests(specification["build"])
 
-    parameters, use_hw_template = _construct_parameters_dict(specification.get("build", {}))
-
     # Mark this for later use - in get_inspection_specification().
     specification["@created"] = datetime2datetime_str()
+
+    raw_specification = specification.copy()  # Without escaped characters, as retrieved on endpoint with defaults.
+    specification = _parse_specification(specification)
+
+    parameters, use_hw_template = _construct_parameters_dict(specification.get("build", {}))
 
     target = "inspection-run-result" if run_job else "inspection-build"
 
     dockerfile = dockerfile.replace("'", "''")
 
     inspection_id = _OPENSHIFT.schedule_inspection(
-        dockerfile=dockerfile, specification=specification, target=target, parameters=parameters
+        dockerfile=dockerfile,
+        specification=specification,
+        target=target,
+        parameters=parameters,
+        raw_specification=raw_specification,
     )
 
     # TODO: Check whether the workflow spec has been resolved successfully
@@ -212,7 +220,7 @@ def post_inspection(specification: dict) -> tuple:
     # is submitted successfully, it mail fail due to an invalid spec later on
 
     return (
-        {"inspection_id": inspection_id, "parameters": specification,},
+        {"inspection_id": inspection_id, "parameters": raw_specification,},
         202,
     )
 
