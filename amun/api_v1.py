@@ -17,6 +17,7 @@
 
 """Implementation of API v1."""
 
+import copy
 import itertools
 import logging
 import os
@@ -102,28 +103,21 @@ def _adjust_default_requests(dict_: dict) -> None:
     dict_["requests"]["memory"] = dict_["requests"].get("memory") or _DEFAULT_REQUESTS["memory"]
 
 
-def _parse_specification(specification: dict) -> dict:
+def _parse_specification(obj: Dict[str, Any]) -> dict:
     """Parse inspection specification.
 
     Cast types to comply with Argo and escapes quotes.
     """
-    parsed_specification = specification.copy()
+    if isinstance(obj, dict):
+        for k in obj:
+            obj[k] = _parse_specification(obj[k])
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            obj[i] = _parse_specification(v)
+    elif isinstance(obj, str):
+        return re.sub(r"'(?!')", "''", obj)
 
-    def _escape_single_quotes(obj):
-        if isinstance(obj, dict):
-            for k in obj:
-                obj[k] = _escape_single_quotes(obj[k])
-        elif isinstance(obj, list):
-            for i, v in enumerate(obj):
-                obj[i] = _escape_single_quotes(v)
-        elif isinstance(obj, str):
-            return re.sub(r"'(?!')", "''", obj)
-
-        return obj
-
-    parsed_specification = _escape_single_quotes(parsed_specification)
-
-    return parsed_specification
+    return obj
 
 
 def _unparse_specification(parsed_specification: dict) -> dict:
@@ -192,7 +186,8 @@ def post_inspection(specification: dict) -> tuple:
     # Mark this for later use - in get_inspection_specification().
     specification["@created"] = datetime2datetime_str()
 
-    raw_specification = specification.copy()  # Without escaped characters, as retrieved on endpoint with defaults.
+    # Without escaped characters, as retrieved on endpoint with defaults.
+    raw_specification = copy.deepcopy(specification)
 
     if "batch_size" in specification:
         # Convert to a string due to serialization when submitting to Argo Workflows.
