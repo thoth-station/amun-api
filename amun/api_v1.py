@@ -103,24 +103,21 @@ def _adjust_default_requests(dict_: dict) -> None:
     dict_["requests"]["memory"] = dict_["requests"].get("memory") or _DEFAULT_REQUESTS["memory"]
 
 
-def _parse_specification(specification: Dict[str, Any]) -> dict:
+def _parse_specification(obj: Dict[str, Any]) -> dict:
     """Parse inspection specification.
 
     Cast types to comply with Argo and escapes quotes.
     """
-    def _escape_single_quotes(obj):
-        if isinstance(obj, dict):
-            for k in obj:
-                obj[k] = _escape_single_quotes(obj[k])
-        elif isinstance(obj, list):
-            for i, v in enumerate(obj):
-                obj[i] = _escape_single_quotes(v)
-        elif isinstance(obj, str):
-            return re.sub(r"'(?!')", "''", obj)
+    if isinstance(obj, dict):
+        for k in obj:
+            obj[k] = _parse_specification(obj[k])
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            obj[i] = _parse_specification(v)
+    elif isinstance(obj, str):
+        return re.sub(r"'(?!')", "''", obj)
 
-        return obj
-
-    return _escape_single_quotes(specification)
+    return obj
 
 
 def _unparse_specification(parsed_specification: dict) -> dict:
