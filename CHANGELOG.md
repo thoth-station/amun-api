@@ -318,3 +318,10 @@
 
 ## Release 0.8.1 (2020-08-18T20:04:05)
 * Make sure the batch_size is always int in raw specification (#529)
+
+## Release 0.9.0 (2020-08-19T11:52:50)
+* Add pull request template (#533)
+* Remove nested function
+* Update README file to reflect the current implementation (#527)
+* Perform deep copy of specification to handle escaping correctly
+* Remove unused files (#528)
