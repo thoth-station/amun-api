@@ -330,3 +330,6 @@
 * Add one more escaped / when serializing files or strings (#540)
 * :pushpin: Automatic update of dependency thoth-storages from 0.25.1 to 0.25.2 (#538)
 * :pushpin: Automatic update of dependency thoth-storages from 0.25.1 to 0.25.2 (#537)
+
+## Release 0.9.2 (2020-08-20T12:30:17)
+* Include start and end datetime of inspections (#543)
