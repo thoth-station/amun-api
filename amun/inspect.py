@@ -102,6 +102,8 @@ def _gather_runtime_environment(os_release: dict, hwinfo: dict):
 
 def main():
     """Entrypoint for inspection container."""
+    start_datetime = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+
     # Load hardware info.
     hwinfo = None
     with open(_HWINFO_FILE, "r") as hwinfo_file:
@@ -159,7 +161,8 @@ def main():
         "exit_code": process.returncode,
         "script_sha256": sha256.hexdigest(),
         "usage": usage,
-        "datetime": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+        "start_datetime": start_datetime,
+        "end_datetime": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f"),
         "os_release": os_release,
         "runtime_environment": runtime_environment,
         "hostname": platform.node(),
