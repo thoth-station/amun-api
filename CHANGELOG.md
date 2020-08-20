@@ -325,3 +325,8 @@
 * Update README file to reflect the current implementation (#527)
 * Perform deep copy of specification to handle escaping correctly
 * Remove unused files (#528)
+
+## Release 0.9.1 (2020-08-20T08:56:40)
+* Add one more escaped / when serializing files or strings (#540)
+* :pushpin: Automatic update of dependency thoth-storages from 0.25.1 to 0.25.2 (#538)
+* :pushpin: Automatic update of dependency thoth-storages from 0.25.1 to 0.25.2 (#537)
