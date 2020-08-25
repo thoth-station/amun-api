@@ -160,6 +160,8 @@ def get_version() -> Dict[str, Any]:
 
 def post_inspection(specification: dict) -> tuple:
     """Create new inspection for the given software stack."""
+    from amun.entrypoint import __service_version__ as __service_version__
+
     # Generate first Dockerfile so we do not end up with an empty imagestream if Dockerfile creation fails.
     dockerfile, run_job_or_error = _do_create_dockerfile(specification)
     if dockerfile is None:
@@ -185,6 +187,7 @@ def post_inspection(specification: dict) -> tuple:
 
     # Mark this for later use - in get_inspection_specification().
     specification["@created"] = datetime2datetime_str()
+    specification["@amun_service_version"] = __service_version__
 
     # Without escaped characters, as retrieved on endpoint with defaults.
     raw_specification = copy.deepcopy(specification)
