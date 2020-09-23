@@ -42,6 +42,9 @@ _LOGGER = logging.getLogger(__name__)
 _OPENSHIFT = OpenShift()
 _PAGE_LIMIT = 100
 
+_AMUN_API_URL = os.getenv("THOTH_AMUN_API_URL")
+_AMUN_DEPLOYMENT_NAME = os.getenv("THOTH_DEPLOYMENT_NAME")
+
 # These are default requests for inspection builds and runs if not stated
 # otherwise. We explicitly assign defaults to requests coming to API so that
 # the specification always carries these values in inspection documents.
@@ -188,6 +191,8 @@ def post_inspection(specification: dict) -> tuple:
     # Mark this for later use - in get_inspection_specification().
     specification["@created"] = datetime2datetime_str()
     specification["@amun_service_version"] = __service_version__
+    specification["@amun_api_url"] = _AMUN_API_URL
+    specification["@amun_deployment_name"] = _AMUN_DEPLOYMENT_NAME
 
     # Without escaped characters, as retrieved on endpoint with defaults.
     raw_specification = copy.deepcopy(specification)
