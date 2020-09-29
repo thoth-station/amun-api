@@ -219,6 +219,9 @@ All manifests required to deploy this application are available in
 `thoth-station/thoth-application
 <https://github.com/thoth-station/thoth-application/tree/master/amun>`__.
 
+See `this video with instructions on how to deploy Amun into a cluster using
+kustomize <https://www.youtube.com/watch?v=rJ6Px2JPMqI>`__.
+
 License & Copying
 =================
 
