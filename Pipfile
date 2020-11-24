@@ -32,4 +32,4 @@ grpcio-tools = "<1.28"
 allow_prereleases = false
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"
