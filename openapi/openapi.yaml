@@ -549,6 +549,13 @@ components:
           type: boolean
           description: Update pip before installing packages.
           default: False
+        send_messages:
+          type: boolean
+          description: Send message upon completion.
+          default: True
+        force_sync:
+          type: boolean
+          description: Should graph-sync force sync these inspection results. (param of sent message)
     InspectionGenerateDockerfileResponse:
       type: object
       description: Response for a generated Dockerfile.
