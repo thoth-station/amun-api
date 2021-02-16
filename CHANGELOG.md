@@ -333,3 +333,47 @@
 
 ## Release 0.9.2 (2020-08-20T12:30:17)
 * Include start and end datetime of inspections (#543)
+
+## Release 0.9.3 (2021-02-09T16:15:07)
+### Features
+* :arrow_up: Automatic update of dependencies by Kebechet (#595)
+* :arrow_up: Automatic update of dependencies by Kebechet (#594)
+* Update README.rst
+* :arrow_up: Automatic update of dependencies by kebechet. (#593)
+* update .aicoe-yaml (#592)
+* update .thoth.yaml (#591)
+* port to python 38 (#590)
+* Add a link to YT video with instructions how to deploy Amun (#573)
+* Propagate Amun version into inspection metadata (#550)
+### Bug Fixes
+* Relock to fix marker issues
+### Improvements
+* removed bissenbay, thanks for your contributions!
+* Propagate deployment-name and Amun API url to specification (#567)
+### Automatic Updates
+* :pushpin: Automatic update of dependency more-itertools from 8.5.0 to 8.6.0 (#588)
+* :pushpin: Automatic update of dependency toml from 0.10.1 to 0.10.2 (#582)
+* :pushpin: Automatic update of dependency more-itertools from 8.5.0 to 8.6.0 (#585)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.18.0 to 0.19.2 (#583)
+* :pushpin: Automatic update of dependency thoth-storages from 0.25.15 to 0.26.0 (#584)
+* :pushpin: Automatic update of dependency thoth-storages from 0.25.15 to 0.26.0 (#581)
+* :pushpin: Automatic update of dependency thoth-common from 0.20.1 to 0.20.4 (#580)
+* :pushpin: Automatic update of dependency prometheus-flask-exporter from 0.18.0 to 0.18.1 (#578)
+* :pushpin: Automatic update of dependency thoth-common from 0.20.0 to 0.20.1 (#577)
+* :pushpin: Automatic update of dependency thoth-storages from 0.25.13 to 0.25.15 (#575)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.17.8 to 0.18.0 (#572)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.17.1 to 0.17.8 (#570)
+* :pushpin: Automatic update of dependency thoth-storages from 0.25.11 to 0.25.13 (#569)
+* :pushpin: Automatic update of dependency thoth-common from 0.17.0 to 0.20.0 (#568)
+* :pushpin: Automatic update of dependency thoth-storages from 0.25.5 to 0.25.11 (#564)
+* :pushpin: Automatic update of dependency prometheus-flask-exporter from 0.16.0 to 0.18.0 (#565)
+* :pushpin: Automatic update of dependency more-itertools from 8.4.0 to 8.5.0 (#561)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.17.0 to 0.17.1 (#560)
+* :pushpin: Automatic update of dependency more-itertools from 8.4.0 to 8.5.0 (#559)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.17.0 to 0.17.1 (#558)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.17.0 to 0.17.1 (#557)
+* :pushpin: Automatic update of dependency flask-cors from 3.0.8 to 3.0.9 (#556)
+* :pushpin: Automatic update of dependency prometheus-flask-exporter from 0.15.4 to 0.16.0 (#555)
+* :pushpin: Automatic update of dependency thoth-common from 0.16.1 to 0.17.0 (#554)
+* :pushpin: Automatic update of dependency sentry-sdk from 0.16.5 to 0.17.0 (#551)
+* :pushpin: Automatic update of dependency thoth-storages from 0.25.2 to 0.25.5 (#548)
