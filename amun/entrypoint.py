@@ -23,7 +23,7 @@ import logging
 
 import connexion
 
-from flask import redirect, jsonify
+from flask import redirect, jsonify, request
 from flask_script import Manager
 from flask_cors import CORS
 from prometheus_flask_exporter import PrometheusMetrics
@@ -42,6 +42,7 @@ from .configuration import Configuration
 # Configure global application logging using Thoth's init_logging.
 init_logging(logging_env_var_start="AMUN_LOG_")
 
+_THOTH_API_HTTPS = bool(int(os.getenv("THOTH_API_HTTPS", 1)))
 _LOGGER = logging.getLogger("amun")
 _LOGGER.setLevel(logging.DEBUG if bool(int(os.getenv("AMUN_DEBUG", 0))) else logging.INFO)
 
@@ -71,6 +72,8 @@ CORS(app.app)
 @metrics.do_not_track()
 def base_url():
     """Redirect to UI by default."""
+    # https://github.com/pallets/flask/issues/773
+    request.environ["wsgi.url_scheme"] = "https" if _THOTH_API_HTTPS else "http"
     return redirect("api/v1/ui")
 
 
