@@ -377,3 +377,7 @@
 * :pushpin: Automatic update of dependency thoth-common from 0.16.1 to 0.17.0 (#554)
 * :pushpin: Automatic update of dependency sentry-sdk from 0.16.5 to 0.17.0 (#551)
 * :pushpin: Automatic update of dependency thoth-storages from 0.25.2 to 0.25.5 (#548)
+
+## Release 0.9.4 (2021-02-23T18:05:35)
+### Features
+* Redirect with HTTPS if HTTPS is used (#601)
