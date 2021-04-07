@@ -54,6 +54,7 @@ Related references
 * `thoth-station/performance <https://github.com/thoth-station/performance>`__
 * `Dependency Monkey ZOO <https://github.com/thoth-station/dependency-monkey-zoo>`__
 * `thoth-station/datasets <https://github.com/thoth-station/datasets/>`__
+* `thoth-station/performance <https://github.com/thoth-station/performance/>`__
 * `Kaggle dataset <https://www.kaggle.com/thothstation>`__
 
 A request to Amun API
