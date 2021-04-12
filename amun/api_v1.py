@@ -54,7 +54,7 @@ _DEFAULT_REQUESTS = {
 }
 
 
-def _construct_parameters_dict(specification: dict) -> tuple:
+def _construct_parameters_dict(specification: Dict[str, Any]) -> Tuple[Dict[str, Any], Any]:
     """Construct parameters that should be passed to build or inspection job."""
     # Name of parameters are shared in build/job templates so parameters are constructed regardless build or job.
     parameters = {}
@@ -78,7 +78,7 @@ def _construct_parameters_dict(specification: dict) -> tuple:
     return parameters, use_hw_template
 
 
-def _do_create_dockerfile(specification: dict) -> tuple:
+def _do_create_dockerfile(specification: Dict[Any, Any]) -> Tuple[Any, Any]:
     """Wrap dockerfile generation and report back an error if any."""
     try:
         return create_dockerfile(specification)
@@ -86,7 +86,7 @@ def _do_create_dockerfile(specification: dict) -> tuple:
         return None, str(exc)
 
 
-def post_generate_dockerfile(specification: dict):
+def post_generate_dockerfile(specification: Dict[Any, Any]) -> Tuple[Dict[str, Any], int]:
     """Generate Dockerfile out of software stack specification."""
     parameters = {"specification": specification}
 
@@ -97,7 +97,7 @@ def post_generate_dockerfile(specification: dict):
     return {"parameters": parameters, "dockerfile": dockerfile}, 200
 
 
-def _adjust_default_requests(dict_: dict) -> None:
+def _adjust_default_requests(dict_: Dict[str, Any]) -> None:
     """Explicitly assign default requests so that they are carried within the requested inspection run."""
     if "requests" not in dict_:
         dict_["requests"] = {}
@@ -106,7 +106,7 @@ def _adjust_default_requests(dict_: dict) -> None:
     dict_["requests"]["memory"] = dict_["requests"].get("memory") or _DEFAULT_REQUESTS["memory"]
 
 
-def _parse_specification(obj: Dict[str, Any]) -> dict:
+def _parse_specification(obj: Dict[str, Any]) -> Any:
     """Parse inspection specification.
 
     Cast types to comply with Argo and escapes quotes.
@@ -123,14 +123,14 @@ def _parse_specification(obj: Dict[str, Any]) -> dict:
     return obj
 
 
-def _unparse_specification(parsed_specification: dict) -> dict:
+def _unparse_specification(parsed_specification: Dict[Any, Any]) -> Dict[Any, Any]:
     """Unparse inspection specification.
 
     Casts types to comply with the inspection scheme and unescapes quotes.
     """
     specification = parsed_specification.copy()
 
-    def _unescape_single_quotes(obj):
+    def _unescape_single_quotes(obj: Dict[Any, Any]) -> Any:
         if isinstance(obj, dict):
             for k in obj:
                 obj[k] = _unescape_single_quotes(obj[k])
@@ -161,7 +161,7 @@ def get_version() -> Dict[str, Any]:
     }
 
 
-def post_inspection(specification: dict) -> tuple:
+def post_inspection(specification: Dict[Any, Any]) -> Tuple[Dict[str, Any], int]:
     """Create new inspection for the given software stack."""
     from amun.entrypoint import __service_version__ as __service_version__
 
@@ -224,7 +224,10 @@ def post_inspection(specification: dict) -> tuple:
     # is submitted successfully, it mail fail due to an invalid spec later on
 
     return (
-        {"inspection_id": inspection_id, "parameters": raw_specification,},
+        {
+            "inspection_id": inspection_id,
+            "parameters": raw_specification,
+        },
         202,
     )
 
@@ -239,7 +242,10 @@ def get_inspection_job_batch_size(inspection_id: str) -> Tuple[Dict[str, Any], i
     try:
         batch_size = inspection_store.results.get_results_count()
     except StorageNotFoundError:
-        return {"error": f"No inspection {inspection_id!r} found", "parameters": parameters,}, 404
+        return {
+            "error": f"No inspection {inspection_id!r} found",
+            "parameters": parameters,
+        }, 404
 
     return {"batch_size": batch_size, "parameters": parameters}, 200
 
@@ -313,9 +319,15 @@ def get_inspection_specification(inspection_id: str) -> Tuple[Dict[str, Any], in
     try:
         specification = inspection_store.retrieve_specification()
     except StorageNotFoundError:
-        return {"error": f"No specification for inspection {inspection_id!r} found", "parameters": parameters,}, 404
+        return {
+            "error": f"No specification for inspection {inspection_id!r} found",
+            "parameters": parameters,
+        }, 404
 
-    return {"parameters": parameters, "specification": specification,}, 200
+    return {
+        "parameters": parameters,
+        "specification": specification,
+    }, 200
 
 
 def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
@@ -329,7 +341,8 @@ def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
     workflow_status = None
     try:
         wf: Dict[str, Any] = _OPENSHIFT.get_workflow(
-            label_selector=f"inspection_id={inspection_id}", namespace=_OPENSHIFT.amun_inspection_namespace,
+            label_selector=f"inspection_id={inspection_id}",
+            namespace=_OPENSHIFT.amun_inspection_namespace,
         )
         workflow_status = wf["status"]
     except NotFoundException:

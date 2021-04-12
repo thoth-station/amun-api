@@ -19,7 +19,7 @@
 
 import logging
 import os
-
+from typing import Any
 from jaeger_client import Config as JaegerConfig
 from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
 
@@ -41,7 +41,7 @@ class Configuration:
     tracer = None
 
 
-def init_jaeger_tracer(service_name):
+def init_jaeger_tracer(service_name: str) -> Any:
     """Create a Jaeger/OpenTracing configuration."""
     config = JaegerConfig(
         config={

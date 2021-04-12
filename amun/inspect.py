@@ -31,7 +31,7 @@ import hashlib
 import sys
 from datetime import datetime
 import platform
-
+from typing import Any, Dict
 
 # A path to file containing hardware information as gathered by init-container
 # amun-hwinfo.
@@ -65,7 +65,7 @@ _RESOURCE_STRUCT_RUSAGE_ITEMS = (
 )
 
 
-def _gather_os_release():
+def _gather_os_release() -> Any:
     """Gather information about operating system used."""
     if not os.path.isfile(_ETC_OS_RELEASE):
         return None
@@ -90,7 +90,7 @@ def _gather_os_release():
     return result
 
 
-def _gather_runtime_environment(os_release: dict, hwinfo: dict):
+def _gather_runtime_environment(os_release: Dict[str, int], hwinfo: Dict[str, Any]) -> Dict[str, Any]:
     """Gather information about runtime environment."""
     return {
         "cuda_version": None,
@@ -100,7 +100,7 @@ def _gather_runtime_environment(os_release: dict, hwinfo: dict):
     }
 
 
-def main():
+def main() -> None:
     """Entrypoint for inspection container."""
     start_datetime = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
 

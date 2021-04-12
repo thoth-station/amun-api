@@ -20,6 +20,9 @@
 import os
 import sys
 import logging
+from typing import Any
+from typing import Dict
+from typing import Tuple
 
 import connexion
 
@@ -48,7 +51,7 @@ _LOGGER.setLevel(logging.DEBUG if bool(int(os.getenv("AMUN_DEBUG", 0))) else log
 
 __service_version__ = f"{__amun_version__}+storage.{__storages__version__}.common.{__common__version__}"
 
-_LOGGER.info(f"This is Amun API v%s", __service_version__)
+_LOGGER.info(f"This is Amun API v{__service_version__}")
 
 # Expose for uWSGI.
 app = connexion.App(__name__)
@@ -70,7 +73,7 @@ CORS(app.app)
 
 @app.route("/")
 @metrics.do_not_track()
-def base_url():
+def base_url() -> Any:
     """Redirect to UI by default."""
     # https://github.com/pallets/flask/issues/773
     request.environ["wsgi.url_scheme"] = "https" if _THOTH_API_HTTPS else "http"
@@ -79,7 +82,7 @@ def base_url():
 
 @app.route("/api/v1")
 @metrics.do_not_track()
-def api_v1():
+def api_v1() -> Any:
     """Provide a listing of all available endpoints."""
     paths = []
 
@@ -91,27 +94,27 @@ def api_v1():
     return jsonify({"paths": paths})
 
 
-def _healthiness():
+def _healthiness() -> Tuple[Any, int, Dict[str, str]]:
     return jsonify({"status": "ready", "version": __service_version__}), 200, {"ContentType": "application/json"}
 
 
 @app.route("/readiness")
 @metrics.do_not_track()
-def api_readiness():
+def api_readiness() -> Tuple[Any, int, Dict[str, str]]:
     """Report readiness for OpenShift readiness probe."""
     return _healthiness()
 
 
 @app.route("/liveness")
 @metrics.do_not_track()
-def api_liveness():
+def api_liveness() -> Tuple[Any, int, Dict[str, str]]:
     """Report liveness for OpenShift readiness probe."""
     return _healthiness()
 
 
 @application.errorhandler(404)
 @metrics.do_not_track()
-def page_not_found(exc):
+def page_not_found(exc: Any) -> Tuple[Any, int]:
     """Adjust 404 page to be consistent with errors reported back from API."""
     # Flask has a nice error message - reuse it.
     return jsonify({"error": str(exc)}), 404
@@ -119,7 +122,7 @@ def page_not_found(exc):
 
 @application.errorhandler(500)
 @metrics.do_not_track()
-def internal_server_error(exc):
+def internal_server_error(exc: Any) -> Tuple[Any, int]:
     """Adjust 500 page to be consistent with errors reported back from API."""
     # Provide some additional information so we can easily find exceptions in logs (time and exception type).
     # Later we should remove exception type (for security reasons).
@@ -135,7 +138,7 @@ def internal_server_error(exc):
 
 
 @application.after_request
-def apply_headers(response):
+def apply_headers(response: Any) -> Any:
     """Add headers to each response."""
     response.headers["X-Amun-Version"] = __service_version__
     return response
