@@ -13,7 +13,7 @@ prometheus-flask-exporter = "*"
 prometheus-client = "*"
 gunicorn = "*"
 connexion = {extras = ["swagger-ui"],version = "*"}
-flask = "*"
+flask = "==1.1.4"
 flask-cors = "*"
 flask-script = "*"
 grpcio = "<1.28"
@@ -23,6 +23,7 @@ jaeger-client = "*"
 opentracing-instrumentation = "*"
 sentry-sdk = {extras = ["flask"],version = "*"}
 more-itertools = "*"
+werkzeug = "==1.0.1"
 
 [dev-packages]
 grpcio = "<1.28"
