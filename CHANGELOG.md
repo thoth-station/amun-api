@@ -381,3 +381,18 @@
 ## Release 0.9.4 (2021-02-23T18:05:35)
 ### Features
 * Redirect with HTTPS if HTTPS is used (#601)
+
+## Release 0.9.5 (2021-06-03T19:45:00)
+### Features
+* Add GitHub templates
+* Fix module not found error for flask._compat
+* :arrow_up: Automatic update of dependencies by Kebechet
+* :arrow_up: Automatic update of dependencies by Kebechet
+* :arrow_up: Automatic update of dependencies by Kebechet
+* Add related links to the README
+* :arrow_up: Automatic update of dependencies by Kebechet
+* :arrow_up: update CI/CD configuration
+* :arrow_up: Automatic update of dependencies by Kebechet
+* :arrow_up: Automatic update of dependencies by Kebechet
+### Non-functional
+* Add also a link to performance repo
