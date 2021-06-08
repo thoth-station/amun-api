@@ -224,7 +224,10 @@ def post_inspection(specification: dict) -> tuple:
     # is submitted successfully, it mail fail due to an invalid spec later on
 
     return (
-        {"inspection_id": inspection_id, "parameters": raw_specification,},
+        {
+            "inspection_id": inspection_id,
+            "parameters": raw_specification,
+        },
         202,
     )
 
@@ -239,7 +242,10 @@ def get_inspection_job_batch_size(inspection_id: str) -> Tuple[Dict[str, Any], i
     try:
         batch_size = inspection_store.results.get_results_count()
     except StorageNotFoundError:
-        return {"error": f"No inspection {inspection_id!r} found", "parameters": parameters,}, 404
+        return {
+            "error": f"No inspection {inspection_id!r} found",
+            "parameters": parameters,
+        }, 404
 
     return {"batch_size": batch_size, "parameters": parameters}, 200
 
@@ -313,9 +319,15 @@ def get_inspection_specification(inspection_id: str) -> Tuple[Dict[str, Any], in
     try:
         specification = inspection_store.retrieve_specification()
     except StorageNotFoundError:
-        return {"error": f"No specification for inspection {inspection_id!r} found", "parameters": parameters,}, 404
+        return {
+            "error": f"No specification for inspection {inspection_id!r} found",
+            "parameters": parameters,
+        }, 404
 
-    return {"parameters": parameters, "specification": specification,}, 200
+    return {
+        "parameters": parameters,
+        "specification": specification,
+    }, 200
 
 
 def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
@@ -329,7 +341,8 @@ def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
     workflow_status = None
     try:
         wf: Dict[str, Any] = _OPENSHIFT.get_workflow(
-            label_selector=f"inspection_id={inspection_id}", namespace=_OPENSHIFT.amun_inspection_namespace,
+            label_selector=f"inspection_id={inspection_id}",
+            namespace=_OPENSHIFT.amun_inspection_namespace,
         )
         workflow_status = wf["status"]
     except NotFoundException:
