@@ -20,7 +20,9 @@
 import json
 import logging
 import os
-
+from typing import Any
+from typing import Dict
+from typing import Tuple
 import toml
 import requests
 
@@ -53,7 +55,7 @@ def _determine_installer_string() -> str:
     )
 
 
-def _obtain_script(script: str) -> str:
+def _obtain_script(script: str) -> Any:
     """Obtain script if it was specified by an URL, if script was provided inline, return it."""
     if script.startswith(("https://", "http://")):
         # Download script from remote if needed.
@@ -85,7 +87,7 @@ def _write_file_script(content: str, path: str) -> str:
     return f'RUN printf "{content}" > "{path}"\n\n'
 
 
-def create_dockerfile(specification: dict) -> tuple:
+def create_dockerfile(specification: Dict[str, Any]) -> Tuple[str, bool]:
     """Create a Dockerfile based on software stack specification."""
     script_present = False
     dockerfile = "FROM " + specification["base"] + "\n\n"
@@ -122,7 +124,7 @@ def create_dockerfile(specification: dict) -> tuple:
 
     # Create workdir only if needed.
     if "python" in specification or "script" in specification:
-        dockerfile += f"RUN mkdir -p /home/amun && chmod -R 777 /home/amun\n\n"
+        dockerfile += "RUN mkdir -p /home/amun && chmod -R 777 /home/amun\n\n"
 
     if "python" in specification:
         requirements = specification["python"]["requirements"]

@@ -11,6 +11,13 @@ presubmits:
             - "pre-commit"
             - "run"
             - "--all-files"
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "300m"
+            limits:
+              memory: "1Gi"
+              cpu: "300m"
 
   - name: thoth-mypy-py38
     decorate: true
@@ -23,3 +30,10 @@ presubmits:
           command:
             - "/usr/local/bin/mypy"
             - "."
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "300m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
