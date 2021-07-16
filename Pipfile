@@ -19,7 +19,6 @@ flask-script = "*"
 grpcio = "<1.28"
 grpcio-opentracing = "*"
 grpcio-tools = "<1.28"
-jaeger-client = "*"
 opentracing-instrumentation = "*"
 sentry-sdk = {extras = ["flask"],version = "*"}
 more-itertools = "*"

@@ -19,9 +19,7 @@
 
 import logging
 import os
-from typing import Any
-from jaeger_client import Config as JaegerConfig
-from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -33,25 +31,5 @@ class Configuration:
     SWAGGER_YAML_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../openapi/openapi.yaml")
     AMUN_INSPECTION_NAMESPACE = os.environ["THOTH_AMUN_INSPECTION_NAMESPACE"]
     AMUN_INFRA_NAMESPACE = os.environ["THOTH_AMUN_INFRA_NAMESPACE"]
-
-    JAEGER_HOST = os.getenv("JAEGER_HOST", "localhost")
-
     OPENAPI_PORT = 8080
-
     tracer = None
-
-
-def init_jaeger_tracer(service_name: str) -> Any:
-    """Create a Jaeger/OpenTracing configuration."""
-    config = JaegerConfig(
-        config={
-            "sampler": {"type": "const", "param": 1},
-            "logging": True,
-            "local_agent": {"reporting_host": Configuration.JAEGER_HOST},
-        },
-        service_name=service_name,
-        validate=True,
-        metrics_factory=PrometheusMetricsFactory(namespace=service_name),
-    )
-
-    return config.initialize_tracer()

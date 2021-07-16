@@ -1,12 +1,12 @@
 ---
 repos:
   - repo: git://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.9
+    rev: v1.1.10
     hooks:
       - id: remove-tabs
 
   - repo: git://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.0.1
     hooks:
       - id: trailing-whitespace
       - id: check-merge-conflict
@@ -23,12 +23,12 @@ repos:
       - id: debug-statements
 
   - repo: git://github.com/pycqa/pydocstyle.git
-    rev: 5.1.1
+    rev: 6.1.1
     hooks:
       - id: pydocstyle
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.0.1
     hooks:
       - id: check-toml
       - id: check-yaml
@@ -36,12 +36,12 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/psf/black
-    rev: 20.8b1
+    rev: 21.6b0
     hooks:
       - id: black
 
   - repo: https://gitlab.com/PyCQA/flake8
-    rev: '3.8.4'
+    rev: '3.9.2'
     hooks:
       - id: flake8
         additional_dependencies: ['pep8-naming']
