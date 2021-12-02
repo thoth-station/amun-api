@@ -18,13 +18,13 @@
 """Exceptions raised in Amun implementation."""
 
 
-class AmunException(Exception):
+class AmunException(Exception):  # noqa: N818
     """A base class for user API exceptions."""
 
 
-class NotFoundException(AmunException):
+class NotFoundException(AmunException):  # noqa: N818
     """An exception raised if the requested resource could not be found."""
 
 
-class ScriptObtainingError(AmunException):
+class ScriptObtainingError(AmunException):  # noqa: N818
     """An exception raised if the provided script on API specified by URL was not obtained due to HTTP error."""
