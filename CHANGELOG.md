@@ -1,4 +1,24 @@
 
+## Release 0.10.0 (2022-02-09T21:47:27)
+* :turtle: Remove the unused packages
+* :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
+* :star: Include issue template for the repo
+* :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
+* Enable TLS verification
+* :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
+* fix the pre-commit git url issue
+* Ignore N818
+* Update pyproject.toml to use Python 3.8
+* :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
+* :snail: remove all bits of jaeger tracing
+* :arrow_up: removing the tracing bits 😼
+* :sparkles: autoupdate of pre-commit-config
+* :arrow_up: Automatic update of dependencies by Kebechet
+
 ## Release 0.6.0 (2020-07-01T20:31:44)
 * :pushpin: Automatic update of dependency thoth-common from 0.13.13 to 0.14.0
 * Allow maintainers to release the application
