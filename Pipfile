@@ -16,10 +16,6 @@ connexion = {extras = ["swagger-ui"],version = "*"}
 flask = "==1.1.4"
 flask-cors = "*"
 flask-script = "*"
-grpcio = "<1.28"
-grpcio-opentracing = "*"
-grpcio-tools = "<1.28"
-opentracing-instrumentation = "*"
 sentry-sdk = {extras = ["flask"],version = "*"}
 more-itertools = "*"
 werkzeug = "==1.0.1"
