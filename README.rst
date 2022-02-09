@@ -1,6 +1,14 @@
 Amun Service
 ------------
 
+.. image:: https://img.shields.io/github/v/tag/thoth-station/amun-api?style=plastic
+  :target: https://github.com/thoth-station/amun-api/releases
+  :alt: GitHub tag (latest by date)
+
+.. image:: https://quay.io/repository/thoth-station/amun-api/status
+  :target: https://quay.io/repository/thoth-station/amun-api?tab=tags
+  :alt: Quay - Build
+
 See `this blog post for a detailed walkthrough together with a video
 demonstrating usage <https://dev.to/fridex/how-to-beat-python-s-pip-inspecting-the-quality-of-machine-learning-software-1pkp>`_.
 
