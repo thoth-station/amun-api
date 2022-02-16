@@ -29,7 +29,7 @@ from typing import Tuple
 
 from thoth.common import OpenShift
 from thoth.common import datetime2datetime_str
-from thoth.common.exceptions import NotFoundException
+from thoth.common.exceptions import NotFoundExceptionError
 from thoth.storages import InspectionStore
 from thoth.storages.exceptions import NotFoundError as StorageNotFoundError
 
@@ -345,7 +345,7 @@ def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
             namespace=_OPENSHIFT.amun_inspection_namespace,
         )
         workflow_status = wf["status"]
-    except NotFoundException:
+    except NotFoundExceptionError:
         pass
 
     build_status = None
@@ -357,7 +357,7 @@ def get_inspection_status(inspection_id: str) -> Tuple[Dict[str, Any], int]:
         build_status = _OPENSHIFT.get_pod_status_report(
             inspection_id + "-1-build", Configuration.AMUN_INSPECTION_NAMESPACE
         )
-    except NotFoundException:
+    except NotFoundExceptionError:
         pass
 
     return (
