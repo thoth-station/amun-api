@@ -1,4 +1,7 @@
 
+## Release 0.10.1 (2022-02-16T17:28:06)
+* Fix NotFoundExceptionError import
+
 ## Release 0.10.0 (2022-02-09T21:47:27)
 * :turtle: Remove the unused packages
 * :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
