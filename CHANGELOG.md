@@ -1,4 +1,10 @@
 
+## Release 0.10.2 (2022-04-04T17:38:39)
+* a9d8458 Add runtime_environment and constraints to api schema
+* ff37973 :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
+* ee136e0 Fix pre-commit config
+* 8fedf0f :ship: Bump up base image initialized in CI.
+
 ## Release 0.10.1 (2022-02-16T17:28:06)
 * Fix NotFoundExceptionError import
 
