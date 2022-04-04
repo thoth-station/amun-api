@@ -401,6 +401,8 @@ components:
           required:
             - requirements
             - requirements_locked
+            - runtime_environment
+            - constraints
           properties:
             requirements:
               type: object
@@ -411,6 +413,14 @@ components:
             requirements_locked:
               type: object
               description: Pipfile.lock with fully pinned down and resolved software stack.
+              additionalProperties: {}
+            runtime_environment:
+              type: object
+              description: Runtime environment
+              additionalProperties: {}
+            constraints:
+              type: object
+              description: Constraints for a given package
               additionalProperties: {}
         build:
           type: object
