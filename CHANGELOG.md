@@ -1,4 +1,9 @@
 
+## Release 0.10.3 (2022-04-05T09:11:34)
+* 0242339 Update Pipfile.lock
+* 5147ab5 Add image tag
+* b450e7c Use thoth-s2i image as a default value in api schema
+
 ## Release 0.10.2 (2022-04-04T17:38:39)
 * a9d8458 Add runtime_environment and constraints to api schema
 * ff37973 :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
