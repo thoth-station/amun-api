@@ -357,7 +357,7 @@ components:
           type: string
           minLength: 1
           description: Base image on which the runtime environment should be based on.
-          example: 'quay.io/thoth-station/s2i-thoth-ubi8-py38'
+          example: 'quay.io/thoth-station/s2i-thoth-ubi8-py38:v0.32.3'
         identifier:
           type: string
           description: >-
