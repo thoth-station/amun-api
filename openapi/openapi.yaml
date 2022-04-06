@@ -409,7 +409,7 @@ components:
               description: >-
                 Pipfile stating software stack (direct dependencies) of an
                 application.
-              example: >-
+              example:
                 {
                   "source": [
                     {
@@ -431,7 +431,7 @@ components:
             requirements_locked:
               type: object
               description: Pipfile.lock with fully pinned down and resolved software stack.
-              example: >-
+              example:
                 {
                   "_meta": {
                       "hash": {
