@@ -20,4 +20,4 @@
 
 __name__ = "amun"
 __author__ = "Fridolin Pokorny <fridolin@redhat.com>"
-__version__ = "0.10.3"
+__version__ = "0.10.4"
