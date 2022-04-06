@@ -166,7 +166,7 @@
                 "sha256:f04e857b59d9d1ccc39ce2da1021d196e47234873820cbeaad210724b1ee28ac",
                 "sha256:fadbfe37f74051d024037f223b8e001611eac868b5c5b06144ef4d8b799862f2"
             ],
-            "markers": "python_version < '3.9'",
+            "markers": "python_version >= '3.6' and python_version < '3.9'",
             "version": "==0.2.1"
         },
         "beautifulsoup4": {
@@ -185,19 +185,19 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:9d8ddfefe0c4a993423e2c40831034c78fcb7b3425bf3610cf0087301dd9098b",
-                "sha256:c06b9b29f80da8cf6d9fac8f41d74a74d0f5347927acf11b15428b295fcbdd31"
+                "sha256:6cbc3aae70af5f35869d7b2f114cc953edf925231febf892d609682b2ba3f9f0",
+                "sha256:9d2175ad0f5de587473f20b062b1ef462d1e5ee547bb22bdd36e28442823e0a9"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==1.21.33"
+            "version": "==1.21.34"
         },
         "botocore": {
             "hashes": [
-                "sha256:16ca4a2b72fef8caaf0eeb423dbf6cd64938442c4b9f96deb672468229e5e3f9",
-                "sha256:ea5fd180082030a6c33fa19bf011d72970f3ed23cfff1b41413069e325768103"
+                "sha256:4402900838fad0c46c78f16a497709039f10e945c6ef1f0df5d9a98c80f1563b",
+                "sha256:ec849864a6791c04ac6c52539dae34d53856cd32eb7e5481a3465aab7bd93555"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==1.24.33"
+            "version": "==1.24.34"
         },
         "cachetools": {
             "hashes": [
@@ -755,19 +755,19 @@
         },
         "prometheus-client": {
             "hashes": [
-                "sha256:357a447fd2359b0a1d2e9b311a0c5778c330cfbe186d880ad5a6b39884652316",
-                "sha256:ada41b891b79fca5638bd5cfe149efa86512eaa55987893becd2c6d8d0a5dfc5"
+                "sha256:8f7a922dd5455ad524b6ba212ce8eb2b4b05e073f4ec7218287f88b1cac34750",
+                "sha256:f4aba3fdd1735852049f537c1f0ab177159b7ab76f271ecc4d2f45aa2a1d01f2"
             ],
             "index": "pypi",
-            "version": "==0.13.1"
+            "version": "==0.14.0"
         },
         "prometheus-flask-exporter": {
             "hashes": [
-                "sha256:11f127dc0a3f60376dcb934fad3d11183f0b9dbde6a5d77e9182a5ce6227eb03",
-                "sha256:49a5b6c0568ddcc382ef4e1bf806aac85bb0c245b052c0c34afe02cd6b3d3beb"
+                "sha256:39c903257a86afa2dea757e736d7ebcd1008722cbf3e1c5eba56710f345970b2",
+                "sha256:92f40294a9d067a587515001072527a020410e38bfdfcc7d73c9a9d3e0c95879"
             ],
             "index": "pypi",
-            "version": "==0.19.0"
+            "version": "==0.20.0"
         },
         "psycopg2-binary": {
             "hashes": [
@@ -1098,14 +1098,6 @@
             "index": "pypi",
             "version": "==1.5.8"
         },
-        "setuptools": {
-            "hashes": [
-                "sha256:7999cbd87f1b6e1f33bf47efa368b224bed5e27b5ef2c4d46580186cbcb1a86a",
-                "sha256:a65e3802053e99fc64c6b3b29c11132943d5b8c8facbcc461157511546510967"
-            ],
-            "markers": "python_version >= '3.7'",
-            "version": "==62.0.0"
-        },
         "six": {
             "hashes": [
                 "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
@@ -1178,11 +1170,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:4c7c850de3dda5c381c509726b732bfd7c714313aca08578e0f2ca850956d35e",
-                "sha256:9bd73618d9c31463ae9959988d061923879915c4f89e6f02bd254a4cffd33699"
+                "sha256:d653965525a7986360134369f54b4cbf10e5e65df03d6051edaa90f6b4b6ff07",
+                "sha256:e6be7fda59ac7568e2dd6860ac64b63fa0098dd40f1667e4f6c3c02a7a6b23ea"
             ],
             "index": "pypi",
-            "version": "==0.36.0"
+            "version": "==0.36.1"
         },
         "thoth-python": {
             "hashes": [
