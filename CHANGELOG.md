@@ -1,4 +1,8 @@
 
+## Release 0.10.4 (2022-04-06T08:51:23)
+* f1e3692 Specify version range for markupsafe to fix library issues
+* fba6544 :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
+
 ## Release 0.10.3 (2022-04-05T09:11:34)
 * 0242339 Update Pipfile.lock
 * 5147ab5 Add image tag
