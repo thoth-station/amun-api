@@ -1,4 +1,11 @@
 
+## Release 0.10.5 (2022-04-07T11:44:43)
+* 27b3d59 Make runtime_environment and constraints optional
+* 874f6a4 Remove >-
+* 4051bad Add my username to approvers and maintainers
+* 45df278 Fix type to object and simplify requirements
+* e6e6d5d Add Pipfile and Pipfile.lock as example values in schema
+
 ## Release 0.10.4 (2022-04-06T08:51:23)
 * f1e3692 Specify version range for markupsafe to fix library issues
 * fba6544 :arrow_up: Automatic update of dependencies by Kebechet for the ubi8 environment
