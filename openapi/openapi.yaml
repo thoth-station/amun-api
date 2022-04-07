@@ -401,8 +401,6 @@ components:
           required:
             - requirements
             - requirements_locked
-            - runtime_environment
-            - constraints
           properties:
             requirements:
               type: object
