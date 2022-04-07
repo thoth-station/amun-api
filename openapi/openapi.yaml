@@ -482,9 +482,8 @@ components:
               description: Runtime environment
               additionalProperties: {}
             constraints:
-              type: object
+              type: array
               description: Constraints for a given package
-              additionalProperties: {}
         build:
           type: object
           description: Hardware requirements for build time.
