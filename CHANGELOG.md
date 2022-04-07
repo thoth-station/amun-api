@@ -1,4 +1,7 @@
 
+## Release 0.10.6 (2022-04-07T12:23:02)
+* 552c4df Constraints key is an array
+
 ## Release 0.10.5 (2022-04-07T11:44:43)
 * 27b3d59 Make runtime_environment and constraints optional
 * 874f6a4 Remove >-
