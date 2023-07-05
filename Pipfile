@@ -22,7 +22,7 @@ werkzeug = "==1.0.1"
 markupsafe = "<2.1.0"
 
 [dev-packages]
-grpcio = "<1.28"
+grpcio = "<1.54"
 grpcio-tools = "<1.28"
 
 [pipenv]
